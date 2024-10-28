@@ -1,2 +1,2 @@
-# at24-web-application-technology-project
-Backend for online battleships webapp
+# Battleships Webapp
+Online browser battleships game
