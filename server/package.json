@@ -8,5 +8,9 @@
   "keywords": [],
   "author": "Bartłomiej Gala",
   "license": "ISC",
-  "description": "Basic webserver for hosting online battleships games"
+  "description": "Basic webserver for hosting online battleships games",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1"
+  }
 }
