@@ -1,0 +1,16 @@
+/* home-button.component.css */
+a {
+  text-decoration: none;
+  color: chartreuse;
+}
+.button-container
+{
+  width: 30%;
+  height: 6vh;
+  border: 2px chartreuse solid;
+  margin-top: 4vh;
+}
+p{
+  text-align: center;
+  font-size: 3vh;
+}
