@@ -1,5 +1,5 @@
-import Server from "./server";
+import AppServer from "./AppServer";
 
-const server: Server = new Server();
+const server: AppServer = new AppServer();
 
 server.start();
