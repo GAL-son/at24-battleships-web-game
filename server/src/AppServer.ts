@@ -40,7 +40,7 @@ class AppServer {
             // onMessage
             ws.on('message', (message) => {
                 wsControllers.forEach(controller => {
-                    controller.onMessage(message);
+                    controller.onMessage(ws, message);
                 });
             });
 
@@ -54,7 +54,7 @@ class AppServer {
             //onClose
             ws.on('close', (code: number) => {
                 wsControllers.forEach(controller => {
-                    controller.onClose(code);
+                    controller.onClose(ws, code);
                 });
             })
         })
