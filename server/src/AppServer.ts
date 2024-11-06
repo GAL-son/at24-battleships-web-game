@@ -4,8 +4,8 @@ import * as http from "http";
 import { config } from './config';
 
 class AppServer {
-    public restServer: express.Application;
-    public webSocketServer: WebSocket.Server;
+    private restServer: express.Application;
+    private webSocketServer: WebSocket.Server;
     private server: http.Server;
 
     constructor() {
