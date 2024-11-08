@@ -1,11 +1,12 @@
 import { IRepository } from "Interfaces/IRepository";
-import { IDatabase } from "pg-promise";
+import { IUserModel } from "Models/IUserModel";
+import { IDatabase, ParameterizedQuery } from "pg-promise";
 
 class UserRepository implements IRepository {
     name: string;
     db?: IDatabase<any>;
 
-    schema: string = 'BattleshipsDB';
+    table: string = 'BattleshipsDB.users';
 
     constructor(name: string) {
         this.name = name;
@@ -16,16 +17,29 @@ class UserRepository implements IRepository {
     }
 
     async getUsers() {
-        const sql = `SELECT * FROM ${this.schema}.users`;
-        if(!this.validateDb()) {
-            throw Error("NO DATABASE CONNECTED");
-        }
-
-        return this.db?.any(sql);
+        this.validateDb();
+        
+        const sql = `SELECT * FROM ${this.table}`;
+        return await this.db?.any<IUserModel>(sql);
+    }
+    
+    async getUserById(id: number) {
+        this.validateDb();
+        
+        const query = `SELECT * FROM ${this.table} WHERE userid = $1 `;
+        this.db?.one<IUserModel>(query, [id]);
     }
 
-    validateDb() : boolean {
-        return (this.db != null);
+    async saveUser(user: IUserModel) {
+        const query = `INSERT INTO ${this.table} VALUES (DEFAULT, $1, $2, $3, $4) RETURNING userid`;
+        return this.db?.one(query, [user.name, user.email, user.score || 0, user.password]);
+    }
+
+
+    validateDb() : void {
+        if(this.db == null) {
+            throw Error("NO DATABASE CONNECTED");
+        }
     }
     
 }

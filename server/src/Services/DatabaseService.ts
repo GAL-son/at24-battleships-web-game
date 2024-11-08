@@ -10,6 +10,8 @@ class DatabaseService {
 
     constructor(dbConfig: any) {        
         let pgp: IMain = pgPromise.default();
+        pgp.pg.types.setTypeParser(20, Number);
+
         this.db = pgp(dbConfig);
         this.repositories = new Map<String, IRepository>();        
     }    
