@@ -1,10 +1,6 @@
 import { IDatabase } from "pg-promise";
 
-interface Repository {
+export interface IRepository {
     name: string;
-
-    construct(name: string): void;
     linkDb(db: IDatabase<any>): void;
 }
-
-export default Repository;

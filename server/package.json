@@ -13,6 +13,7 @@
   "description": "Basic webserver for hosting online battleships games",
   "dependencies": {
     "@types/http-server": "^0.12.4",
+    "battieships-server": "file:",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "ws": "^8.18.0"
