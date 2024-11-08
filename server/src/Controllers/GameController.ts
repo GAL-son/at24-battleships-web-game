@@ -1,4 +1,4 @@
-import WsController from "Interfaces/WsController";
+import WsController from "Interfaces/IWsController";
 
 import WebSocket, {Data} from "ws";
 

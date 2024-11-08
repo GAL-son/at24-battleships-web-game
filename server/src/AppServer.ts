@@ -3,8 +3,8 @@ import WebSocket, { WebSocketServer } from 'ws';
 import * as http from "http";
 
 import { config } from './config';
-import RestController from 'Interfaces/RestController';
-import WsController from 'Interfaces/WsController';
+import {IRestController} from 'Interfaces/IRestController';
+import {IWsController} from 'Interfaces/IWsController';
 
 class AppServer {
     private restServer: express.Application;
@@ -23,13 +23,13 @@ class AppServer {
         });
     }
 
-    public withRestControllers(restControllers: RestController[]) {
+    public withRestControllers(restControllers: IRestController[]) {
         restControllers.forEach(controller => {
             this.restServer.use('/', controller.router);
         });
     } 
 
-    public withWsControllers(wsControllers: WsController[]) {
+    public withWsControllers(wsControllers: IWsController[]) {
         this.webSocketServer.on('connection', (ws: WebSocket) => {
             // onConnection 
             wsControllers.forEach(controller => {

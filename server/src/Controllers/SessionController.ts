@@ -1,5 +1,5 @@
 import { Router } from "express";
-import RestController from "Interfaces/RestController";
+import RestController from "Interfaces/IRestController";
 
 
 class SessionController implements RestController {

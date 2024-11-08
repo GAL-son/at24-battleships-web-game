@@ -1,8 +1,8 @@
 import WebSocket from "ws";
 
-import WsController from "Interfaces/WsController";
+import {IWsController} from "Interfaces/IWsController";
 
-class EchoController implements WsController {
+class EchoController implements IWsController {
     onConnection(ws: WebSocket): void {
         console.log("Connected");
         ws.send("Connected");
