@@ -5,6 +5,8 @@ class UserRepository implements IRepository {
     name: string;
     db?: IDatabase<any>;
 
+    schema: string = 'BattleshipsDB';
+
     constructor(name: string) {
         this.name = name;
     }
@@ -13,9 +15,14 @@ class UserRepository implements IRepository {
         this.db = db;    
     }
 
-    // getUsers() : Promise<any> {
-        
-    // }
+    async getUsers() {
+        const sql = `SELECT * FROM ${this.schema}.users`;
+        if(!this.validateDb()) {
+            throw Error("NO DATABASE CONNECTED");
+        }
+
+        return this.db?.any(sql);
+    }
 
     validateDb() : boolean {
         return (this.db != null);

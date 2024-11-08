@@ -1,8 +1,8 @@
 import { Router } from "express";
 
-interface RestController {
+export interface IRestController {
     path: string;
     router: Router;
 }
 
-export default RestController;
+export default IRestController;

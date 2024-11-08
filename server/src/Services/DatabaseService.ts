@@ -23,13 +23,13 @@ class DatabaseService {
         return this;
     }
 
-    repository(name: string) : IRepository  {
+    repository<T extends IRepository>(name: string) : T  {
         let repo = this.repositories.get(name);
         if(repo === undefined) {
             throw Error("No such repository");
         }
 
-        return repo;
+        return repo as T;
     }
 }
 

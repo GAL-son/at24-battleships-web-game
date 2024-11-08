@@ -2,6 +2,8 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
+import { config } from './config';
+
 import AppServer from "./AppServer";
 import DatabaseService from "./Services/DatabaseService";
 import {IRepository} from "./Interfaces/IRepository";
@@ -15,17 +17,13 @@ const server: AppServer = new AppServer();
 // Database Service
 
 // Database config
-const dbConfig = {
-    "host": process.env.DB_HOST || "localhost",
-    "port": process.env.DB_PORT || 5432,
-    "database": process.env.DB_NAME || 'db',
-    "user": process.env.DB_USER || 'postgres'
-}
 
-// const db: DatabaseService = new DatabaseService(dbConfig)
-//     .withRepositories([
-//         new UserRepository("users")
-//     ]);
+const db: DatabaseService = new DatabaseService(config.db)
+    .withRepositories([
+        new UserRepository("users")
+    ]);
+
+db.repository<UserRepository>('users').getUsers().then(console.log);
 
 // Inject Controllers
 server.withRestControllers([
