@@ -2,8 +2,6 @@ import WebSocket from "ws";
 
 import WsController from "Interfaces/WsController";
 
-
-
 class EchoController implements WsController {
     onConnection(ws: WebSocket): void {
         console.log("Connected");
@@ -19,9 +17,6 @@ class EchoController implements WsController {
     onError(Ws: WebSocket, error: Error): void {
         console.error("Connection Error")
     }
-
-
-
 }
 
 export default EchoController;
