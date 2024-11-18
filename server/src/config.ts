@@ -19,5 +19,7 @@ export const config = {
                 callback(new Error('Not allowed by CORS'))
             }
         }
-    }
+    },
+    saltRounds: 4,
+    jwtKey: process.env.JWT_KEY
 }
