@@ -4,12 +4,13 @@ import IRestController from "Interfaces/IRestController";
 import UserRepository from "../Repositories/UserRepository";
 import { IUserModel } from "Models/IUserModel";
 import { ICreateUserData } from "Models/ICreateUserData";
-import typia from "typia";
+import typia, { tags } from "typia";
 import PasswordService from "../Services/PasswordService";
 import { getMiddlewareWithSession } from "../Middleware/AuthMiddleware";
 import SessionService from "Services/SessionService";
+import ISessionModel from "Models/ISessionModel";
 
-class UserController implements IRestController{
+class UserController implements IRestController {
     path: string = "/users";
     router: Router = Router();
 
@@ -17,17 +18,94 @@ class UserController implements IRestController{
     passwordService: PasswordService;
     sessionService: SessionService;
 
-    constructor(userRepository: UserRepository,sessionService: SessionService ) {
+    authMiddleware;
+
+    constructor(userRepository: UserRepository, sessionService: SessionService) {
         this.userRepository = userRepository;
         this.sessionService = sessionService;
         this.passwordService = new PasswordService(this.userRepository);
+        this.authMiddleware = getMiddlewareWithSession(this.sessionService);
         this.initRoutes();
+
     }
 
     private initRoutes() {
-        this.router.get(this.path,  getMiddlewareWithSession(this.sessionService), this.getAllUsers);
-        this.router.get(this.path + "/user/:name",  getMiddlewareWithSession(this.sessionService), this.getUser);
+        this.router.get(this.path, this.authMiddleware, this.getAllUsers);
+        this.router.get(this.path + "/user/:name", this.authMiddleware, this.getUser);
         this.router.post(this.path + "/create", this.createUser);
+        this.router.delete(this.path + "/user/:name/delete", this.authMiddleware, this.deleteUser);
+        this.router.patch(this.path + "/user/:name/updateMail", this.authMiddleware, this.updateUser);
+    }
+
+    updateUser = async(request: Request, response: Response) => {
+        const session = request.body["session"];
+        const userToUpdate = request.params["name"];
+        
+        const userDb = await this.userRepository.getUser(userToUpdate);
+        if(!userDb) {
+            return response.status(404).send("No such user");
+        }
+
+        if(!this.canEditUser(session, userDb.name)) {
+            return response.status(403).send("Action is forbidden");
+        }
+
+        let newEmail: string & tags.Format<'email'> = request.body["email"];
+        let newpassword = request.body["password"];        
+        
+        if(newEmail) {
+            try {
+                newEmail = typia.assert(newEmail);
+            } catch (e) {
+                return response.status(400).send("Invalid Email");
+            }
+            
+            try {
+                await this.userRepository.updateEmail(userDb.name,newEmail);            
+                return response.status(204).send("Email updated"); 
+            } catch (e) {
+                return response.status(500).send("Failed when updating email");
+            }
+        } else if(newpassword) {            
+            try {
+                const parsedPasswd = await this.passwordService.encryptPassword(newpassword);
+                await this.userRepository.updateEmail(userDb.name,parsedPasswd);            
+                return response.status(204).send("PasswordUpdated"); 
+            } catch (e) {
+                return response.status(500).send("Failed when updating password");
+            }
+        }
+        
+    }
+
+    deleteUser = async (request: Request, response: Response) => {
+        const session = request.body["session"];
+        const userToDelete = request.params["name"];
+
+        if(!session) {
+            response.status(401).send("No session found");
+            return;
+        }
+
+        console.log(session.data);
+
+        const userDb = await this.userRepository.getUser(userToDelete);
+        if(!userDb) {
+            return response.status(404).send("No such user");
+        }
+
+        if(!this.canEditUser(session, userDb.name)) {
+            return response.status(403).send("Action is forbidden");
+        }
+
+        try {
+            await this.userRepository.deleteUser(userDb.name);
+            this.sessionService.deleteSessionsForUser(userDb.name);
+            
+            return response.status(204).send(); 
+        } catch (e) {
+            return response.status(500).send("Failed when deleting user");
+        }
     }
 
     getAllUsers = async (request: Request, response: Response) => {
@@ -40,7 +118,7 @@ class UserController implements IRestController{
             return;
         }
 
-        if(users === undefined) {
+        if (users === undefined) {
             users = [];
         } else {
             const parsedUsers: any[] = [];
@@ -52,7 +130,7 @@ class UserController implements IRestController{
             users = parsedUsers;
         }
 
-        users.sort((a,b) => {
+        users.sort((a, b) => {
             return (b?.score || 0) - (a?.score || 0);
         })
 
@@ -60,33 +138,39 @@ class UserController implements IRestController{
     }
 
     getUser = async (request: Request, response: Response) => {
-        
+        const session = request.body["session"];
         const name = request.params["name"];
-        
+
         let user;
-        user = await this.userRepository.getUser(name);
         try {
+            user = await this.userRepository.getUser(name);
         } catch (error) {
             console.error("Error when accessing database: " + error);
             response.status(500).send();
-            
             return;
         }
 
-        if(user === undefined) {
-            response.status(404).json({message: "user not found"});
+        if (!user) {
+            response.status(404).send("user not found");
             return;
         }
 
         // only if auth =/= equal searched user
-        const parsedUser = this.userRepository.parseSafe(user);
-
-        response.status(200).json(parsedUser);
+        if(this.canEditUser(session, user.name)) {
+            return response.status(200).json(
+                {
+                    name: user.name,
+                    email: user.email,
+                    score: user.score
+                }
+            );
+        }
+        response.status(200).json(this.userRepository.parseSafe(user));
     }
 
     createUser = async (request: Request, response: Response) => {
         console.log("CREATE");
-        
+
         let createUserData: ICreateUserData;
         try {
             createUserData = typia.assert(request.body);
@@ -105,21 +189,22 @@ class UserController implements IRestController{
 
         console.log("NEW USER");
         console.log(newUser);
-        
-
-        
 
         try {
             await this.userRepository.saveUser(newUser);
             response.status(201).send();
         } catch (error) {
-            if(await this.userRepository.getUser(newUser.name)) {
+            if (await this.userRepository.getUser(newUser.name)) {
                 response.status(400).send("Name already in use");
             }
             console.error("Failed to save user! " + error);
             response.status(500).send("Failed to create user");
-        }                
-    }    
+        }
+    }
+
+    private canEditUser(session: ISessionModel, name: string) {
+        return name === session.data.user.name;
+    }
 }
 
 export default UserController;

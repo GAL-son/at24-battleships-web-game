@@ -13,6 +13,9 @@ import UserRepository from "./Repositories/UserRepository";
 import UserController from './Controllers/UserController';
 import SessionController from './Controllers/SessionController';
 import SessionService from './Services/SessionService';
+import GameRepository from './Repositories/GameRepository';
+import { getMiddlewareWithSession } from './Middleware/AuthMiddleware';
+import GamesController from './Controllers/GamesController';
 
 const server: AppServer = new AppServer();
 
@@ -22,14 +25,16 @@ const server: AppServer = new AppServer();
 // Database Service
 const db: DatabaseService = new DatabaseService(config.db)
     .withRepositories([
-        new UserRepository("users")
+        new UserRepository("users"),
+        new GameRepository("games")
     ]);
 const sessionService: SessionService = new SessionService();
 
 // Inject Controllers
 server.withRestControllers([
     new UserController(db.repository<UserRepository>('users'), sessionService),
-    new SessionController(sessionService, db.repository<UserRepository>('users'))
+    new SessionController(sessionService, db.repository<UserRepository>('users')),
+    new GamesController(db.repository<GameRepository>('games'), getMiddlewareWithSession(sessionService))
 ]);
 
 server.withWsControllers([
