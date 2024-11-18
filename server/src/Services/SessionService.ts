@@ -8,8 +8,8 @@ class SessionService {
     jwtService: JWTService;
     sessions: ISessionModel[] = [];
 
-    constructor(jwtService: JWTService) {
-        this.jwtService = jwtService;
+    constructor() {
+        this.jwtService = new JWTService();
     }
 
     createSession(payload: any, lifetimeMinutes: number = this.DEFAULT_LIFETIME_MINUTES) {
@@ -19,6 +19,10 @@ class SessionService {
             token: token,
             data: payload
         } as ISessionModel;
+
+        this.sessions.push(session);
+
+        return token;
     }   
 
     deleteSession(token: string) {
@@ -27,6 +31,18 @@ class SessionService {
                 this.sessions.splice(i, 1);
             }
         });
+    }
+
+    validateSession(token: string) {
+        let valid = false;
+
+        this.sessions.forEach(session => {
+            if(session.token === token) {
+                valid = true;
+            }
+        });
+
+        return valid;
     }
 
     clearOldSessions() {

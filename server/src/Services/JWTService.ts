@@ -1,19 +1,14 @@
 import jwt from "jsonwebtoken";
 
 class JWTService {
-
-    key: string;
-
-    constructor() {
-        if(!process.env.JWT_KEY) {
-            throw new Error("Missing JWT Key");
-        } else {
-            this.key = process.env.JWT_KEY;
-        }       
-    }
-
     public createToken(payload: any, expiresMinutes?: number) {
-        const token = jwt.sign(payload, this.key, {
+        const key: string | undefined = process.env.JWT_KEY;
+
+        if(!key) {
+            throw new Error("Missing jwt key");
+        }
+
+        const token = jwt.sign(payload, key, {
             'expiresIn': expiresMinutes + 'm'
         })
 

@@ -30,17 +30,23 @@ class UserRepository implements IRepository {
         return this.db?.one<IUserModel>(query, [email]);
     }
     
-    async getUserById(id: number) {
-        this.validateDb();
-        
-        const query = `SELECT * FROM ${this.table} WHERE userId = $1 `;
-        return this.db?.one<IUserModel>(query, [id]);
+    async getUser(name: string) {
+        this.validateDb();        
+        const query = `SELECT * FROM ${this.table} WHERE name = $1 `;
+        return this.db?.one<IUserModel>(query, [name]);
     }
 
     async saveUser(user: IUserModel) {
         this.validateDb();
-        const query = `INSERT INTO ${this.table} VALUES (DEFAULT, $1, $2, $3, $4) RETURNING userid`;
+        const query = `INSERT INTO ${this.table} VALUES ($1, $2, $3, $4) RETURNING name`;
         return this.db?.one(query, [user.name, user.email, user.score, user.password]);
+    }
+
+    public parseSafe(userUnsafe: IUserModel) {
+        return {
+            score: userUnsafe.score,
+            name: userUnsafe.name
+        };
     }
 
     validateDb() : void {
