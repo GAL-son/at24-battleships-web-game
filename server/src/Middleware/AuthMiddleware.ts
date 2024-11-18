@@ -11,12 +11,7 @@ export const getMiddlewareWithSession = (sessionService: SessionService) => {
     }
 
     return (request: Request, response: Response, next: NextFunction)=> {
-        console.log("AUTH MIDDLEWARE");
-
-        const token =  request.header('Authorization')?.replace('Bearer ', '');
-
-        console.log(token);
-        
+        const token =  request.header('Authorization')?.replace('Bearer ', '');      
 
         if(!token) {
             response.status(401).send("Missing token");
@@ -24,6 +19,7 @@ export const getMiddlewareWithSession = (sessionService: SessionService) => {
             const session = sessionService.validateSession(token);
 
             if(session) {
+                request.body["token"] = token;
                 next();
             } else {
                 response.status(401).send("Authorization failed");
