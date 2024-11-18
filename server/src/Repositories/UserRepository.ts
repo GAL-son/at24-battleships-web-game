@@ -38,9 +38,9 @@ class UserRepository implements IRepository {
     }
 
     async saveUser(user: IUserModel) {
-        this.validateDb()
+        this.validateDb();
         const query = `INSERT INTO ${this.table} VALUES (DEFAULT, $1, $2, $3, $4) RETURNING userid`;
-        return this.db?.one(query, [user.name, user.email, user.score || 0, user.password]);
+        return this.db?.one(query, [user.name, user.email, user.score, user.password]);
     }
 
     validateDb() : void {

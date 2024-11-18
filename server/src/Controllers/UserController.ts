@@ -3,6 +3,8 @@ import { request, Request, Response, Router } from "express";
 import IRestController from "Interfaces/IRestController";
 import UserRepository from "../Repositories/UserRepository";
 import { IUserModel } from "Models/IUserModel";
+import { ICreateUserData } from "Models/ICreateUserData";
+import typia from "typia";
 
 class UserController implements IRestController{
     path: string = "/users";
@@ -11,25 +13,25 @@ class UserController implements IRestController{
     userRepository: UserRepository;
 
     constructor(userRepository: UserRepository) {
-        // console.log(userRepository);
         this.userRepository = userRepository;
-        console.log(this.userRepository);
-
         this.initRoutes();
     }
 
     private initRoutes() {
         this.router.get(this.path, this.getAllUsers);
-        this.router.get(this.path + "/:id", this.getUser);
+        this.router.post(this.path + "/create", this.createUser);
+        this.router.get(this.path + "/:id([0-9]+)", this.getUser);
     }
 
     getAllUsers = async (request: Request, response: Response) => {
-        let users = await this.userRepository.getUsers().catch((error) => {
+        let users;
+        try {
+            users = await this.userRepository.getUsers();
+        } catch (error) {
             console.error("Error when reading database: " + error);
-            response.status(500);
+            response.status(500).send();
             return;
-        });
-        console.log("Database responsed");
+        }
 
         if(users === undefined) {
             users = [];
@@ -54,13 +56,15 @@ class UserController implements IRestController{
         
         const id = parseInt(request.params["id"]);
         
-        let user = await this.userRepository.getUserById(id).catch(error => {
+        let user;
+        user = await this.userRepository.getUserById(id);
+        try {
+        } catch (error) {
             console.error("Error when accessing database: " + error);
-            response.status(500);
+            response.status(500).send();
             
             return;
-        })
-        console.log("HERE" + user + " " + id);
+        }
 
         if(user === undefined) {
             response.status(404).json({message: "user not found"});
@@ -71,6 +75,35 @@ class UserController implements IRestController{
         const parsedUser = this.parseSafe(user);
 
         response.status(200).json(parsedUser);
+    }
+
+    createUser = async (request: Request, response: Response) => {
+        console.log("CREATE");
+        
+        let createUserData: ICreateUserData;
+        try {
+            createUserData = typia.assert(request.body);
+        } catch (error) {
+            console.error("Invalid data format" + error);
+            response.status(400).json(error);
+            return;
+        }
+
+        const newUser: IUserModel = {
+            userid: 0,
+            name: createUserData.name,
+            email: createUserData.email,
+            score: 0,
+            password: createUserData.password
+        };
+
+        try {
+            this.userRepository.saveUser(newUser);
+            response.status(201).send();
+        } catch (error) {
+            console.error("Failed to save user! " + error);
+            response.status(500).send();
+        }                
     }
 
     private parseSafe(userUnsafe: IUserModel) {
