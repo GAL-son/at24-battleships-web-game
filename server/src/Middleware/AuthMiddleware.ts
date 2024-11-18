@@ -4,13 +4,11 @@ import jwt from 'jsonwebtoken';
 import { config } from "../config";
 
 export const getMiddlewareWithSession = (sessionService: SessionService) => {
-
-    const key = config.jwtKey;
-    if(!key) {
-        throw new Error("Missing JWT Key")
-    }
-
     return (request: Request, response: Response, next: NextFunction)=> {
+        const key = config.jwtKey;
+        if(!key) {
+            throw new Error("Missing JWT Key")
+        }
         const token =  request.header('Authorization')?.replace('Bearer ', '');      
 
         if(!token) {

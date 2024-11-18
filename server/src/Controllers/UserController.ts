@@ -34,27 +34,13 @@ class UserController implements IRestController {
         this.router.get(this.path + "/user/:name", this.authMiddleware, this.getUser);
         this.router.post(this.path + "/create", this.createUser);
         this.router.delete(this.path + "/user/:name/delete", this.authMiddleware, this.deleteUser);
-        this.router.patch(this.path + "/user/:name/updateMail", this.authMiddleware, this.updateEmail);
+        this.router.patch(this.path + "/user/:name/updateMail", this.authMiddleware, this.updateUser);
     }
 
-    updateEmail = async(request: Request, response: Response) => {
+    updateUser = async(request: Request, response: Response) => {
         const session = request.body["session"];
         const userToUpdate = request.params["name"];
-        let newEmail: string & tags.Format<'email'> = request.body["email"];
         
-        try {
-            newEmail = typia.assert(newEmail);
-        } catch (e) {
-            return response.status(400).send("Missing email");
-        }
-
-        if(!session) {
-            response.status(401).send("No session found");
-            return;
-        }
-
-        console.log(session.data);
-
         const userDb = await this.userRepository.getUser(userToUpdate);
         if(!userDb) {
             return response.status(404).send("No such user");
@@ -64,12 +50,32 @@ class UserController implements IRestController {
             return response.status(403).send("Action is forbidden");
         }
 
-        try {
-            await this.userRepository.updateEmail(userDb.name,newEmail);            
-            return response.status(204).send(); 
-        } catch (e) {
-            return response.status(500).send("Failed when deleting user");
+        let newEmail: string & tags.Format<'email'> = request.body["email"];
+        let newpassword = request.body["password"];        
+        
+        if(newEmail) {
+            try {
+                newEmail = typia.assert(newEmail);
+            } catch (e) {
+                return response.status(400).send("Invalid Email");
+            }
+            
+            try {
+                await this.userRepository.updateEmail(userDb.name,newEmail);            
+                return response.status(204).send("Email updated"); 
+            } catch (e) {
+                return response.status(500).send("Failed when updating email");
+            }
+        } else if(newpassword) {            
+            try {
+                const parsedPasswd = await this.passwordService.encryptPassword(newpassword);
+                await this.userRepository.updateEmail(userDb.name,parsedPasswd);            
+                return response.status(204).send("PasswordUpdated"); 
+            } catch (e) {
+                return response.status(500).send("Failed when updating password");
+            }
         }
+        
     }
 
     deleteUser = async (request: Request, response: Response) => {
@@ -144,8 +150,8 @@ class UserController implements IRestController {
             return;
         }
 
-        if (user === undefined) {
-            response.status(404).json({ message: "user not found" });
+        if (!user) {
+            response.status(404).send("user not found");
             return;
         }
 
