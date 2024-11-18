@@ -1,12 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { GetRankingService } from "../../services/get-ranking.service";
+import {RankingTileComponent} from "../../shared/ranking-tile/ranking-tile.component";
+import {NgForOf} from "@angular/common";
 
 @Component({
   selector: 'app-ranking',
   standalone: true,
-  imports: [],
+  imports: [
+    RankingTileComponent,
+    NgForOf
+  ],
   templateUrl: './ranking.component.html',
-  styleUrl: './ranking.component.css'
+  styleUrls: ['./ranking.component.css']
 })
-export class RankingComponent {
+export class RankingComponent implements OnInit {
 
+  ranking: any[] = [ { name: 'Alice', score: 1200 }, { name: 'Bob', score: 1100 }, { name: 'Charlie', score: 900 }, ]; // To store the ranking data
+
+  constructor(private getRankingService: GetRankingService) {}
+
+  ngOnInit() {
+    // Subscribe to the Observable to fetch data
+    this.getRankingService.getRanking().subscribe({
+      next: (data: any) => {
+        this.ranking = data; // Update ranking with fetched data
+        console.log('Ranking fetched:', this.ranking);
+      },
+      error: (err) => {
+        console.error('Error fetching ranking:', err);
+      }
+    });
+  }
 }

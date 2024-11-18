@@ -1,0 +1,14 @@
+.rankingTileContainer {
+  border: chartreuse 1px solid;
+  display:flex;
+  justify-content: space-between;
+  width: 40%;
+  margin-top: 4vh;
+  padding: 2vh;
+  margin-left: 30%;
+}
+p{
+  text-align: center;
+  font-size: 3vh;
+}
+

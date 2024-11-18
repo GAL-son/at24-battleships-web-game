@@ -1,21 +1,15 @@
-// src/app/auth.interceptor.ts
-import {HttpEvent, HttpHandler, HttpInterceptor, HttpInterceptorFn, HttpRequest} from '@angular/common/http';
-import { Injectable, Provider } from '@angular/core';
+import { HttpEvent, HttpHandlerFn, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AuthService} from '../services/auth.service';
 
-export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const token = localStorage.getItem('token');
-
-  if (token) {
-    console.log("Adding token to headers");
-    const authReq = req.clone({
-      setHeaders: {
-        'x-access-token': `Bearer ${token}`
-      }
-    });
-    return next(authReq);
-  } else {
-    return next(req);
+export function authInterceptor(req: HttpRequest<any>, next: HttpHandlerFn): Observable<HttpEvent<any>> {
+  if (typeof window !== 'undefined' && window.localStorage) {
+    const authToken = localStorage.getItem('auth_token');
+    if (authToken) {
+      const cloned = req.clone({
+        headers: req.headers.set('Authorization', `Bearer ${authToken}`)
+      });
+      return next(cloned);
+    }
   }
-};
+  return next(req); // Proceed without modification if localStorage is not available
+}
