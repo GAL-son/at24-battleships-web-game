@@ -1,5 +1,5 @@
 
-import { request, Request, Response, Router } from "express";
+import { Request, Response, Router } from "express";
 import IRestController from "Interfaces/IRestController";
 import UserRepository from "../Repositories/UserRepository";
 import { IUserModel } from "Models/IUserModel";

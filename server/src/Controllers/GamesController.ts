@@ -21,6 +21,22 @@ export default class GamesController implements IRestController {
         this.router.get(this.path + "/user/:user", this.authMiddleware, this.getUserGames)
     }
 
+    getGame = async (request: Request, response: Response) => {
+        const id = request.params["id"];
+
+        if(!Number.isInteger(id)) {
+            return response.status(400).send("Invalid id");
+        }
+
+        try {
+            const game = await this.gameRepository.getGameById(parseInt(id));
+            return response.status(200).json(game);
+        } catch (error) {
+            return response.status(404).send("No game found");
+        }
+    }
+    
+
     getAllGames = async (request: Request, response: Response) => {
         try {
             const games = await this.gameRepository.getAllGames();
