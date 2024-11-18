@@ -22,12 +22,19 @@ class UserRepository implements IRepository {
         const sql = `SELECT * FROM ${this.table}`;
         return await this.db?.any<IUserModel>(sql);
     }
+
+    async getUserByEmail(email: string) {
+        this.validateDb();
+
+        const query = `SELECT * FROM ${this.table} where email = $1`;
+        return this.db?.one<IUserModel>(query, [email]);
+    }
     
     async getUserById(id: number) {
         this.validateDb();
         
-        const query = `SELECT * FROM ${this.table} WHERE userid = $1 `;
-        this.db?.one<IUserModel>(query, [id]);
+        const query = `SELECT * FROM ${this.table} WHERE userId = $1 `;
+        return this.db?.one<IUserModel>(query, [id]);
     }
 
     async saveUser(user: IUserModel) {
@@ -36,13 +43,11 @@ class UserRepository implements IRepository {
         return this.db?.one(query, [user.name, user.email, user.score || 0, user.password]);
     }
 
-
     validateDb() : void {
         if(this.db == null) {
             throw Error("NO DATABASE CONNECTED");
         }
-    }
-    
+    }    
 }
 
 export default UserRepository;

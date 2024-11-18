@@ -4,6 +4,6 @@ export interface IUserModel {
     userid: number;
     name: string & tags.MaxLength<64>;
     email: string & tags.Format<"email">;
-    score?: number;
+    score: number;
     password: string;
 }

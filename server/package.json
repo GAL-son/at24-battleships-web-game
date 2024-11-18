@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.14",
+    "@types/morgan": "1.9.3",
     "@types/node": "^14.18.33",
     "@types/ws": "^8.5.13",
     "node-gyp": "^6.1.0",

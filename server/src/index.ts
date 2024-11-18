@@ -24,8 +24,6 @@ const db: DatabaseService = new DatabaseService(config.db)
         new UserRepository("users")
     ]);
 
-    // console.log(db.repository<UserRepository>('users'));
-
 // Inject Controllers
 server.withRestControllers([
     new UserController(db.repository<UserRepository>('users'))
