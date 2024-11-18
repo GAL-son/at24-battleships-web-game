@@ -34,8 +34,7 @@ export default class GamesController implements IRestController {
         } catch (error) {
             return response.status(404).send("No game found");
         }
-    }
-    
+    }    
 
     getAllGames = async (request: Request, response: Response) => {
         try {
