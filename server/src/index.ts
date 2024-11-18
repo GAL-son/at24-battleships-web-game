@@ -10,6 +10,7 @@ import {IRepository} from "./Interfaces/IRepository";
 
 import EchoController from "./Controllers/EchoController";
 import UserRepository from "./Repositories/UserRepository";
+import UserController from './Controllers/UserController';
 
 const server: AppServer = new AppServer();
 
@@ -23,11 +24,9 @@ const db: DatabaseService = new DatabaseService(config.db)
         new UserRepository("users")
     ]);
 
-db.repository<UserRepository>('users').getUsers().then(console.log);
-
 // Inject Controllers
 server.withRestControllers([
-
+    new UserController(db.repository<UserRepository>('users'))
 ]);
 
 server.withWsControllers([

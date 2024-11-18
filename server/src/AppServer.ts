@@ -5,6 +5,8 @@ import * as http from "http";
 import { config } from './config';
 import {IRestController} from 'Interfaces/IRestController';
 import {IWsController} from 'Interfaces/IWsController';
+import morgan from 'morgan';
+import bodyParser from 'body-parser';
 
 class AppServer {
     private restServer: express.Application;
@@ -14,7 +16,10 @@ class AppServer {
     constructor() {
         this.restServer = express();
         this.server = http.createServer(this.restServer);
-        this.webSocketServer = new WebSocket.Server({server: this.server});        
+        this.webSocketServer = new WebSocket.Server({server: this.server}); 
+              
+        this.restServer.use(bodyParser.json());
+        this.restServer.use(morgan('dev'));
     }
 
     public start() {
