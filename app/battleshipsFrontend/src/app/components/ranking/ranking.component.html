@@ -1,4 +1,6 @@
-<app-ranking-tile name="user name" score="user score" number="position"></app-ranking-tile>
-<div *ngFor="let user of ranking; index as i">
-   <app-ranking-tile name={{user.name}} score={{user.score}} number={{i+1}}></app-ranking-tile>
- </div>
+<div class="RankingFullContainer">
+  <app-ranking-tile name="user name" score="user score" number="position"></app-ranking-tile>
+  <div *ngFor="let user of ranking; index as i">
+    <app-ranking-tile name={{user.name}} score={{user.score}} number={{i+1}}></app-ranking-tile>
+  </div>
+</div>
