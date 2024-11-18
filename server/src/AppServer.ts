@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { ErrorRequestHandler } from 'express';
 import WebSocket, { WebSocketServer } from 'ws';
 import * as http from "http";
 
@@ -18,8 +18,15 @@ class AppServer {
         this.server = http.createServer(this.restServer);
         this.webSocketServer = new WebSocket.Server({server: this.server}); 
               
-        this.restServer.use(bodyParser.json());
-        this.restServer.use(morgan('dev'));
+        this.restServer.use(
+            morgan('dev'),
+            bodyParser.json()
+        );
+        this.restServer.use(
+            (err: any, req: any, res: any, next: any) => {
+            console.error(err.stack);
+            next(err);
+          });
     }
 
     public start() {
@@ -30,8 +37,11 @@ class AppServer {
 
     public withRestControllers(restControllers: IRestController[]) {
         restControllers.forEach(controller => {
-            this.restServer.use('/', controller.router);
-        });
+            controller.router.stack.forEach((l: any) => console.log("/api" + l.route?.path, l.route?.methods))
+            
+            this.restServer.use('/api', controller.router);
+        });       
+        
     } 
 
     public withWsControllers(wsControllers: IWsController[]) {
