@@ -7,7 +7,7 @@ export const config = {
         "user": process.env.DB_USER,
         "password": process.env.DB_PASSWORD
     },
-    corsWhitelist: ['https://localhost:3001'],
+    corsWhitelist: ['https://localhost:3001','http://localhost:4200'],
     corsOptions: {
         origin: function (origin: any, callback: any) {
             if(!origin){//for bypassing postman req with  no origin
