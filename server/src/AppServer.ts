@@ -20,7 +20,7 @@ class AppServer {
         this.webSocketServer = new WebSocket.Server({server: this.server}); 
             
         this.restServer.use(            
-            cors,
+            cors(config.corsOptions),
             morgan('dev'),
             bodyParser.json()
         );

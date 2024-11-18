@@ -6,5 +6,18 @@ export const config = {
         "database": process.env.DB_NAME,
         "user": process.env.DB_USER,
         "password": process.env.DB_PASSWORD
+    },
+    corsWhitelist: ['https://localhost:3001'],
+    corsOptions: {
+        origin: function (origin: any, callback: any) {
+            if(!origin){//for bypassing postman req with  no origin
+                return callback(null, true);
+            }
+            if (config.corsWhitelist.indexOf(origin) !== -1) {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS'))
+            }
+        }
     }
 }
