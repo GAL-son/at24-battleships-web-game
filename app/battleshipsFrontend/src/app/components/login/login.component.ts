@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-login',
@@ -11,12 +12,18 @@ import { CommonModule } from '@angular/common';
 })
 export class LoginComponent {
 
-  constructor(private router: Router) {}
+
+
+  username = '';
+  password = '';
+  constructor(private authService: AuthService, private router: Router) {}
 
   logIn(event: Event) {
-    event.preventDefault(); // Explicitly prevent form submission
-    console.log("Logging in without page reload"); // Check if this logs without a reload
-    this.router.navigate(['../home']);
+    this.authService.login(this.username, this.password).subscribe((result) => {
+      if (result) {
+        this.router.navigate(['/dashboard']); // Redirect on successful login
+      }
+    });
   }
 
   goToRegistration(event: Event) {
