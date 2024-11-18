@@ -42,6 +42,18 @@ class UserRepository implements IRepository {
         return this.db?.one(query, [user.name, user.email, user.score, user.password]);
     }
 
+    async deleteUser(name: string) {
+        this.validateDb();
+        const query = `DELETE from ${this.table} WHERE name = $1`;
+        return this.db?.query(query, [name]);
+    }
+
+    async updateEmail(name: string, newEmail: string) {
+        this.validateDb();
+        const query = `UPDATE ${this.table} SET email = $1 WHERE name = $2`;
+        return this.db?.query(query, [newEmail, name]);
+    }
+
     public parseSafe(userUnsafe: IUserModel) {
         return {
             score: userUnsafe.score,

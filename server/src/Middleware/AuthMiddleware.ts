@@ -16,15 +16,20 @@ export const getMiddlewareWithSession = (sessionService: SessionService) => {
         if(!token) {
             response.status(401).send("Missing token");
         } else {
-            const session = sessionService.validateSession(token);
+            const session = sessionService.getSession(token);
 
             if(session) {
-                request.body["token"] = token;
+                try {
+                    jwt.verify(token, key);
+                } catch (error) {
+                    sessionService.deleteSession(token);
+                    return response.status(401).send("Session has expired");
+                }
+                request.body['session'] = session;
                 next();
             } else {
                 response.status(401).send("Authorization failed");
             }
-
         }    
     }
 }

@@ -35,8 +35,12 @@ export default class SessionController implements RestController {
 
     createSession = async (request: Request, response: Response) => {
         const sessiondata: IAuthData = typia.assert(request.body);
-        console.log(sessiondata);
         
+        let session = this.sessionService.getSessionForUser(sessiondata.name);
+
+        if(session) {            
+            return response.status(201).json({token: session.token});
+        }        
 
         try {
             const user = await this.passwordService.validatePassword(sessiondata);
