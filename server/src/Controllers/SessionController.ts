@@ -19,9 +19,10 @@ class SessionController implements RestController {
 
     }
 
-    createSession = (request: Request, response: Response) {
+    createSession = (request: Request, response: Response) => {
         const sessiondata: ISessionCreateData = typia.assert(request.body);
 
+        
 
     }
 

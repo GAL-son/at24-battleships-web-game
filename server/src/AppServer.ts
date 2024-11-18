@@ -1,7 +1,7 @@
 import express, { ErrorRequestHandler } from 'express';
 import WebSocket, { WebSocketServer } from 'ws';
 import * as http from "http";
-import * as cors from 'cors'
+import cors from 'cors';
 
 import { config } from './config';
 import {IRestController} from 'Interfaces/IRestController';
@@ -18,9 +18,9 @@ class AppServer {
         this.restServer = express();
         this.server = http.createServer(this.restServer);
         this.webSocketServer = new WebSocket.Server({server: this.server}); 
-              
-        this.restServer.use,
-            cors(),
+            
+        this.restServer.use(            
+            cors,
             morgan('dev'),
             bodyParser.json()
         );
