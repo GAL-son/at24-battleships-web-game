@@ -180,6 +180,7 @@ class UserController implements IRestController {
             return;
         }
 
+        
         const newUser: IUserModel = {
             name: createUserData.name,
             email: createUserData.email,
@@ -187,16 +188,17 @@ class UserController implements IRestController {
             password: await this.passwordService.encryptPassword(createUserData.password)
         };
 
+        if (await this.userRepository.getUser(newUser.name)) {
+            return response.status(400).send("Name already in use");
+        }
+
         console.log("NEW USER");
         console.log(newUser);
 
         try {
             await this.userRepository.saveUser(newUser);
             response.status(201).send();
-        } catch (error) {
-            if (await this.userRepository.getUser(newUser.name)) {
-                response.status(400).send("Name already in use");
-            }
+        } catch (error) {            
             console.error("Failed to save user! " + error);
             response.status(500).send("Failed to create user");
         }
