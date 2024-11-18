@@ -8,9 +8,8 @@ export const routes: Routes = [
   },
   {
     path:'home',
-    loadComponent:()=>import('./components/home/home.component').then(m=>m.HomeComponent)
-    // loadComponent:()=>import('./components/home/home.component').then(m=>m.HomeComponent),
-    // canActivate:[AuthGuard]
+    loadComponent:()=>import('./components/home/home.component').then(m=>m.HomeComponent),
+    canActivate:[AuthGuard]
   },
   {
     path:'ranking',
@@ -22,7 +21,7 @@ export const routes: Routes = [
     canActivate:[AuthGuard]
   },
   {
-    path:'account',
+    path:'account/:name',
     loadComponent:()=>import('./components/account/account.component').then(m=>m.AccountComponent),
     canActivate:[AuthGuard]
   },

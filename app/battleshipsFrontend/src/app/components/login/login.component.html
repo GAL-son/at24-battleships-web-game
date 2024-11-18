@@ -1,12 +1,12 @@
 <form autocomplete="off">
   <div class="input-group">
-    <input type="text" name="username" placeholder="Nazwa" title="Login">
+    <input type="text" name="username" placeholder="Nazwa" title="Login" [(ngModel)]="name">
   </div>
   <div class="input-group">
-    <input type="password" name="password" placeholder="Hasło" title="Password">
+    <input type="password" name="password" placeholder="Hasło" title="Password" [(ngModel)]="password">
   </div>
 
-  <button type="button" (click)="logIn($event)" class="btn btn-primary" title="Przycisk zaloguj">
+  <button type="button" (click)="Login($event)" class="btn btn-primary" title="Przycisk zaloguj">
     log in
   </button>
   <button type="button" (click)="goToRegistration($event)" class="btn btn-secondary" title="Przycisk zaloguj">

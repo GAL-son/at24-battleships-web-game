@@ -1,1 +1,19 @@
-<p>register works!</p>
+
+<form autocomplete="off">
+  <div class="input-group">
+    <input type="text" name="username" placeholder="Nazwa" title="Login" [(ngModel)]="username">
+  </div>
+  <div class="input-group">
+    <input type="password" name="password" placeholder="Hasło" title="Password" [(ngModel)]="password">
+  </div>
+  <div class="input-group">
+    <input type="email" name="mail" placeholder="adres eMail" title="Mail"[(ngModel)]="email">
+  </div>
+
+  <button type="button" (click)="Register($event)" class="btn btn-primary" title="Przycisk zarejestruj">
+    rejestracja
+  </button>
+  <button type="button" (click)="goToLogin($event)" class="btn btn-secondary" title="Przycisk rejestracja">
+    już mam konto
+  </button>
+</form>
