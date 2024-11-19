@@ -2,13 +2,13 @@
 import { Request, Response, Router } from "express";
 import IRestController from "Interfaces/IRestController";
 import UserRepository from "../Repositories/UserRepository";
-import { IUserModel } from "Models/IUserModel";
+import { IUserModel } from "Repositories/DataModels/IUserModel";
 import { ICreateUserData } from "Models/ICreateUserData";
 import typia, { tags } from "typia";
 import PasswordService from "../Services/PasswordService";
 import { getMiddlewareWithSession } from "../Middleware/AuthMiddleware";
 import SessionService from "Services/SessionService";
-import ISessionModel from "Models/ISessionModel";
+import ISessionModel from "Repositories/DataModels/ISessionModel";
 
 class UserController implements IRestController {
     path: string = "/users";

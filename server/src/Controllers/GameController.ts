@@ -1,26 +1,41 @@
-import WsController from "Interfaces/IWsController";
+import { IWsController } from "Interfaces/IWsController";
+import GameService from "Services/GameService";
+import { WsAuthMiddleware } from "../Middleware/WsAuthMiddleware";
+import WsSessionService from "Services/WsSessionService";
 
 import WebSocket, {Data} from "ws";
 
 
-class GameController implements WsController {
-    
-    constructor() {
-        
+class GameController implements IWsController {
+    gameService: GameService;
+    wsSessionService: WsSessionService;
+
+    constructor(
+        gameService: GameService,
+        wsSessionService: WsSessionService
+    ) {
+        this.gameService = gameService;
+        this.wsSessionService = wsSessionService;
     }
     
-    onConnection(ws: WebSocket): void {
-        throw new Error("Method not implemented.");
-    }
-    onMessage(ws: WebSocket, message: WebSocket.Data): void {
-        throw new Error("Method not implemented.");
+    onConnection(ws: WebSocket): void {}
+
+    onMessage(ws: WebSocket, data: WebSocket.Data): void {
+        if(WsAuthMiddleware(this.wsSessionService, ws, data)) {
+            return;
+        }
+
+
+
     }
     onClose(ws: WebSocket, code: number): void {
-        throw new Error("Method not implemented.");
+        
     }
     onError(Ws: WebSocket, error: Error): void {
-        throw new Error("Method not implemented.");
+        
     }
+
+
 }
 
 export default GameController;

@@ -1,5 +1,5 @@
 import { IRepository } from "Interfaces/IRepository";
-import { IUserModel } from "Models/IUserModel";
+import { IUserModel } from "Repositories/DataModels/IUserModel";
 import { IDatabase, ParameterizedQuery } from "pg-promise";
 import { errors } from "pg-promise";
 

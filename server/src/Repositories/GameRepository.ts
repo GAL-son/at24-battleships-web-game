@@ -1,5 +1,5 @@
 import { IRepository } from "Interfaces/IRepository";
-import { IGameModel } from "Models/IGameModel";
+import { IGameModel } from "Repositories/DataModels/IGameModel";
 import { IDatabase } from "pg-promise";
 
 export default class GameRepository implements IRepository {
