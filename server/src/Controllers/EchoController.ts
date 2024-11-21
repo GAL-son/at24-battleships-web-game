@@ -1,21 +1,31 @@
-import WebSocket from "ws";
+import WebSocket, { WebSocketServer } from "ws";
 
 import {IWsController} from "Interfaces/IWsController";
+import { WebSocketWrapper } from "Interfaces/WebSocketWrapper";
 
 class EchoController implements IWsController {
-    onConnection(ws: WebSocket): void {
-        console.log("Connected");
-        ws.send("Connected");
+
+    constructor() {
     }
-    onMessage(ws: WebSocket, message: WebSocket.Data): void {
-        console.log("Message: " + message);
-        ws.send("Echo: " + message);
+
+    onConnection(wsw: WebSocketWrapper): void {
+        const echo = "Connected on :" + wsw.id; 
+        console.log(echo);
+        wsw.ws.send(echo);
     }
-    onClose(ws: WebSocket, code: number): void {
-        console.log("Connection closed")
+    onMessage(wsw: WebSocketWrapper, message: WebSocket.Data): void {
+        const echo = "Message: " + message + " on connID: " + wsw.id;
+        console.log(echo);
+        wsw.ws.send("Echo: " + echo);
     }
-    onError(Ws: WebSocket, error: Error): void {
-        console.error("Connection Error")
+    onClose(wsw: WebSocketWrapper, code: number): void {
+        const echo = "Connection closed on connID: " + wsw.id;
+        wsw.ws.send(echo);
+        console.log(echo);
+    }
+    onError(wsw: WebSocketWrapper, error: Error): void {
+        const echo = "Connection Error " + error.message + " on connID " + wsw.id;
+        wsw.ws.send(echo);  
     }
 }
 

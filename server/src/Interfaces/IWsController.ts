@@ -1,8 +1,9 @@
-import WebSocket from 'ws';
+import WebSocket, { WebSocketServer } from 'ws';
+import { WebSocketWrapper } from './WebSocketWrapper';
 
 export interface IWsController {
-    onConnection(ws: WebSocket): void;
-    onMessage(ws: WebSocket, message: WebSocket.Data): void;
-    onClose(ws: WebSocket, code: number): void;
-    onError(Ws: WebSocket, error: Error): void;
+    onConnection(wsw: WebSocketWrapper): void;
+    onMessage(wsw: WebSocketWrapper, message: WebSocket.Data): void;
+    onClose(wss: WebSocketWrapper, code: number): void;
+    onError(wsw: WebSocketWrapper, error: Error): void;
 }

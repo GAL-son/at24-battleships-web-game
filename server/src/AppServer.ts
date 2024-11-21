@@ -8,6 +8,7 @@ import {IRestController} from 'Interfaces/IRestController';
 import {IWsController} from 'Interfaces/IWsController';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
+import { randomUUID } from 'crypto';
 
 class AppServer {
     private restServer: express.Application;
@@ -48,30 +49,36 @@ class AppServer {
 
     public withWsControllers(wsControllers: IWsController[]) {
         this.webSocketServer.on('connection', (ws: WebSocket) => {
+
+            const wsWrapper = {
+                ws: ws,
+                id: randomUUID()
+            }
+
             // onConnection 
             wsControllers.forEach(controller => {
-                controller.onConnection(ws);
+                controller.onConnection(wsWrapper);
             });
 
             
             // onMessage
             ws.on('message', (message) => {
                 wsControllers.forEach(controller => {
-                    controller.onMessage(ws, message);
+                    controller.onMessage(wsWrapper, message);
                 });
             });
 
             //onError
             ws.on('error', (ws: WebSocket, error: Error) => {
                 wsControllers.forEach(controller => {
-                    controller.onError(ws, error);
+                    controller.onError(wsWrapper, error);
                 });
             });
 
             //onClose
             ws.on('close', (code: number) => {
                 wsControllers.forEach(controller => {
-                    controller.onClose(ws, code);
+                    controller.onClose(wsWrapper, code);
                 });
             })
         })

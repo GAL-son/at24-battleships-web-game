@@ -1,5 +1,5 @@
 import JWTService from "./JWTService";
-import ISessionModel from "Models/ISessionModel";
+import ISessionModel from "Repositories/DataModels/ISessionModel";
 
 
 class SessionService {
@@ -63,10 +63,6 @@ class SessionService {
             }
         });
     } 
-
-    clearOldSessions() {
-        
-    }
 }
 
 export default SessionService;
