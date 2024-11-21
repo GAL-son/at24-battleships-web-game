@@ -17,18 +17,18 @@ export const WsAuthMiddleware = (wsSessionService: WsSessionService, ws: WebSock
         if(error instanceof Error) {
             sendError(ws, error);
         }
-    }
-    
+    } 
+       
 
     if(!typia.is<GameSessionMessage>(json)) {
-        ws.send("Missing uuid: Closing connection")
+        ws.send("Missing sessionKey: Closing connection")
         ws.close();
         return true;
     }
 
-    const uuid = (json as GameSessionMessage).uuid;
+    const key = (json as GameSessionMessage).sessionKey;
 
-    if(!wsSessionService.validateSession(uuid)) {
+    if(!wsSessionService.validateSession(key)) {
         ws.send("Invalid session key");
         ws.close();
         return true;

@@ -1,40 +1,31 @@
-import WebSocket from "ws";
+import WebSocket, { WebSocketServer } from "ws";
 
 import {IWsController} from "Interfaces/IWsController";
-import Board from "../Logic/Game/Board";
-import Ship from "../Logic/Game/Ship";
-import { IShipPlacement } from "Messages/Types/WsPlayerMessages";
+import { WebSocketWrapper } from "Interfaces/WebSocketWrapper";
 
 class EchoController implements IWsController {
 
     constructor() {
-        // const board = new Board({ x:10, y:10});
-        // const ships = [
-        //     new Ship(3),
-        //     new Ship(1)
-        // ];
-
-        // const placement: IShipPlacement[] = [
-        //     {shipSize: 3, position: {x: 2, y: 2}, vertically: true},
-        //     {shipSize: 1, position: {x: 3, y: 3}, vertically: true},
-        // ];
-
-        // board.setShips(ships, placement);
     }
 
-    onConnection(ws: WebSocket): void {
-        console.log("Connected");
-        ws.send("Connected");
+    onConnection(wsw: WebSocketWrapper): void {
+        const echo = "Connected on :" + wsw.id; 
+        console.log(echo);
+        wsw.ws.send(echo);
     }
-    onMessage(ws: WebSocket, message: WebSocket.Data): void {
-        console.log("Message: " + message);
-        ws.send("Echo: " + message);
+    onMessage(wsw: WebSocketWrapper, message: WebSocket.Data): void {
+        const echo = "Message: " + message + " on connID: " + wsw.id;
+        console.log(echo);
+        wsw.ws.send("Echo: " + echo);
     }
-    onClose(ws: WebSocket, code: number): void {
-        console.log("Connection closed")
+    onClose(wsw: WebSocketWrapper, code: number): void {
+        const echo = "Connection closed on connID: " + wsw.id;
+        wsw.ws.send(echo);
+        console.log(echo);
     }
-    onError(Ws: WebSocket, error: Error): void {
-        console.error("Connection Error")
+    onError(wsw: WebSocketWrapper, error: Error): void {
+        const echo = "Connection Error " + error.message + " on connID " + wsw.id;
+        wsw.ws.send(echo);  
     }
 }
 

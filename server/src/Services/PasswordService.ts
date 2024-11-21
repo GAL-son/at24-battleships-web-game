@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { config } from '../config';
-import { IAuthData } from 'Messages/Types/AuthMessages';
+import { AuthData } from 'Messages/Types/AuthMessages';
 import UserRepository from 'Repositories/UserRepository';
 import typia, { tags } from 'typia';
 import { AuthError, NotFoundError } from '../Errors/Errors';
@@ -15,7 +15,7 @@ export default class PasswordService {
         this.userRepository = userRepository;
     }
 
-    public async validatePassword(authData: IAuthData) {
+    public async validatePassword(authData: AuthData) {
         let user = await this.userRepository.getUser(authData.name);       
         if(!user) {
             throw new NotFoundError("No such user");

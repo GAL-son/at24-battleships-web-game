@@ -93,7 +93,7 @@ export default class SessionController implements RestController {
     createGameSession = async(request: Request, response: Response) => {
         const sessionKey = this.wsSessionService.createSession();
 
-        response.status(201).json({'uuid': sessionKey});
+        response.status(201).json({'sessionKey': sessionKey});
     }
     
     deleteGameSession = async(request: Request, response: Response) => {

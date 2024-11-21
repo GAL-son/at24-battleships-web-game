@@ -8,7 +8,7 @@ enum PlayerMessages {
 }
 
 type GameSessionMessage = {
-    uuid: string
+    sessionKey: string
 }
 
 type PlayerMessage = GameSessionMessage & {
@@ -22,6 +22,13 @@ type PlayerMoveMessage = PlayerMessage & {
 
 type SetShipsMessage = PlayerMessage & {
     ships: ShipPlacement[];
+}
+
+export {
+    GameSessionMessage,
+    PlayerMessage,
+    PlayerMoveMessage,
+    SetShipsMessage
 }
 
 

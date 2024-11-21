@@ -3,7 +3,8 @@ import GameService from "Services/GameService";
 import { WsAuthMiddleware } from "../Middleware/WsAuthMiddleware";
 import WsSessionService from "Services/WsSessionService";
 
-import WebSocket, {Data} from "ws";
+import WebSocket, {Data, WebSocketServer} from "ws";
+import { WebSocketWrapper } from "Interfaces/WebSocketWrapper";
 
 
 class GameController implements IWsController {
@@ -18,10 +19,12 @@ class GameController implements IWsController {
         this.wsSessionService = wsSessionService;
     }
     
-    onConnection(ws: WebSocket): void {}
+    onConnection(wsw: WebSocketWrapper): void {
 
-    onMessage(ws: WebSocket, data: WebSocket.Data): void {
-        if(WsAuthMiddleware(this.wsSessionService, ws, data)) {
+    }
+
+    onMessage(wsw: WebSocketWrapper, data: WebSocket.Data): void {
+        if(WsAuthMiddleware(this.wsSessionService, wsw.ws, data)) {
             return;
         }
 
@@ -30,13 +33,13 @@ class GameController implements IWsController {
         try {
             message = this.convertDataToMessage(data);
         } catch (error) {
-            ws.send("Message is not a valid JSON");
+            wsw.ws.send("Message is not a valid JSON");
         }
 
-        this.handleMessage(ws, message);
+        this.handleMessage(wsw.ws, message);
     }
-    onClose(ws: WebSocket, code: number): void {}
-    onError(Ws: WebSocket, error: Error): void {}
+    onClose(wsw: WebSocketWrapper, code: number): void {}
+    onError(wsw: WebSocketWrapper, error: Error): void {}
 
     private convertDataToMessage(data: WebSocket.Data) {
         return JSON.parse(data.toString());
@@ -44,7 +47,6 @@ class GameController implements IWsController {
     }
         
     private handleMessage(ws: WebSocket, message: string) {
-        ws.
     }
 
 }
