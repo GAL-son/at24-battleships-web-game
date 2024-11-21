@@ -10,6 +10,11 @@ enum ServerMessages {
     GAME_ENDED = "game-ended",
 }
 
+enum GameEndReason {
+    SHIPS_DESTROYES = 'ships-destroyed',
+    FORFIET = "forfeit"
+} 
+
 type ServerMessage = {
     serverTimestamp: number;
     serverMessage: string & ServerMessages;
@@ -17,6 +22,10 @@ type ServerMessage = {
 
 type GameSetupMessage = ServerMessage & {
     gameSetup: ShipSetup;
+    opponent: {
+        name: string;
+        score: number;
+    }
 }
 
 type GameUpdateMessage = ServerMessage & {
@@ -27,6 +36,18 @@ type GameUpdateMessage = ServerMessage & {
 }
 
 type GameEndedMessage = {
-    
+    didYouWon: boolean;
+    totalTurns: number;
+    scoreChange: number;
+    reason: GameEndReason;
+}
+
+export {
+    ServerMessages,
+    GameEndReason,
+    ServerMessage,
+    GameSetupMessage,
+    GameUpdateMessage,
+    GameEndedMessage
 }
 

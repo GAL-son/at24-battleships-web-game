@@ -2,7 +2,7 @@ import IPlayer from "../../Interfaces/IPlayer";
 import Ship from "./Ship";
 import Board from "./Board";
 import { IGameSetup, ShipSetup} from "../IGameSetup";
-import { IShipPlacement } from "Messages/Types/PlayerMessages";
+import { IShipPlacement } from "Messages/Types/WsPlayerMessages";
 
 export default class Game {
 

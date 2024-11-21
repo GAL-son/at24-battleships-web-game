@@ -1,7 +1,7 @@
 import Field from "./Field";
 import { FieldPosition } from "./FieldPosition";
 import Ship from "./Ship";
-import { IShipPlacement } from "Messages/Types/PlayerMessages";
+import { IShipPlacement } from "Messages/Types/WsPlayerMessages";
 
 export default class Board {
     private boardSize: { x: number, y: number };

@@ -3,7 +3,7 @@ import WebSocket from "ws";
 import {IWsController} from "Interfaces/IWsController";
 import Board from "../Logic/Game/Board";
 import Ship from "../Logic/Game/Ship";
-import { IShipPlacement } from "Messages/Types/PlayerMessages";
+import { IShipPlacement } from "Messages/Types/WsPlayerMessages";
 
 class EchoController implements IWsController {
 

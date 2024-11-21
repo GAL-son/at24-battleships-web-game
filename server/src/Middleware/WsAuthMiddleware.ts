@@ -2,7 +2,7 @@ import WsSessionService from "Services/WsSessionService";
 import { Data } from "ws";
 import WebSocket from "ws";
 import typia from "typia";
-import { GameSessionMessage } from "Messages/Types/PlayerMessages";
+import { GameSessionMessage } from "Messages/Types/WsPlayerMessages";
 
 
 export const WsAuthMiddleware = (wsSessionService: WsSessionService, ws: WebSocket, data: Data): boolean => {

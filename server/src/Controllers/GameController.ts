@@ -25,16 +25,27 @@ class GameController implements IWsController {
             return;
         }
 
+        let message;
 
+        try {
+            message = this.convertDataToMessage(data);
+        } catch (error) {
+            ws.send("Message is not a valid JSON");
+        }
+
+        this.handleMessage(ws, message);
+    }
+    onClose(ws: WebSocket, code: number): void {}
+    onError(Ws: WebSocket, error: Error): void {}
+
+    private convertDataToMessage(data: WebSocket.Data) {
+        return JSON.parse(data.toString());
 
     }
-    onClose(ws: WebSocket, code: number): void {
         
+    private handleMessage(ws: WebSocket, message: string) {
+        ws.
     }
-    onError(Ws: WebSocket, error: Error): void {
-        
-    }
-
 
 }
 
