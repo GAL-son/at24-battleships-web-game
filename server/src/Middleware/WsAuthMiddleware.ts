@@ -1,6 +1,8 @@
 import WsSessionService from "Services/WsSessionService";
 import { Data } from "ws";
 import WebSocket from "ws";
+import typia from "typia";
+import { GameSessionMessage } from "Messages/Types/PlayerMessages";
 
 
 export const WsAuthMiddleware = (wsSessionService: WsSessionService, ws: WebSocket, data: Data): boolean => {
@@ -16,13 +18,15 @@ export const WsAuthMiddleware = (wsSessionService: WsSessionService, ws: WebSock
             sendError(ws, error);
         }
     }
-    const uuid = json.uuid;
+    
 
-    if(!uuid) {
+    if(!typia.is<GameSessionMessage>(json)) {
         ws.send("Missing uuid: Closing connection")
         ws.close();
         return true;
     }
+
+    const uuid = (json as GameSessionMessage).uuid;
 
     if(!wsSessionService.validateSession(uuid)) {
         ws.send("Invalid session key");
@@ -31,5 +35,4 @@ export const WsAuthMiddleware = (wsSessionService: WsSessionService, ws: WebSock
     }      
 
     return false;
-
 }

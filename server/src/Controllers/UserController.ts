@@ -3,7 +3,7 @@ import { Request, Response, Router } from "express";
 import IRestController from "Interfaces/IRestController";
 import UserRepository from "../Repositories/UserRepository";
 import { IUserModel } from "Repositories/DataModels/IUserModel";
-import { ICreateUserData } from "Models/ICreateUserData";
+import { CreateUserData } from "Messages/Types/UserControllerMessages";
 import typia, { tags } from "typia";
 import PasswordService from "../Services/PasswordService";
 import { getMiddlewareWithSession } from "../Middleware/AuthMiddleware";
@@ -171,7 +171,7 @@ class UserController implements IRestController {
     createUser = async (request: Request, response: Response) => {
         console.log("CREATE");
 
-        let createUserData: ICreateUserData;
+        let createUserData: CreateUserData;
         try {
             createUserData = typia.assert(request.body);
         } catch (error) {

@@ -1,6 +1,6 @@
 import { tags } from "typia";
 
-export interface IAuthData {
+export type AuthData = {
     name: string; 
     password: string;
 }

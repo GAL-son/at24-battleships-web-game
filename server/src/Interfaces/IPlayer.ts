@@ -1,4 +1,4 @@
-import { IGameUpdateData } from "Models/GameCommunication";
+import { IGameUpdateData } from "Messages/Types/PlayerMessages";
 
 export default interface IPlayer {    
     updateState(update: IGameUpdateData): void;

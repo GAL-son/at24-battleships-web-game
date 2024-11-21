@@ -1,7 +1,7 @@
 import Field from "./Field";
 import { FieldPosition } from "./FieldPosition";
 import Ship from "./Ship";
-import { IShipPlacement } from "Models/GameCommunication";
+import { IShipPlacement } from "Messages/Types/PlayerMessages";
 
 export default class Board {
     private boardSize: { x: number, y: number };

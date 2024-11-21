@@ -1,7 +1,7 @@
 
 import { Request, Response, Router } from "express";
 import RestController from "Interfaces/IRestController";
-import { IAuthData } from "Models/IAuthData";
+import { AuthData } from "Messages/Types/AuthMessages";
 import UserRepository from "Repositories/UserRepository";
 import PasswordService from "../Services/PasswordService";
 import SessionService from "Services/SessionService";
@@ -47,7 +47,7 @@ export default class SessionController implements RestController {
     }
 
     createSession = async (request: Request, response: Response) => {
-        const sessiondata: IAuthData = typia.assert(request.body);
+        const sessiondata: AuthData = typia.assert(request.body);
         
         let session = this.sessionService.getSessionForUser(sessiondata.name);
 
