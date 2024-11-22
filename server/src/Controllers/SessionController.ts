@@ -1,12 +1,15 @@
 
 import { Request, Response, Router } from "express";
 import RestController from "Interfaces/IRestController";
-import { IAuthData } from "Models/IAuthData";
+import { AuthData } from "Messages/Types/AuthMessages";
 import UserRepository from "Repositories/UserRepository";
 import PasswordService from "../Services/PasswordService";
 import SessionService from "Services/SessionService";
-import typia, { tags } from "typia";
+import typia from "typia";
+import { getMiddlewareWithSession } from "../Middleware/AuthMiddleware";
 import { AuthError, NotFoundError } from "../Errors/Errors";
+
+import WsSessionService from "Services/WsSessionService";
 
 
 export default class SessionController implements RestController {
@@ -14,29 +17,43 @@ export default class SessionController implements RestController {
     router: Router = Router();
 
     sessionService: SessionService;
+    
+    wsSessionService: WsSessionService;
     userRepository: UserRepository;
     passwordService: PasswordService;
 
+    authMiddleware;
+
     constructor(
-        sessionService: SessionService,
         userRepository: UserRepository,
+        wsSessionService: WsSessionService,
+        sessionService: SessionService,
     ) {
         this.sessionService = sessionService;
+        this.wsSessionService = wsSessionService;
         this.userRepository = userRepository;
         this.passwordService = new PasswordService(this.userRepository);
 
+
+        this.authMiddleware = getMiddlewareWithSession(this.sessionService);
         this.initRoutes();
     }
 
     private initRoutes() {
         this.router.post(this.path + "/create", this.createSession);
-        this.router.post(this.path + "/delete", this.deleteSession);
+        this.router.post(this.path + "/delete", this.authMiddleware, this.deleteSession);
+        this.router.post(this.path + "/game/create", this.authMiddleware, this.createGameSession);
+        this.router.post(this.path + "/game/delete", this.authMiddleware, this.deleteSession);
     }
 
     createSession = async (request: Request, response: Response) => {
-        const sessiondata: IAuthData = typia.assert(request.body);
-        console.log(sessiondata);
+        const sessiondata: AuthData = typia.assert(request.body);
         
+        let session = this.sessionService.getSessionForUser(sessiondata.name);
+
+        if(session) {            
+            return response.status(201).json({token: session.token});
+        }        
 
         try {
             const user = await this.passwordService.validatePassword(sessiondata);
@@ -72,4 +89,15 @@ export default class SessionController implements RestController {
 
         response.status(200).send();
     }
+
+    createGameSession = async(request: Request, response: Response) => {
+        const sessionKey = this.wsSessionService.createSession();
+
+        response.status(201).json({'sessionKey': sessionKey});
+    }
+    
+    deleteGameSession = async(request: Request, response: Response) => {
+
+    }
+
 }

@@ -1,5 +1,5 @@
 import JWTService from "./JWTService";
-import ISessionModel from "Models/ISessionModel";
+import ISessionModel from "Repositories/DataModels/ISessionModel";
 
 
 class SessionService {
@@ -33,21 +33,36 @@ class SessionService {
         });
     }
 
-    validateSession(token: string) {
-        let valid = false;
+    getSession(token: string) {
+        let session;
 
-        this.sessions.forEach(session => {
-            if(session.token === token) {
-                valid = true;
+        this.sessions.forEach(s => {
+            if(s.token === token) {
+                session = s;
             }
         });
 
-        return valid;
+        return session;
     }
 
-    clearOldSessions() {
-        
+    getSessionForUser(name: string): undefined | ISessionModel {
+        let session;
+        this.sessions.forEach((s) => {
+            if(s.data.user.name == name) {
+                session = s;
+            }
+        });
+
+        return session;
     }
+
+    deleteSessionsForUser(name: string) {
+        this.sessions.forEach((s, i) => {
+            if(s.data.user.name == name) {
+                this.sessions.splice(i, 1);
+            }
+        });
+    } 
 }
 
 export default SessionService;

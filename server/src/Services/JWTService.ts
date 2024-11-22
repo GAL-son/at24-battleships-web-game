@@ -15,6 +15,8 @@ class JWTService {
         return token;
     }
 
+    
+
 }
 
 export default JWTService;
