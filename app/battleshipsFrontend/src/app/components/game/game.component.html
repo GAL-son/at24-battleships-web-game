@@ -1,1 +1,29 @@
-<p>game works!</p>
+<div class="game-container">
+  <!-- Display Ship Sizes to Place -->
+  <div class="ship-info">
+    <h3>Place Ships</h3>
+    <p>Current Ship Size: {{ currentShipSize }}</p>
+    <p *ngIf="shipSizes.length === 0">All ships placed! Ready to start the game.</p>
+  </div>
+  <div class="ship-info">
+    <h3>Current Orientation:</h3>
+
+    <p *ngIf="horizontal">placing ships horizontaly</p>
+    <p *ngIf="!horizontal">placing ships verticaly</p>
+  </div>
+
+  <!-- Grid for placing ships -->
+  <app-grid
+    #gridObj
+    [grid]="grid"
+    [currentShipSize]="currentShipSize"
+    (shipPlaced)="onShipPlaced($event)"
+    [horizontal]="horizontal"
+  >
+  </app-grid>
+
+  <!-- Start Game Button -->
+  <button (click)="changeOrientation()">change orientation</button>
+  <button *ngIf="shipSizes.length == 0" (click)="startGame()">Start Game</button>
+  <button (click)="reset()">reset</button>
+</div>
