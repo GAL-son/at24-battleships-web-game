@@ -28,11 +28,15 @@ type GameSetupMessage = ServerMessage & {
     }
 }
 
-type GameUpdateMessage = ServerMessage & {
-    enemyMove: MoveData;
-    wasHit: boolean;
-    turn: number;
+type GameStartMessage = ServerMessage & {
     isYourTurn: boolean;
+}
+
+type GameUpdateMessage = ServerMessage & {
+    move: MoveData;
+    wasHit: boolean;
+    wasSunk: boolean;
+    turn: number;
 }
 
 type GameEndedMessage = {
@@ -48,6 +52,7 @@ export {
     ServerMessage,
     GameSetupMessage,
     GameUpdateMessage,
-    GameEndedMessage
+    GameEndedMessage,
+    GameStartMessage
 }
 

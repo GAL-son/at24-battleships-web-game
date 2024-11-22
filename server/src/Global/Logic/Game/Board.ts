@@ -67,7 +67,7 @@ export default class Board {
 
             const field = this.getField(partCoordinates.x, partCoordinates.y);
             shipFields.push(partCoordinates);
-            if (field.hasShip() || field.canHostShip) {
+            if (field.hasShip() || !field.canHostShip) {
                 console.error("Ship overlap");
                 throw new Error("This field is occupied. Clear first")
             }
