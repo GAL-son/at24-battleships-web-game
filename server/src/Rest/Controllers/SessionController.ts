@@ -4,12 +4,12 @@ import RestController from "Rest/Interface/IRestController";
 import { AuthData } from "Rest/Messages/AuthMessages";
 import UserRepository from "Global/Database/Repositories/UserRepository";
 import PasswordService from "../Services/PasswordService";
-import SessionService from "Global/Services/SessionService";
+import SessionService from "Rest/Services/SessionService";
+import WsSessionService from "Ws/Services/WsSessionService";
 import typia from "typia";
 import { getMiddlewareWithSession } from "../Middleware/AuthMiddleware";
 import { AuthError, NotFoundError } from "../../Errors/Errors";
 
-import WsSessionService from "Global/Services/WsSessionService";
 
 
 export default class SessionController implements RestController {
@@ -91,7 +91,9 @@ export default class SessionController implements RestController {
     }
 
     createGameSession = async(request: Request, response: Response) => {
-        const sessionKey = this.wsSessionService.createSession();
+        const jwt = request.body['session'];
+
+        const sessionKey = this.wsSessionService.createSession(jwt);
 
         response.status(201).json({'sessionKey': sessionKey});
     }
