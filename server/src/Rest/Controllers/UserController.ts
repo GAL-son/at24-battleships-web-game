@@ -7,7 +7,7 @@ import { CreateUserData } from "Rest/Messages/UserControllerMessages";
 import typia, { tags } from "typia";
 import PasswordService from "../Services/PasswordService";
 import { getMiddlewareWithSession } from "../Middleware/AuthMiddleware";
-import SessionService from "Global/Services/SessionService";
+import SessionService from "Rest/Services/SessionService";
 import ISessionModel from "Repositories/DataModels/ISessionModel";
 
 class UserController implements IRestController {

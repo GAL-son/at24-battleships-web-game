@@ -2,7 +2,7 @@ import IPlayer from "../../../Interfaces/IPlayer";
 import Ship from "./Ship";
 import Board from "./Board";
 import { IGameSetup, ShipSetup} from "../../../Logic/IGameSetup";
-import { IShipPlacement } from "Ws/Messages/Types/WsPlayerMessages";
+import { ShipPlacement } from "./Types";
 
 export default class Game {
 
@@ -52,7 +52,7 @@ export default class Game {
         return this.player1?.isReady() && this.player2?.isReady();
     }
 
-    private setShips(player: IPlayer, shipsPlacement: IShipPlacement[]) {
+    private setShips(player: IPlayer, shipsPlacement: ShipPlacement[]) {
 
         if(player !== this.player1 && player !== this.player2) {
             throw new Error("Invalid player");
@@ -76,7 +76,7 @@ export default class Game {
         }
     }
 
-    private validateShipPlacement(shipsPlacement: IShipPlacement[]) {
+    private validateShipPlacement(shipsPlacement: ShipPlacement[]) {
         const check = {...this.shipSetup};
 
         shipsPlacement.forEach(placement => {

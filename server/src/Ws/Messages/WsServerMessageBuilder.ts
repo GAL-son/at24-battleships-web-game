@@ -1,9 +1,9 @@
 import { ShipSetup } from "Logic/IGameSetup";
-import { GameEndReason, ServerMessage, ServerMessages } from "./Types/WsServerMessages";
+import { GameEndReason, GameSetupMessage, ServerMessage, ServerMessages } from "./Types/WsServerMessages";
 import { MoveData } from "Global/Logic/Game/Types";
 
 
-export default class WsServerMessageBuilder {
+class WsServerMessageBuilder {
     public static createGenericServerMessage(message: ServerMessages) {
         return {
             serverMessage: message,
@@ -11,7 +11,7 @@ export default class WsServerMessageBuilder {
         } as ServerMessage
     }
 
-    public static createGameSetupMessage(gameSetup: ShipSetup, opponent: {name: string; score: number;}) {
+    public static createGameSetupMessage(gameSetup: ShipSetup, opponent: {name: string; score: number;}): GameSetupMessage {
         return {
             ... this.createGenericServerMessage(ServerMessages.GAME_FOUND),
             gameSetup: gameSetup,
@@ -39,3 +39,5 @@ export default class WsServerMessageBuilder {
         }
     }
 }
+
+export default WsServerMessageBuilder;

@@ -1,6 +1,9 @@
-import { IGameUpdateData } from "Ws/Messages/Types/WsPlayerMessages";
+import { ServerMessage } from "Ws/Messages/Types/WsServerMessages";
 
 export default interface IPlayer {    
-    updateState(update: IGameUpdateData): void;
+    name: string;
+    score: number;
+
+    sendMessage(message: ServerMessage): void;    
     isReady(): boolean;
 }

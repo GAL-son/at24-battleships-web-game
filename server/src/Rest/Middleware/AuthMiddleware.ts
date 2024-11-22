@@ -1,5 +1,5 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
-import SessionService from "Global/Services/SessionService";
+import SessionService from "Rest/Services/SessionService";
 import jwt from 'jsonwebtoken';
 import { config } from "../../config";
 
