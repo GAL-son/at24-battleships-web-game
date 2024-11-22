@@ -1,4 +1,5 @@
 import { MoveData, ShipPlacement } from "Global/Logic/Game/Types";
+import { WsSessionMessage } from "./WsSessionMessage";
 
 enum PlayerMessages {
     START_SEARCH = "start-search",
@@ -7,13 +8,8 @@ enum PlayerMessages {
     QUIT_GAME = "quit-game"
 }
 
-type GameSessionMessage = {
-    sessionKey: string
-}
-
-type PlayerMessage = GameSessionMessage & {
+type PlayerMessage = WsSessionMessage & {
     message: string & PlayerMessages;
-    name: string;
 }
 
 type PlayerMoveMessage = PlayerMessage & {
@@ -25,7 +21,7 @@ type SetShipsMessage = PlayerMessage & {
 }
 
 export {
-    GameSessionMessage,
+    PlayerMessages,
     PlayerMessage,
     PlayerMoveMessage,
     SetShipsMessage

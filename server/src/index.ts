@@ -6,20 +6,20 @@ import { config } from './config';
 
 import AppServer from "./AppServer";
 import DatabaseService from "./Global/Services/DatabaseService";
+import SessionService from './Rest/Services/SessionService';
+import WsSessionService from './Ws/Services/WsSessionService';
+import GameService from './Ws/Services/GameService';
 
-
-import EchoController from "./Ws/Controllers/EchoController";
-import UserRepository from "./Global/Database/Repositories/UserRepository";
-import UserController from './Rest/Controllers/UserController';
 import SessionController from './Rest/Controllers/SessionController';
-import SessionService from './Global/Services/SessionService';
-import GameRepository from './Global/Database/Repositories/GameRepository';
-import { getMiddlewareWithSession } from './Rest/Middleware/AuthMiddleware';
+import EchoController from "./Ws/Controllers/EchoController";
+import UserController from './Rest/Controllers/UserController';
 import GamesController from './Rest/Controllers/GamesController';
-import GameSessionService from 'Global/Services/GameSessionService';
 import GameController from './Ws/Controllers/GameController';
-import GameService from './Global/Services/GameService';
-import WsSessionService from './Global/Services/WsSessionService';
+
+import UserRepository from "./Global/Database/Repositories/UserRepository";
+import GameRepository from './Global/Database/Repositories/GameRepository';
+
+import { getMiddlewareWithSession } from './Rest/Middleware/AuthMiddleware';
 
 const server: AppServer = new AppServer();
 
@@ -45,8 +45,7 @@ server.withRestControllers([
 ]);
 
 server.withWsControllers([
-    new EchoController(),
-    new GameController(gameService, wsSessionService),
+    new GameController(gameService, wsSessionService, db.repository<UserRepository>('users')),
 ]);
 
 // Start service

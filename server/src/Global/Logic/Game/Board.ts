@@ -1,7 +1,7 @@
 import Field from "./Field";
 import { FieldPosition } from "./FieldPosition";
 import Ship from "./Ship";
-import { IShipPlacement } from "Ws/Messages/Types/WsPlayerMessages";
+import { ShipPlacement } from "./Types";
 
 export default class Board {
     private boardSize: { x: number, y: number };
@@ -21,7 +21,7 @@ export default class Board {
         this.printBoard();
     }
 
-    setShips(ships: Ship[], placements: IShipPlacement[]) {
+    setShips(ships: Ship[], placements: ShipPlacement[]) {
         ships.forEach(ship => {
             // Find Placement
             const placement = placements.find((placement) => {
