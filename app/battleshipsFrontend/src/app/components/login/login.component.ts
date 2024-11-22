@@ -7,7 +7,7 @@ import {FormsModule} from "@angular/forms";
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterModule, CommonModule,FormsModule],
+  imports: [RouterModule, CommonModule, FormsModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -37,13 +37,9 @@ export class LoginComponent {
   }
 
 
-goToRegistration(event
-:
-Event
-)
-{
-  event.preventDefault(); // Explicitly prevent form submission
-  console.log("going to registration"); // Check if this logs without a reload
-  this.router.navigate(['../register']);
-}
+  goToRegistration(event:Event) {
+    event.preventDefault(); // Explicitly prevent form submission
+    console.log("going to registration"); // Check if this logs without a reload
+    this.router.navigate(['../register']);
+  }
 }
