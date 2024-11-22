@@ -7,6 +7,8 @@ import WebSocket, {Data, WebSocketServer} from "ws";
 import { WebSocketWrapper } from "Interfaces/WebSocketWrapper";
 
 
+
+
 class GameController implements IWsController {
     gameService: GameService;
     wsSessionService: WsSessionService;
@@ -47,6 +49,7 @@ class GameController implements IWsController {
     }
         
     private handleMessage(ws: WebSocket, message: string) {
+        console.log(message);
     }
 
 }
