@@ -31,6 +31,10 @@ export default class OnlinePlayer implements IPlayer {
         return this.didSetShips;
     }
 
+    setReady(ready: boolean): void {
+        this.didSetShips = true;
+    }
+
 
 
 }

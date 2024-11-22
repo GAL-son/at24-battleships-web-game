@@ -3,6 +3,10 @@ import WsServerMessageBuilder from "../Messages/WsServerMessageBuilder";
 import { GameSetupMessage, ServerMessages } from "../Messages/Types/WsServerMessages";
 import Game from "../../Global/Logic/Game/Game";
 import { defaultGameSetup } from "../../Resources/DefaultBoardSetup";
+import { MoveData, ShipPlacement } from "Global/Logic/Game/Types";
+import { randomUUID } from "crypto";
+
+
 
 class GameService {   
     // Queue
@@ -30,6 +34,17 @@ class GameService {
 
     removeFromQueue(player: IPlayer) {
         this.queue.delete(player.name);
+    }
+
+    setShips(player: IPlayer, ships: ShipPlacement[]) {
+        
+        const game = this.getPlayerGame(player);
+        
+        game.setShips(player, ships);
+
+        if(game.canGameStart()) {
+            this.startGame(game);
+        }
     }
 
     processQueue = (name: string): void => {
@@ -87,10 +102,14 @@ class GameService {
         const gameSetup = defaultGameSetup;
         const game = new Game(gameSetup);
 
+        game.linkPlayer(player1);
+        game.linkPlayer(player2);
 
+        const gameId = randomUUID();
 
-        game.player1 = player1;
-        game.player2 = player2;
+        this.games.set(gameId, game);
+        this.players.set(player1.name, gameId);
+        this.players.set(player2.name, gameId);
 
         const message1: GameSetupMessage = WsServerMessageBuilder.createGameSetupMessage(
             gameSetup.shipSizes,
@@ -109,6 +128,32 @@ class GameService {
 
         player1.sendMessage(message1);
         player2.sendMessage(message2);
+    }
+
+    startGame(game: Game) {
+        game.start();
+    }
+
+    playerMove(player: IPlayer, move: MoveData) {
+        const game = this.getPlayerGame(player);
+
+        game.move(player, move);
+    }
+
+    getPlayerGame(player: IPlayer) {
+        const gameId = this.players.get(player.name);
+
+        if(gameId === undefined || (!this.games.has(gameId))) {
+            throw new Error("Cant find game for player");
+        }
+        
+        const game = this.games.get(gameId);
+        
+        if(game===undefined) {
+            throw new Error("Cant find game for player");
+        } 
+
+        return game;
     }
 
 

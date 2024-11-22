@@ -5,13 +5,14 @@ import WsSessionService from "Ws/Services/WsSessionService";
 
 import WebSocket, {Data, WebSocketServer} from "ws";
 import { WebSocketWrapper } from "Interfaces/WebSocketWrapper";
-import { PlayerMessage, PlayerMessages, SetShipsMessage} from "../Messages/Types/WsPlayerMessages";
+import { PlayerMessage, PlayerMessages, PlayerMoveMessage, SetShipsMessage} from "../Messages/Types/WsPlayerMessages";
 import typia from "typia";
 import UserRepository from "Global/Database/Repositories/UserRepository";
 import IPlayer from "Interfaces/IPlayer";
 import { Connection } from "Ws/Types/Connection";
 import OnlinePlayer from "../OnlinePlayer";
 import { ServerMessage } from "Ws/Messages/Types/WsServerMessages";
+import { wsErrorHandler}  from "../WsErrorHandler";
 
 class GameController implements IWsController {
     connections: Map<string, Connection> = new Map(); // Key is ws id
@@ -41,16 +42,10 @@ class GameController implements IWsController {
             return;
         }
 
-        let message;
-
-        try {
-            message = this.convertDataToMessage(data);
-        } catch (error) {
-            wsw.ws.send("Message is not a valid JSON");
-        }
-
+        let message = JSON.parse(data.toString());
         this.handleMessage(wsw, message);
     }
+
     onClose(wsw: WebSocketWrapper, code: number): void {
         // DO ALL STUFF WHEN DISCONNECTED
         
@@ -59,23 +54,20 @@ class GameController implements IWsController {
     }
 
     onError(wsw: WebSocketWrapper, error: Error): void {
-        wsw.ws.send("ERROR" + error.message);
-    }
-
-    private convertDataToMessage(data: WebSocket.Data): any {
-        return JSON.parse(data.toString());
-
+        wsErrorHandler(wsw.ws, error);
     }
         
     private handleMessage(wsw: WebSocketWrapper, message: any) {
         console.log(message);
 
         if(!typia.is<PlayerMessage>(message)) {
-            wsw.ws.send("Not valid player message");
+            wsErrorHandler(wsw.ws, "Not valid player message");
+            return;
         }
-
+        
         if(!this.connections.has(wsw.id)) {
-            throw new Error("Unregistered connection");
+            wsErrorHandler(wsw.ws, "unregistered connection");
+            return;
         }
 
         const conn = this.connections.get(wsw.id);
@@ -90,15 +82,25 @@ class GameController implements IWsController {
                     this.handleGameSearch(pmessage, conn);
                     break;
                 case PlayerMessages.SET_SHIPS:
+                    if(!typia.is<SetShipsMessage>(pmessage)) {
+                        wsErrorHandler(wsw.ws, "Invalid SetShipsMessage!")
+                    }
                     const setShips = pmessage as SetShipsMessage;
                     this.handleSetShips(setShips, conn);
                     break;
-                case PlayerMessages.MOVE:
+                    case PlayerMessages.MOVE:
+                    case PlayerMessages.SET_SHIPS:
+                        if(!typia.is<PlayerMoveMessage>(pmessage)) {
+                            wsErrorHandler(wsw.ws, "Invalid PlayerMoveMessage!")
+                        }
+                    const moveMessage = pmessage as PlayerMoveMessage;
+                    this.handleMove(moveMessage, conn);
+                    break;
                 case PlayerMessages.QUIT_GAME:
                     wsw.ws.send("NOT IMPLEMENTED");
                     break;
                 default:
-                    wsw.ws.send("Invalid message type");
+                    wsErrorHandler(wsw.ws, "Invalid message type");
                     break;
             }
         }     
@@ -112,23 +114,71 @@ class GameController implements IWsController {
         const userData = session?.session.data.user;
         console.log(userData);        
 
-        if(session !== undefined) {
+       try {
+        if(session !== undefined && userData !== undefined) {
             const player = new OnlinePlayer(userData, connection.wsw.id, this.handleMessageSend);
             this.players.set(session?.uuid, player);
             this.gameService.addToQueue(player);
-        }       
+        }     
+       } catch (error) {
+        wsErrorHandler(connection.wsw.ws, error);
+       }
     }
 
     private handleSetShips(message: SetShipsMessage, connection: Connection) {
-        
+        const player = this.getPlayer(connection);
+        try {
+
+            if(player === undefined) {
+                throw(connection.wsw.ws, "Player not searching game")
+            }
+
+            this.gameService.setShips(player, message.ships);
+        } catch (error) {
+            wsErrorHandler(connection.wsw.ws, error);
+        }
     }
 
-    private handleMove() {
+    private handleMove(moveMessage: PlayerMoveMessage ,connection: Connection) {
+        const player = this.getPlayer(connection);
 
+        try {
+            const move = moveMessage.move;
+
+            if(player !== undefined) {
+                this.gameService.playerMove(player, move);
+            } else {
+                throw new Error ("Player Not Found")
+            }
+        } catch (error) {
+            wsErrorHandler(connection.wsw.ws, error);
+        }
     }
 
     private handleQuit() {
 
+    }
+
+    private getPlayer(connection: Connection): IPlayer | undefined {
+        try {
+            if(connection.sessionKey === undefined) {
+                throw new Error("Unregisterec donnection");
+    
+            };
+    
+            if(!this.players.has(connection.sessionKey)) {
+                throw new Error("Has not joined the game");
+            }
+            
+            const player = this.players.get(connection.sessionKey);
+            if(player == undefined) {
+                throw new Error("Player Not found");
+            }
+
+            return player;
+        } catch (error) {
+            wsErrorHandler(connection.wsw.ws, wsErrorHandler);
+        }
     }
 
     

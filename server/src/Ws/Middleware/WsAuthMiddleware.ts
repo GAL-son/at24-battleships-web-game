@@ -3,34 +3,31 @@ import { Data } from "ws";
 import WebSocket from "ws";
 import typia from "typia";
 import { WsSessionMessage } from "Ws/Messages/Types/WsSessionMessage";
+import { wsErrorHandler } from "../WsErrorHandler";
 
 
 export const WsAuthMiddleware = (wsSessionService: WsSessionService, ws: WebSocket, data: Data): boolean => {
-    const sendError = (ws: WebSocket, error: Error) => {
-        ws.send(error.message);
-    }
-
     let json;
     try {
         json = JSON.parse(data.toString());
     } catch (error) {
         if(error instanceof Error) {
-            sendError(ws, error);
+            wsErrorHandler(ws, error);
+
+        } else {
+            wsErrorHandler(ws, "Unknown error");
         }
-    } 
-       
+    }       
 
     if(!typia.is<WsSessionMessage>(json)) {
-        ws.send("Missing sessionKey: Closing connection")
-        ws.close();
+        wsErrorHandler(ws, "'sessionKey' missing!");
         return true;
     }
 
     const key = (json as WsSessionMessage).sessionKey;
 
     if(!wsSessionService.validateSession(key)) {
-        ws.send("Invalid session key");
-        ws.close();
+        wsErrorHandler(ws, "Invalid session key");
         return true;
     }      
 
