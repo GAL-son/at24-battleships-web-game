@@ -11,11 +11,11 @@
   height: 10%;
   background-color: rgba(0, 0, 0, 0);
   cursor: pointer;
-  border: chartreuse 2px solid;
+  border: rgba(72, 255, 10, 0.69) 2px solid;
 }
 
 .cell.ship {
-  background-color: #ffffff; /* Mark ship cells */
+  background-color: rgba(13, 225, 16, 0.73); /* Mark ship cells */
 }
 .containerOneGrid
 {

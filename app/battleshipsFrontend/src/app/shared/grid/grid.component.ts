@@ -25,7 +25,7 @@ export class GridComponent implements OnInit {
 
   placeShip(x: number, y: number) {
     // First, check if the placement is valid
-    if (!this.isValidPlacement(x, y)) {
+    if (!this.isValidPlacement(x, y)||this.currentShipSize==0) {
       console.log('Invalid placement, try again!');
       return false; // Ship cannot be placed
     }

@@ -2,6 +2,10 @@ import {Inject, Injectable} from '@angular/core';
 import {Subject} from "rxjs";
 import {DOCUMENT} from "@angular/common";
 
+interface GameSetup {
+[key:number]:number
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -10,6 +14,8 @@ export class WebSocketService {
   private socket: WebSocket | null = null;
   private messagesSubject: Subject<any> = new Subject<any>();
   private tokenKey="WStoken";
+  setup:number[]=[]
+  enemy={name:'',score:''}
   constructor( @Inject(DOCUMENT) private document: Document, ) {
 
 
@@ -19,6 +25,8 @@ export class WebSocketService {
 
   connect(url: string): void {
 
+
+
     this.socket = new WebSocket(url);
 
     this.socket.onopen = () =>{
@@ -26,10 +34,12 @@ export class WebSocketService {
     }
 
     this.socket.onmessage = (event: MessageEvent) => {
-
+      console.log(event.data)
       const message = JSON.parse(event.data);
+
       this.messagesSubject.next(message);
       console.log(this.messagesSubject)
+
     };
 
 
@@ -47,7 +57,7 @@ export class WebSocketService {
     console.log(JSON.stringify(this.getWsKey()))
     const message = {
       sessionKey:this.getWsKey(),
-      message:"game-search"
+      message:"start-search"
     }
     return JSON.stringify(message);
   }
@@ -76,5 +86,20 @@ export class WebSocketService {
     if (this.socket) {
       this.socket.close();
     }
+  }
+
+  storeData(message: any) {
+
+      this.enemy.name=message.opponent.name;
+      this.enemy.score=message.opponent.score;
+      this.setup = Object.entries(message.gameSetup as GameSetup).flatMap(([shipType, count]) =>
+      Array(count).fill(Number(shipType))
+    );
+      console.log("setup got setted")
+    console.log("setting"+this.setup)
+    console.log("enemy"+this.enemy.name)
+    console.log("enemy"+this.enemy.score)
+    console.log("EOF==")
+
   }
 }

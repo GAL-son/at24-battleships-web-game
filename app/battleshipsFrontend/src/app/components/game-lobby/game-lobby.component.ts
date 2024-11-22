@@ -31,8 +31,10 @@ export class GameLobbyComponent implements  OnInit{
         this.webSocketService.connect('ws://localhost:3001'); // Provide your WebSocket URL here
 
         this.wsSubscription = this.webSocketService.messages$.subscribe((message) => {
-          if (message.type === 'game-found') {
+          if (message.serverMessage === 'game-found') {
+            console.log('GameFount!!');
             console.log('Game found:', message);
+            this.webSocketService.storeData(message)
             this.router.navigate(['/game']); // Navigate to the game component
           }
         });
@@ -43,10 +45,6 @@ export class GameLobbyComponent implements  OnInit{
     });
   }
 
-  ngOnDestroy(): void {
-    // Clean up the WebSocket connection when the component is destroyed
-    this.wsSubscription.unsubscribe(); // Unsubscribe from the WebSocket messages
-    this.webSocketService.closeConnection(); // Close WebSocket connection
-  }
+
 
 }
