@@ -33,7 +33,7 @@ const db: DatabaseService = new DatabaseService(config.db)
         new GameRepository("games")
     ]);
 
-const gameService: GameService = new GameService();
+const gameService: GameService = new GameService(db.repository<GameRepository>('games'));
 const sessionService: SessionService = new SessionService();
 const wsSessionService = new WsSessionService();
 

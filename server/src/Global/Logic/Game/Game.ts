@@ -63,6 +63,10 @@ export default class Game {
         this.serviceDeleteGame = seviceDeleteGame;
     }
 
+    getLength() {
+        return this.turn+1;
+    }
+
     public linkPlayer(player: IPlayer) {
         if(this.player1 === undefined) {
             this.player1 = player;

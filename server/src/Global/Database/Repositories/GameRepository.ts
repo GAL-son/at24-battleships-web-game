@@ -6,7 +6,7 @@ export default class GameRepository implements IRepository {
     name: string;
     db?: IDatabase<any>;
 
-    table: string = 'BattleshipsDB.games';
+    table: string = 'BattleshipsDB.GameHistory';
 
     constructor(name: string) {
         this.name = name;
@@ -36,7 +36,7 @@ export default class GameRepository implements IRepository {
 
     async saveGame(game: IGameModel) {
         this.validateDb();
-        const query = `INSERT INTO ${this.table} VALUES [DEFAULT, $1, $2, $3, $4] returning gameId`;
+        const query = `INSERT INTO ${this.table} VALUES (DEFAULT, $1, $2, $3, $4) returning gameId`;
         return this.db?.query(query, [game.player1Name, game.player2Name, game.player1Winner, game.length]);
     }
 
