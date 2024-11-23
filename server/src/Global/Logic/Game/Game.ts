@@ -38,6 +38,17 @@ export default class Game {
         }
     };
 
+    stats: {
+        player1: {
+            hit: number
+            miss: number
+        },
+        player2: {
+            hit: number,
+            miss: number
+        }
+    }
+
     serviceDeleteGame;
 
     constructor(
@@ -61,6 +72,9 @@ export default class Game {
         };
 
         this.serviceDeleteGame = seviceDeleteGame;
+
+        const initStats = {hit: 0, miss: 0};
+        this.stats = {player1: initStats, player2: initStats}
     }
 
     getLength() {
@@ -227,10 +241,13 @@ export default class Game {
         console.log(JSON.stringify(isHit));
         
         if(isHit) {
+            this.stats.player1.hit++;
             isDead = isHit?.isDead() || false;
             if(isDead) {
                 this.ships.alive.player2--;
             }            
+        } else {
+            this.stats.player1.miss++;
         }
         
         if(this.player1 == undefined) {
