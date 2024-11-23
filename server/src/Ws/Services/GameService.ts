@@ -5,6 +5,9 @@ import Game from "../../Global/Logic/Game/Game";
 import { defaultGameSetup, testGameSetup } from "../../Resources/GameSetups";
 import { MoveData, ShipPlacement } from "Global/Logic/Game/Types";
 import { randomUUID } from "crypto";
+import { IGameModel } from "Global/Database/Models/IGameModel";
+import GameRepository from "Global/Database/Repositories/GameRepository";
+import { error } from "console";
 
 
 
@@ -19,6 +22,12 @@ class GameService {
     // Game
     games: Map<string, Game> = new Map(); // game id to game
     players: Map<string, string> = new Map(); // player name to game id
+
+    // Repositories
+    gameRepository: GameRepository;
+    constructor(gameRepository: GameRepository) {
+        this.gameRepository = gameRepository
+    }
 
     addToQueue(player: IPlayer) {
         if(this.players.has(player.name)) {
@@ -174,8 +183,12 @@ class GameService {
 
     endGame(gameIdGameToDelete: string) {
         // Arcivise game
-
-        // kKill game
+        try {
+            this.archiveGame(gameIdGameToDelete);
+        } catch (error){
+            console.error("Can not save game");
+        }
+        // Kill game
         this.games.delete(gameIdGameToDelete);
 
         // Unlink players
@@ -187,6 +200,28 @@ class GameService {
             }
         }) 
     }  
+
+    archiveGame(gameID: string) {
+        const game = this.games.get(gameID);
+        let winner = game?.getWinner();
+        if(game == undefined || !winner || winner == undefined ) {
+            throw new Error("Cant save game");
+        }       
+    
+        const gameData: IGameModel = {
+            gameId: -1,
+            player1Name: game.player1?.name || "",
+            player2Name: game.player2?.name || "",
+            player1Winner: winner.name == game.player1?.name,
+            length: game.getLength()
+        }
+
+        try {
+            this.gameRepository.saveGame(gameData);  
+        } catch (error: any) {
+            console.error("FAILED TO SAVE TO DB");
+        }
+    }
         
 }
 
