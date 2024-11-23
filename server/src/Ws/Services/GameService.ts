@@ -2,7 +2,7 @@ import IPlayer from "Interfaces/IPlayer";
 import WsServerMessageBuilder from "../Messages/WsServerMessageBuilder";
 import { GameSetupMessage, ServerMessages } from "../Messages/Types/WsServerMessages";
 import Game from "../../Global/Logic/Game/Game";
-import { defaultGameSetup } from "../../Resources/DefaultBoardSetup";
+import { defaultGameSetup, testGameSetup } from "../../Resources/GameSetups";
 import { MoveData, ShipPlacement } from "Global/Logic/Game/Types";
 import { randomUUID } from "crypto";
 
@@ -56,7 +56,7 @@ class GameService {
 
         if(this.queue.size <= 1) {
             console.info("Not enough players");
-            setTimeout(this.processQueue.bind(name), this.GAME_SEARCH_REPEAT_TIME);
+            this.restartSearch(name);
             return;
         }
 
@@ -83,23 +83,28 @@ class GameService {
             console.info("Skill gap to big");
             const newMaxSkillGap = maxPlayerSkillGap + Math.exp(maxPlayerSkillGap / this.START_SKILLGAP);
             this.queueMaxSkillGap.set(name, newMaxSkillGap);
-
-            setTimeout(this.processQueue.bind(name), this.GAME_SEARCH_REPEAT_TIME);
+            
+            this.restartSearch(name);
         } else {
             if(currentOpponent?.name === currentPlayer.name) {
                 throw new Error("Player cant compete with him self");
             }
-
+            
             console.info("GAME FOUND");
             this.createGame(currentOpponent, currentPlayer);
-
+            
             this.queue.delete(name);
             this.queue.delete(currentOpponent.name);
         }
     }
+    
+    restartSearch(name: string) {
+        console.log("Prepare new search for: " + name);
+        setTimeout(this.processQueue.bind(this, name), this.GAME_SEARCH_REPEAT_TIME);
+    }
 
     createGame(player1: IPlayer, player2: IPlayer) {
-        const gameSetup = defaultGameSetup;
+        const gameSetup = testGameSetup;
         const game = new Game(gameSetup);
 
         game.linkPlayer(player1);
