@@ -77,7 +77,7 @@ export default class Game {
     }
 
     public setShips(player: IPlayer, shipsPlacement: ShipPlacement[]) {
-
+        this.validateShipPlacement(shipsPlacement);
         if(this.gameStarted || this.gameEnded) {
             throw Error("Cant set ships, game already started");
         }
@@ -111,13 +111,18 @@ export default class Game {
     }
 
     private validateShipPlacement(shipsPlacement: ShipPlacement[]) {
+        let countShips = 0;
         const check = {...this.shipSetup};
 
         shipsPlacement.forEach(placement => {
             const size = placement.shipSize as keyof typeof this.shipSetup;
-
+            countShips++;
             check[size]--;
         });
+
+        if(countShips !== this.ships.alive.player1) {
+            throw new Error("Invalid ship placement");
+        }
 
         Object.keys(check).forEach((size) => {
             const key = parseInt(size) as keyof typeof check;
