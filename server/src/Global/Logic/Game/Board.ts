@@ -16,9 +16,6 @@ export default class Board {
                 this.fields[y][x] = new Field();
             }
         }
-
-
-        this.printBoard();
     }
 
     setShips(ships: Ship[], placements: ShipPlacement[]) {
@@ -42,11 +39,6 @@ export default class Board {
                 placements.splice(index, 1);
             }
         });
-
-
-
-        // DEBUG 
-        this.printBoard();
     }
 
     setShip(ship: Ship, coordinates: FieldPosition, vertically: boolean) {
@@ -61,9 +53,6 @@ export default class Board {
                 x: coordinates.x + cellOffset.x * i,
                 y: coordinates.y + cellOffset.y * i,
             }
-
-
-            console.log("GET FIELD " + partCoordinates.x + " " + partCoordinates.y);
 
             const field = this.getField(partCoordinates.x, partCoordinates.y);
             shipFields.push(partCoordinates);
@@ -91,9 +80,7 @@ export default class Board {
             adjecendFields.forEach(adjecendField => {
                 try {
                     const field = this.getField(adjecendField.x, adjecendField.y);
-                    field.lockField();
-                    console.log("Field " + adjecendField.x + "," + adjecendField.y + " locked");
-                    
+                    field.lockField();                    
                 } catch (error){}
             });
         });

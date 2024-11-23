@@ -25,13 +25,9 @@ export default class Field {
 
     public hit() {        
         if(this.hasShip() && this.ship !== undefined && this.shipPart !== undefined) {
-            console.log("HIT SHIP");
-            
             this.ship.hit(this.shipPart);
             return this.ship;
         }
-        
-        console.log("HIT WATTER");
         return false;        
     }
 

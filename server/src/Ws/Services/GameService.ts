@@ -8,12 +8,15 @@ import { randomUUID } from "crypto";
 import { IGameModel } from "Global/Database/Models/IGameModel";
 import GameRepository from "Global/Database/Repositories/GameRepository";
 import { error } from "console";
+import { GameResult } from "Ws/Types/GameResult";
+import ScoreService from "./ScoreService";
 
 
 
 class GameService {   
     // Queue
-    readonly START_SKILLGAP = 10;
+    readonly START_SKILLGAP = 250;
+    readonly SKILLGAP_DEFAULT_GAIN = 200;
     readonly GAME_SEARCH_REPEAT_TIME = 10000;
     queue: Map<string, IPlayer> = new Map(); // Player name to player
     queueMaxSkillGap: Map<string, number> = new Map(); // player name to skill gap limit
@@ -25,8 +28,12 @@ class GameService {
 
     // Repositories
     gameRepository: GameRepository;
-    constructor(gameRepository: GameRepository) {
+
+    // services
+    scoreService: ScoreService;
+    constructor(gameRepository: GameRepository, scoreService: ScoreService) {
         this.gameRepository = gameRepository
+        this.scoreService = scoreService;
     }
 
     addToQueue(player: IPlayer) {
@@ -47,9 +54,11 @@ class GameService {
     }
 
     setShips(player: IPlayer, ships: ShipPlacement[]) {
-        
+        console.log("SetShips");        
         const game = this.getPlayerGame(player);
+        console.log(game);
         
+
         game.setShips(player, ships);
 
         if(game.canGameStart()) {
@@ -81,17 +90,20 @@ class GameService {
         let currentOpponent = currentPlayer;
         this.queue.forEach((player, key) => {
             if(name !== key) {
-                const newSkillgap = Math.abs(currentPlayer.score - player.score)
+                const newSkillgap = Math.abs(currentPlayer.score - player.score);
                 if(newSkillgap < currentSkillgap) {
+                    console.log("Update skillGap from " + currentSkillgap + " to " + newSkillgap);
                     currentSkillgap = newSkillgap
                     currentOpponent = player;
                 }
             }
         });
 
+        console.log("Skill gap for player: " + name + " - " + maxPlayerSkillGap + " Current skill gap" + currentSkillgap);
+
         if(currentSkillgap > maxPlayerSkillGap) {
             console.info("Skill gap to big");
-            const newMaxSkillGap = maxPlayerSkillGap + Math.exp(maxPlayerSkillGap / this.START_SKILLGAP);
+            const newMaxSkillGap = maxPlayerSkillGap + Math.exp(this.SKILLGAP_DEFAULT_GAIN * (1/this.queue.size));
             this.queueMaxSkillGap.set(name, newMaxSkillGap);
             
             this.restartSearch(name);
@@ -115,7 +127,7 @@ class GameService {
 
     createGame(player1: IPlayer, player2: IPlayer) {
         const gameSetup = testGameSetup;
-        const game = new Game(gameSetup, this.clearEndedGames);
+        const game = new Game(gameSetup, this.clearEndedGames, this.updateScore);
 
         game.linkPlayer(player1);
         game.linkPlayer(player2);
@@ -223,6 +235,18 @@ class GameService {
         }
     }
         
+    updateScore = async (name: string, result: GameResult): Promise<number> => {
+        try {
+            const scoreChange = await this.scoreService.updateScore(name, result);
+            return scoreChange;
+        } catch (e) {
+           console.error("Cant update userScore!")
+           if(e instanceof Error) {
+            console.error(e.message);
+           }
+           return new Promise<number> (() => {return 0})
+        }
+    }
 }
 
 export default GameService;

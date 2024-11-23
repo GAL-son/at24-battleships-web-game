@@ -35,11 +35,13 @@ export default class ScoreService {
         let playerResult = gameResult.player1;
         let opponentResult = gameResult.player2;
 
-        if(playerResult.name != name && gameResult.player2.name == name) {
-            playerResult = gameResult.player2
-            opponentResult = gameResult.player1
-        } else {
-            throw new Error("Cant update this player score");
+        if(playerResult.name != name) {
+            if(gameResult.player2.name == name) {
+                playerResult = gameResult.player2
+                opponentResult = gameResult.player1
+            } else {
+                throw new Error("Cant update this player score");
+            }
         }
         const isWinner = gameResult.winner == playerResult.name;
         const isBetterScore = playerResult.score > opponentResult.score;

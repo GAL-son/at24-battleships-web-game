@@ -16,4 +16,17 @@ export default class Ship {
     public isDead() {
         return this.parts.reduce((prev, curr) => {return prev && curr});
     }
+
+    getSize() {
+        return this.parts.length;
+    }
+
+    getHp() {
+        let hp = 0;
+        this.parts.forEach(part => {
+            if(!part) hp++;
+        });
+
+        return hp;
+    }
 }

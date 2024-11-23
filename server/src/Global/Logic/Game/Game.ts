@@ -5,12 +5,15 @@ import { IGameSetup, ShipSetup} from "../../../Logic/IGameSetup";
 import { MoveData, ShipPlacement } from "./Types";
 import WsServerMessageBuilder from "../../../Ws/Messages/WsServerMessageBuilder";
 import { GameEndReason, ServerMessages } from "../../../Ws/Messages/Types/WsServerMessages";
+import ScoreService from "Ws/Services/ScoreService";
+import { GameResult, PlayerResult } from "Ws/Types/GameResult";
 
 export default class Game {
 
     player1?: IPlayer;
     player2?: IPlayer;
 
+    gamesetup;
     gameStarted: boolean = false;
     gameEnded: boolean = false;
     private turn: number = 0;
@@ -50,11 +53,14 @@ export default class Game {
     }
 
     serviceDeleteGame;
+    updateScore;
 
     constructor(
         setup: IGameSetup,
-        seviceDeleteGame: () => void
+        seviceDeleteGame: () => void,
+        updateScore: (name: string, gameResult: GameResult) => Promise<number>
     ) {
+        this.gamesetup = setup;
         this.boards = {
             player1: new Board(setup.boardSize),
             player2: new Board(setup.boardSize)
@@ -72,6 +78,7 @@ export default class Game {
         };
 
         this.serviceDeleteGame = seviceDeleteGame;
+        this.updateScore = updateScore;
 
         const initStats = {hit: 0, miss: 0};
         this.stats = {player1: initStats, player2: initStats}
@@ -114,8 +121,10 @@ export default class Game {
         try {
             if(player === this.player1) {
                 this.boards.player1.setShips(this.ships.player1, shipsPlacement);
+                this.player1.setReady(true);
             } else if (player === this.player2) {
                 this.boards.player2.setShips(this.ships.player2, shipsPlacement);
+                this.player2.setReady(true);
             }
         } catch (error) {
             let message = "Invalid Ship Placement: ";
@@ -127,12 +136,6 @@ export default class Game {
             }
             throw new Error(message);
         }
-
-        player.setReady(true);
-        console.log("PLAYER 1 BOARD")
-        this.boards.player1.printBoard();
-        console.log("PLAYER 2 BOARD")
-        this.boards.player2.printBoard();
     }
 
     private validateShipPlacement(shipsPlacement: ShipPlacement[]) {
@@ -258,7 +261,7 @@ export default class Game {
     
     public movePlayerTwo(move: MoveData) {
         console.log("PLAYER 2");
-
+        
         console.log("PLAYER 1 BOARD")
         this.boards.player1.printBoard();
         if(this.isPlayer1Move) {
@@ -267,14 +270,17 @@ export default class Game {
 
         const isHit = this.boards.player1.hitField(move.moveCoordinates.x, move.moveCoordinates.y);
         let isDead = false;
-
+        
         if(isHit) {
+            this.stats.player2.hit++;
             isDead = isHit?.isDead() || false;
             if(isDead) {
                 this.ships.alive.player1--;
             }            
+        }else {
+            this.stats.player2.miss++;
         }
-
+        
         if(this.player2 == undefined) {
             throw new Error("Missing player 2");
         }
@@ -295,23 +301,61 @@ export default class Game {
         }
     }
 
-    sendEndGameMessage(player: IPlayer) {
+    async sendEndGameMessage(player: IPlayer) {
 
         const winner = this.getWinner();
-        if(winner == false) {
+        if(winner == false || winner === undefined) {
             throw new Error("Game not ended");
         }
 
         const didyouWon = ((winner as IPlayer).name == player.name);
 
+        const result: GameResult = {
+            winner: winner?.name,
+            boardSize: this.gamesetup.boardSize,
+            player1: this.getPlayer1Result(),
+            player2: this.getPlayer2Result(),
+            turns: this.getLength()
+        }
+
+        const scoreChange = await this.updateScore(player.name, result);
+
         const gameEndMessage = WsServerMessageBuilder.createGameEndedMessage(
             didyouWon,
             this.turn +1,
-            0,
+            scoreChange,
             GameEndReason.SHIPS_DESTROYES
         );
 
         player.sendMessage(gameEndMessage);
+    }
+
+    getPlayer1Result() {
+        const ships = this.ships.player1.map((s) => {
+            return {size: s.getSize(), hp: s.getHp()};
+        });
+
+        return {
+            name: this.player1?.name,
+            score: this.player1?.score,
+            hits: this.stats.player1.hit,
+            misses: this.stats.player1.miss,
+            ships: ships
+        } as PlayerResult
+    }
+
+    getPlayer2Result() {
+        const ships = this.ships.player2.map((s) => {
+            return {size: s.getSize(), hp: s.getHp()};
+        });
+
+        return {
+            name: this.player2?.name,
+            score: this.player2?.score,
+            hits: this.stats.player2.hit,
+            misses: this.stats.player2.miss,
+            ships: ships
+        } as PlayerResult
     }
 
     endGame() {

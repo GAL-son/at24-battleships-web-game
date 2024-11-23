@@ -20,6 +20,7 @@ import UserRepository from "./Global/Database/Repositories/UserRepository";
 import GameRepository from './Global/Database/Repositories/GameRepository';
 
 import { getMiddlewareWithSession } from './Rest/Middleware/AuthMiddleware';
+import ScoreService from './Ws/Services/ScoreService';
 
 const server: AppServer = new AppServer();
 
@@ -32,8 +33,8 @@ const db: DatabaseService = new DatabaseService(config.db)
         new UserRepository("users"),
         new GameRepository("games")
     ]);
-
-const gameService: GameService = new GameService(db.repository<GameRepository>('games'));
+const scoreService: ScoreService = new ScoreService(db.repository<UserRepository>('users'));
+const gameService: GameService = new GameService(db.repository<GameRepository>('games'), scoreService);
 const sessionService: SessionService = new SessionService();
 const wsSessionService = new WsSessionService();
 
