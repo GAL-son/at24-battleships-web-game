@@ -2,7 +2,7 @@ import IPlayer from "Interfaces/IPlayer";
 import WsServerMessageBuilder from "../Messages/WsServerMessageBuilder";
 import { GameSetupMessage, ServerMessages } from "../Messages/Types/WsServerMessages";
 import Game from "../../Global/Logic/Game/Game";
-import { defaultGameSetup } from "../../Resources/DefaultBoardSetup";
+import { defaultGameSetup, testGameSetup } from "../../Resources/GameSetups";
 import { MoveData, ShipPlacement } from "Global/Logic/Game/Types";
 import { randomUUID } from "crypto";
 
@@ -12,13 +12,13 @@ class GameService {
     // Queue
     readonly START_SKILLGAP = 10;
     readonly GAME_SEARCH_REPEAT_TIME = 10000;
-    queue: Map<string, IPlayer> = new Map();    
-    queueMaxSkillGap: Map<string, number> = new Map();
+    queue: Map<string, IPlayer> = new Map(); // Player name to player
+    queueMaxSkillGap: Map<string, number> = new Map(); // player name to skill gap limit
     searchEstimateSeconds: number = 10;
 
     // Game
-    games: Map<string, Game> = new Map();
-    players: Map<string, string> = new Map();    
+    games: Map<string, Game> = new Map(); // game id to game
+    players: Map<string, string> = new Map(); // player name to game id
 
     addToQueue(player: IPlayer) {
         if(this.players.has(player.name)) {
@@ -34,6 +34,7 @@ class GameService {
 
     removeFromQueue(player: IPlayer) {
         this.queue.delete(player.name);
+        this.queueMaxSkillGap.delete(player.name);
     }
 
     setShips(player: IPlayer, ships: ShipPlacement[]) {
@@ -56,7 +57,7 @@ class GameService {
 
         if(this.queue.size <= 1) {
             console.info("Not enough players");
-            setTimeout(this.processQueue.bind(name), this.GAME_SEARCH_REPEAT_TIME);
+            this.restartSearch(name);
             return;
         }
 
@@ -83,24 +84,29 @@ class GameService {
             console.info("Skill gap to big");
             const newMaxSkillGap = maxPlayerSkillGap + Math.exp(maxPlayerSkillGap / this.START_SKILLGAP);
             this.queueMaxSkillGap.set(name, newMaxSkillGap);
-
-            setTimeout(this.processQueue.bind(name), this.GAME_SEARCH_REPEAT_TIME);
+            
+            this.restartSearch(name);
         } else {
             if(currentOpponent?.name === currentPlayer.name) {
                 throw new Error("Player cant compete with him self");
             }
-
+            
             console.info("GAME FOUND");
             this.createGame(currentOpponent, currentPlayer);
-
+            
             this.queue.delete(name);
             this.queue.delete(currentOpponent.name);
         }
     }
+    
+    restartSearch(name: string) {
+        console.log("Prepare new search for: " + name);
+        setTimeout(this.processQueue.bind(this, name), this.GAME_SEARCH_REPEAT_TIME);
+    }
 
     createGame(player1: IPlayer, player2: IPlayer) {
-        const gameSetup = defaultGameSetup;
-        const game = new Game(gameSetup);
+        const gameSetup = testGameSetup;
+        const game = new Game(gameSetup, this.clearEndedGames);
 
         game.linkPlayer(player1);
         game.linkPlayer(player2);
@@ -156,8 +162,31 @@ class GameService {
         return game;
     }
 
+    clearEndedGames = () => {
+        this.games.forEach((game, id) => {
+            if(game.gameEnded) {
+                console.log("CLEAR GAME WITH ID: " + id);
+                
+                this.endGame(id);
+            }
+        });
+    }
 
-    
+    endGame(gameIdGameToDelete: string) {
+        // Arcivise game
+
+        // kKill game
+        this.games.delete(gameIdGameToDelete);
+
+        // Unlink players
+        this.players.forEach((gameId, playerName) => {
+            if(gameId == gameIdGameToDelete) {
+                console.log("DELETE FROM GAMES: " + playerName) ;
+                
+                this.players.delete(playerName);
+            }
+        }) 
+    }  
         
 }
 

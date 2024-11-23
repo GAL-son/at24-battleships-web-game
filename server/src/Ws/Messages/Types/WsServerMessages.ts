@@ -37,6 +37,8 @@ type GameUpdateMessage = ServerMessage & {
     wasHit: boolean;
     wasSunk: boolean;
     turn: number;
+    who: string,
+    isYourTurn: boolean;
 }
 
 type GameEndedMessage = {
