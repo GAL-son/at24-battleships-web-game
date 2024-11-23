@@ -31,6 +31,8 @@ class WsServerMessageBuilder {
         wasHit: boolean,
         wasSunk: boolean, 
         turn: number, 
+        who:string,
+        isYourTurn: boolean
     ) {
         return {
             ... this.createGenericServerMessage(ServerMessages.GAME_UPDATE),
@@ -38,6 +40,8 @@ class WsServerMessageBuilder {
             wasHit: wasHit,
             wasSunk: wasSunk,
             turn: turn,
+            who: who,
+            isYourTurn: isYourTurn
         }
     }
 

@@ -12,13 +12,13 @@ class GameService {
     // Queue
     readonly START_SKILLGAP = 10;
     readonly GAME_SEARCH_REPEAT_TIME = 10000;
-    queue: Map<string, IPlayer> = new Map();    
-    queueMaxSkillGap: Map<string, number> = new Map();
+    queue: Map<string, IPlayer> = new Map(); // Player name to player
+    queueMaxSkillGap: Map<string, number> = new Map(); // player name to skill gap limit
     searchEstimateSeconds: number = 10;
 
     // Game
-    games: Map<string, Game> = new Map();
-    players: Map<string, string> = new Map();    
+    games: Map<string, Game> = new Map(); // game id to game
+    players: Map<string, string> = new Map(); // player name to game id
 
     addToQueue(player: IPlayer) {
         if(this.players.has(player.name)) {
@@ -34,6 +34,7 @@ class GameService {
 
     removeFromQueue(player: IPlayer) {
         this.queue.delete(player.name);
+        this.queueMaxSkillGap.delete(player.name);
     }
 
     setShips(player: IPlayer, ships: ShipPlacement[]) {
@@ -105,7 +106,7 @@ class GameService {
 
     createGame(player1: IPlayer, player2: IPlayer) {
         const gameSetup = testGameSetup;
-        const game = new Game(gameSetup);
+        const game = new Game(gameSetup, this.clearEndedGames);
 
         game.linkPlayer(player1);
         game.linkPlayer(player2);
@@ -161,8 +162,31 @@ class GameService {
         return game;
     }
 
+    clearEndedGames = () => {
+        this.games.forEach((game, id) => {
+            if(game.gameEnded) {
+                console.log("CLEAR GAME WITH ID: " + id);
+                
+                this.endGame(id);
+            }
+        });
+    }
 
-    
+    endGame(gameIdGameToDelete: string) {
+        // Arcivise game
+
+        // kKill game
+        this.games.delete(gameIdGameToDelete);
+
+        // Unlink players
+        this.players.forEach((gameId, playerName) => {
+            if(gameId == gameIdGameToDelete) {
+                console.log("DELETE FROM GAMES: " + playerName) ;
+                
+                this.players.delete(playerName);
+            }
+        }) 
+    }  
         
 }
 

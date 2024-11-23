@@ -4,6 +4,7 @@ import Board from "./Board";
 import { IGameSetup, ShipSetup} from "../../../Logic/IGameSetup";
 import { MoveData, ShipPlacement } from "./Types";
 import WsServerMessageBuilder from "../../../Ws/Messages/WsServerMessageBuilder";
+import { GameEndReason, ServerMessages } from "../../../Ws/Messages/Types/WsServerMessages";
 
 export default class Game {
 
@@ -20,6 +21,7 @@ export default class Game {
         move: MoveData,
         isHit: boolean,
         isSunk: boolean 
+        who: string;
     } | undefined;
 
     boards: {
@@ -36,9 +38,12 @@ export default class Game {
         }
     };
 
+    serviceDeleteGame;
 
-
-    constructor(setup: IGameSetup) {
+    constructor(
+        setup: IGameSetup,
+        seviceDeleteGame: () => void
+    ) {
         this.boards = {
             player1: new Board(setup.boardSize),
             player2: new Board(setup.boardSize)
@@ -54,6 +59,8 @@ export default class Game {
                 player2: count,
             }
         };
+
+        this.serviceDeleteGame = seviceDeleteGame;
     }
 
     public linkPlayer(player: IPlayer) {
@@ -174,9 +181,15 @@ export default class Game {
         }        
 
         if(this.checkIfGameEnded()) {
-            this.endGame()
+            this.endGame();
+            return;
         } else {
             this.nextTurn()
+        }
+
+        if(this.player1 !== undefined && this.player2 !== undefined) {
+            this.sendGameUpdate(this.player2);
+            this.sendGameUpdate(this.player1);
         }
     }
 
@@ -216,11 +229,10 @@ export default class Game {
             }            
         }
         
-        if(this.player2 == undefined) {
-            throw new Error("Missing player 2");
+        if(this.player1 == undefined) {
+            throw new Error("Missing player 1");
         }
-        this.updateLastMove(move , isHit != false, isDead);
-        this.sendGameUpdate(this.player2);
+        this.updateLastMove(move , isHit != false, isDead, this.player1.name);
     }
     
     public movePlayerTwo(move: MoveData) {
@@ -242,11 +254,10 @@ export default class Game {
             }            
         }
 
-        if(this.player1 == undefined) {
-            throw new Error("Missing player 1");
+        if(this.player2 == undefined) {
+            throw new Error("Missing player 2");
         }
-        this.updateLastMove(move, isHit != false, isDead);
-        this.sendGameUpdate(this.player1);
+        this.updateLastMove(move, isHit != false, isDead, this.player2.name);
     }
 
     checkIfGameEnded() {
@@ -263,8 +274,37 @@ export default class Game {
         }
     }
 
-    endGame() {
+    sendEndGameMessage(player: IPlayer) {
 
+        const winner = this.getWinner();
+        if(winner == false) {
+            throw new Error("Game not ended");
+        }
+
+        const didyouWon = ((winner as IPlayer).name == player.name);
+
+        const gameEndMessage = WsServerMessageBuilder.createGameEndedMessage(
+            didyouWon,
+            this.turn +1,
+            0,
+            GameEndReason.SHIPS_DESTROYES
+        );
+
+        player.sendMessage(gameEndMessage);
+    }
+
+    endGame() {
+        if(this.player1!== undefined) {
+            this.sendGameUpdate(this.player1);
+            this.sendEndGameMessage(this.player1);
+        }
+        
+        if (this.player2!== undefined) {
+            this.sendGameUpdate(this.player2);
+            this.sendEndGameMessage(this.player2);
+        }
+        this.gameEnded = true;
+        this.serviceDeleteGame();
     }
 
     nextTurn() {
@@ -277,21 +317,28 @@ export default class Game {
             return;
         }
 
+        const isPlayerTurn = 
+            (!this.gameEnded) &&
+            (player.name == (this.isPlayer1Move ? this.player1?.name : this.player2?.name));
+
         const message = WsServerMessageBuilder.createGameUpdateMessage(
             this.lastMove?.move,
             this.lastMove?.isHit,
             this.lastMove?.isSunk,
             this.turn,
+            this.lastMove.who,
+            isPlayerTurn
         );
 
         player.sendMessage(message);
     }
 
-    updateLastMove(move: MoveData, isHit: boolean, isSunk: boolean) {
+    updateLastMove(move: MoveData, isHit: boolean, isSunk: boolean, who: string) {
         this.lastMove = {
             move: move,
             isHit: isHit,
-            isSunk: isSunk
+            isSunk: isSunk,
+            who: who,
         }
     }
 
