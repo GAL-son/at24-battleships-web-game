@@ -16,6 +16,6 @@ export class BarComponent {
   constructor(public authService: AuthService) {}
   onLogout() {
     this.authService.logout();
-    // Optionally, redirect or update the UI
+
   }
 }

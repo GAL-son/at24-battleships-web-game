@@ -10,7 +10,7 @@ export class GetRankingService {
 
   constructor(private http: HttpClient, @Inject(DOCUMENT) private document: Document) {}
 
-  // Returns an Observable with the ranking data
+
   getRanking() {
     console.log("aaa")
     return this.http.get(this.url);

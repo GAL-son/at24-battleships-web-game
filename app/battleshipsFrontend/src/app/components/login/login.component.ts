@@ -26,7 +26,7 @@ export class LoginComponent {
     this.authService.login(this.name, this.password).subscribe((response) => {
       if (response) {
         console.log('Login successful:', response);
-        //this.authService.getCurrentUser()
+
         this.router.navigate(['../home']);
       } else {
         console.log('Login failed.');
@@ -38,8 +38,8 @@ export class LoginComponent {
 
 
   goToRegistration(event:Event) {
-    event.preventDefault(); // Explicitly prevent form submission
-    console.log("going to registration"); // Check if this logs without a reload
+    event.preventDefault();
+    console.log("going to registration");
     this.router.navigate(['../register']);
   }
 }

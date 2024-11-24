@@ -20,10 +20,10 @@ export class RankingComponent implements OnInit {
   constructor(private getRankingService: GetRankingService) {}
 
   ngOnInit() {
-    // Subscribe to the Observable to fetch data
+
     this.getRankingService.getRanking().subscribe({
       next: (data: any) => {
-        this.ranking = data; // Update ranking with fetched data
+        this.ranking = data;
         console.log('Ranking fetched:', this.ranking);
       },
       error: (err) => {

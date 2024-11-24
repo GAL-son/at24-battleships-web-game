@@ -22,22 +22,22 @@ export class GameComponent implements OnInit{
   grid = Array.from({ length: 10 }, () =>
     Array.from({ length: 10 }, () => ({ hasShip: false }))
   );
-  shipSizes:number[] = []; // Remaining ships to place
-  shipsPlaced: any[] = []; // Array to store placed ships
-  currentShipSize = this.shipSizes[0]; // Start with the largest ship
+  shipSizes:number[] = [];
+  shipsPlaced: any[] = [];
+  currentShipSize = this.shipSizes[0];
   horizontal:boolean=true;
 
 
 
-  // Handle when a ship is successfully placed
+
   onShipPlaced(success: JSON): void {
     if (success) {
       console.log(success)
       console.log(this.shipSizes[0])
       this.shipsPlaced.push(success);
       console.log("ships"+this.shipsPlaced)
-      this.shipSizes.shift(); // Remove the placed ship size from the array
-      this.currentShipSize = this.shipSizes[0] || 0; // Update current size or finish
+      this.shipSizes.shift();
+      this.currentShipSize = this.shipSizes[0] || 0;
 
       if (this.shipSizes.length === 0) {
         console.log('All ships placed! Ready to start the game.');

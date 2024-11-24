@@ -23,7 +23,7 @@ export class AuthService {
   constructor(private http: HttpClient, @Inject(DOCUMENT) private document: Document, private router: Router) {
   }
 
-//
+
 
   login(name: string, password: string): Observable<any> {
     const localStorage = this.document.defaultView?.localStorage;
@@ -37,7 +37,7 @@ export class AuthService {
       catchError(error => {
         alert("Login failed. Please try again.");
         console.error('Login error:', error);
-        return of(null); // Handle error and return null observable
+        return of(null);
       })
     );
   }
@@ -70,7 +70,7 @@ export class AuthService {
 
   private decodeToken(token: string): void {
     try {
-      const decoded = jwtDecode(token); // Decode the token using jwt-decode
+      const decoded = jwtDecode(token);
       this.currentUser = decoded;
       console.log('Decoded JWT:', this.currentUser);
     } catch (e) {

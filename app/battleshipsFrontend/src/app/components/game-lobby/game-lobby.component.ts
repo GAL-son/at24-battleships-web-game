@@ -28,14 +28,14 @@ export class GameLobbyComponent implements  OnInit{
         this.sessionkey = data.sessionKey;
         console.log('Session key fetched:', this.sessionkey);
         this.webSocketService.setWsKey(this.sessionkey)
-        this.webSocketService.connect('ws://localhost:3001'); // Provide your WebSocket URL here
+        this.webSocketService.connect('ws://localhost:3001');
 
         this.wsSubscription = this.webSocketService.messages$.subscribe((message) => {
           if (message.serverMessage === 'game-found') {
             console.log('GameFount!!');
             console.log('Game found:', message);
             this.webSocketService.storeData(message)
-            this.router.navigate(['/game']); // Navigate to the game component
+            this.router.navigate(['/game']);
           }
         });
       },

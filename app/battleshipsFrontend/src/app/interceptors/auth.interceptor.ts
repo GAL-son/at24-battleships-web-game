@@ -18,5 +18,5 @@ export function authInterceptor(req: HttpRequest<any>, next: HttpHandlerFn): Obs
   {
     console.log("unused")
   }
-  return next(req); // Proceed without modification if localStorage is not available
+  return next(req);
 }

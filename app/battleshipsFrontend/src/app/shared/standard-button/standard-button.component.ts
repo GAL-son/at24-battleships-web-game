@@ -9,6 +9,6 @@ import {RouterLink} from "@angular/router";
   styleUrl: './standard-button.component.css'
 })
 export class StandardButtonComponent {
-  @Input() label: string = '';  // Label for the button
-  @Input() link: string = '';    // Link for router navigation
+  @Input() label: string = '';
+  @Input() link: string = '';
 }
