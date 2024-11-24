@@ -1,0 +1,21 @@
+.ContainerAccount {
+  width: 30%;
+  margin-left: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+h1{
+  justify-content: center;
+}
+button{
+  max-width: 50%;
+}
+h2{
+  justify-content: center;
+}
+
+.containerAccountSubdivide {
+  display: flex;
+  justify-content: space-between;
+}

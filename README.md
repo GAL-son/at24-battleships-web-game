@@ -1,2 +1,16 @@
 # Battleships Webapp
-Online browser battleships game
+Gra w statki online
+
+## Uruchamianie
+
+### Serwer: 
+```
+> cd ./server
+> npm run dev
+```
+
+### Frontend
+``` 
+> cd ./app
+> ng serve
+```

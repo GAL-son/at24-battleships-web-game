@@ -1,0 +1,37 @@
+.barStyle {
+  background: black;
+  border-bottom: chartreuse solid 1px;
+  width: 100%;
+  height: 12vh;
+
+  display: flex;
+  justify-content: space-between;
+  padding-left: 10vh;
+  padding-right: 10vh;
+}
+
+.navbar-title {
+  color: chartreuse;
+  font-size: 4vh;
+}
+
+img {
+  height: 11vh;
+}
+
+p {
+  font-size: 6vh;
+}
+
+button {
+  margin: 3vh;
+  height: 6vh;
+  background-color: black;
+  color: chartreuse;
+  border: chartreuse 2px solid;
+  border-radius: 10px;
+  font-size: 4vh;
+  text-align: center;
+
+
+}

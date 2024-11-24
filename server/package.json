@@ -1,0 +1,40 @@
+{
+  "name": "battieships-server",
+  "version": "0.0.1",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "ts-node ./src/index.ts",
+    "build": "tsc",
+    "watch": "nodemon",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "ts-patch install && typia patch"
+  },
+  "keywords": [],
+  "author": "Bartłomiej Gala",
+  "license": "ISC",
+  "description": "Basic webserver for hosting online battleships games",
+  "dependencies": {
+    "@types/http-server": "^0.12.4",
+    "battieships-server": "file:",
+    "body-parser": "1.20.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "morgan": "1.10.0",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.14",
+    "@types/morgan": "1.9.3",
+    "@types/node": "^14.18.33",
+    "@types/pg-promise": "^5.4.3",
+    "@types/ws": "^8.5.13",
+    "node-gyp": "^6.1.0",
+    "nodemon": "^3.1.0",
+    "ts-node": "10.9.1",
+    "ts-patch": "^3.2.1",
+    "typescript": "^5.6.2",
+    "typia": "^6.12.0"
+  }
+}

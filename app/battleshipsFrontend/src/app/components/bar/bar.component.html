@@ -1,0 +1,7 @@
+<nav class="barStyle" >
+  <a routerLink="/home"><img src="assets/images/battleships_logo.png"> </a>
+<!--  <p class="navbar-title">Battleships</p>-->
+<!--  <p *ngIf="authService.isLoggedIn$">{{this.authService.getCurrentUser()}}</p>-->
+  <button class="" *ngIf="!(authService.isLoggedIn$ | async)" routerLink="/login">Login</button>
+  <button *ngIf="authService.isLoggedIn$ | async" (click)="authService.logout()">Logout</button>
+</nav>

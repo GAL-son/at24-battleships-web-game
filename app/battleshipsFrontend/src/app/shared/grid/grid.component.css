@@ -1,0 +1,23 @@
+.grid {
+  border-collapse: collapse;
+  width: 300px;
+  height: 300px;
+  border: chartreuse 1px solid;
+}
+
+.cell {
+
+  width: 10%; /* 10x10 grid */
+  height: 10%;
+  background-color: rgba(0, 0, 0, 0);
+  cursor: pointer;
+  border: rgba(72, 255, 10, 0.69) 2px solid;
+}
+
+.cell.ship {
+  background-color: rgba(13, 225, 16, 0.73); /* Mark ship cells */
+}
+.containerOneGrid
+{
+
+}
