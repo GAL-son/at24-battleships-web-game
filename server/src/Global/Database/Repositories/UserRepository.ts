@@ -70,6 +70,12 @@ class UserRepository implements IRepository {
         const query = `UPDATE ${this.table} SET password = $1 WHERE name = $2`;
         return this.db?.query(query, [newEmail, name]);
     }
+
+    async updateScore(name: string, score: number) {
+        this.validateDb();
+        const query = `UPDATE ${this.table} SET score = $1 WHERE name = $2`;
+        return this.db?.query(query, [score, name]);
+    }
     
     public parseSafe(userUnsafe: IUserModel) {
         return {

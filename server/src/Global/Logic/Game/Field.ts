@@ -23,12 +23,11 @@ export default class Field {
         this.canHostShip = false;
     }
 
-    public hit() {
-        if(this.ship && this.shipPart) {
+    public hit() {        
+        if(this.hasShip() && this.ship !== undefined && this.shipPart !== undefined) {
             this.ship.hit(this.shipPart);
             return this.ship;
         }
-
         return false;        
     }
 
