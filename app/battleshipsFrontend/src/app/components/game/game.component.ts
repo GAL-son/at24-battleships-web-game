@@ -51,7 +51,7 @@ export class GameComponent implements OnInit{
   reset() {
    // console.log(this.gridComponent)
     this.gridComponent.clear()
-    this.shipSizes=this.wsService.setup;
+    this.shipSizes=[...this.wsService.setup];
     this.currentShipSize = this.shipSizes[0]
     console.log(this.shipSizes)
     console.log("in service:"+this.wsService.setup)
