@@ -35,6 +35,7 @@ export class GameComponent implements OnInit{
 
 
 
+
   onShipPlaced(success: JSON): void {
     if (success) {
       console.log(success)
@@ -53,7 +54,7 @@ export class GameComponent implements OnInit{
 
     this.gameService.setData(this.shipsPlaced,this.wsService.enemy.name)
     console.log("navigating to Game")
-    this.wsService.sendMessage(this.wsService.shipsMessage())
+    this.wsService.sendMessage(this.wsService.shipsMessage(this.shipsPlaced))
     //this.router.navigate(['/playing']);
 
   }

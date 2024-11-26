@@ -151,9 +151,9 @@ constructor(private gameService:GameService) {
 
   private clickedEnemy(x: number, y: number) {
 
-    if (!this.gameService.yourTurn||this.grid[x][y].shot==true)
+    if (!this.gameService.yourTurn||this.grid[y][x].shot==true)
     {return}
-    this.onEnemyClicked.emit({x,y});
+    this.onEnemyClicked.emit({y,x});
 
   }
   getCellClass(cell: { hasShip: boolean; shot: boolean }): string {

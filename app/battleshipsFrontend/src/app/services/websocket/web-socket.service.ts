@@ -63,8 +63,15 @@ export class WebSocketService {
 
         }
         else{
-
+            if(message.wasHit==true){
+              const {x,y}=message.enemyMove.moveCoordinates;
+              this.gameService.emitWasHit(x,y)
+            }
         }
+      }if(message.serverMessage=="game-ended")
+      {
+        this.gameService.won=message.didYouWon;
+        this.router.navigate(['./result'])
       }
 
     };
@@ -92,17 +99,17 @@ export class WebSocketService {
     }
     return JSON.stringify(message);
   }
-  shipsMessage(){
+  shipsMessage(shipsData:any[]){
     console.log(JSON.stringify(this.getWsKey()))
+    const ships = shipsData.map(ship => ({
+      shipSize: ship.size,
+      position: { x: ship.x, y: ship.y },
+      vertically: !ship.horizontal,
+    }));
     const message = {
       sessionKey:this.getWsKey(),
       message:"set-ships",
-      ships:[
-        {
-          "shipSize":2,
-          "position":{x:0,y:0},
-          "vertically":true//here dybug later make it real!!!
-      }]
+      ships:ships
 
 
     }

@@ -7,10 +7,15 @@ import {Subject} from "rxjs";
 export class GameService {
 
   private enemyMoveSubject = new Subject<{ x: number; y: number }>();
+  private wasHitSubject = new Subject<{ x: number; y: number }>();
   enemyMove$ = this.enemyMoveSubject.asObservable();
-
+  wasHit$ = this.wasHitSubject.asObservable();
+  won:boolean=false;
   emitEnemyMove(x: number, y: number): void {
     this.enemyMoveSubject.next({ x, y });
+  }
+  emitWasHit(x: number, y: number): void {
+    this.wasHitSubject.next({ x, y });
   }
 
 

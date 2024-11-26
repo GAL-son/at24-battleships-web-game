@@ -56,7 +56,7 @@ export class GamePlayingComponent {
       this.gameService.yourTurn=false;
       console.log(success)
 
-      this.gridComponentE.grid[success.y][success.x].hasShip=true
+      //this.gridComponentE.grid[success.y][success.x].hasShip=true
       this.gridComponentE.grid[success.y][success.x].shot=true
       console.log(this.gridE[success.y][success.x])
       this.cdr.detectChanges();
@@ -68,7 +68,10 @@ export class GamePlayingComponent {
 
     this.gameService.enemyMove$.subscribe(({x,y})=>{
       this.gameService.yourTurn=true;
-      this.gotShot(x,y);
+      this.gotShot(y,x);
+    })
+    this.gameService.wasHit$.subscribe(({x,y})=>{
+      this.gridE[y][x].hasShip=true;
     })
 
     console.log(this.gameService.getShips());
