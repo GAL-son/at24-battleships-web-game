@@ -1,0 +1,9 @@
+.containerTwoPlayers {
+  width: 100%;
+  justify-content: space-between;
+  display: flex;
+  margin-left: 10%;
+}
+.containerOnePlayer{
+  margin: 10px;
+}

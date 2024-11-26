@@ -3,8 +3,8 @@
   <tr *ngFor="let row of grid; let y = index">
     <td
       *ngFor="let cell of row; let x = index"
-      [class.ship]="cell.hasShip"
-      (click)="placeShip(x, y)"
+      [class]="getCellClass(cell)"
+      (click)="handleClick(x, y)"
       class="cell">
     </td>
   </tr>

@@ -1,6 +1,9 @@
 import {Inject, Injectable} from '@angular/core';
 import {Subject} from "rxjs";
 import {DOCUMENT} from "@angular/common";
+import {Router} from "@angular/router";
+import {GameService} from "../game.service";
+import {GamePlayingComponent} from "../../components/game-playing/game-playing.component";
 
 interface GameSetup {
 [key:number]:number
@@ -16,7 +19,8 @@ export class WebSocketService {
   private tokenKey="WStoken";
   setup:number[]=[]
   enemy={name:'',score:''}
-  constructor( @Inject(DOCUMENT) private document: Document, ) {
+
+  constructor( @Inject(DOCUMENT) private document: Document,private router:Router ,private gameService:GameService) {
 
 
   }
@@ -34,11 +38,34 @@ export class WebSocketService {
     }
 
     this.socket.onmessage = (event: MessageEvent) => {
+      console.log("ws speaking!")
       console.log(event.data)
       const message = JSON.parse(event.data);
 
       this.messagesSubject.next(message);
       console.log(this.messagesSubject)
+      if (message.serverMessage==='game-started'){
+        console.log("caught event game started")
+        console.log(message.isYourTurn)
+        if (message.isYourTurn==true)
+        {
+          console.log("this one has priority")
+          this.gameService.yourTurn=true;
+        }
+        this.goToGame(message)
+      }
+      if(message.serverMessage==="game-update"){
+        if (message.isYourTurn===true)
+        {
+          this.gameService.yourTurn=true;
+          const {x,y}=message.enemyMove.moveCoordinates;
+          this.gameService.emitEnemyMove(x,y)
+
+        }
+        else{
+
+        }
+      }
 
     };
 
@@ -53,11 +80,44 @@ export class WebSocketService {
     };
   }
 
+  private goToGame(message:any) {
+    this.router.navigate(['./playing'])
+  }
+
   initMessage(){
     console.log(JSON.stringify(this.getWsKey()))
     const message = {
       sessionKey:this.getWsKey(),
       message:"start-search"
+    }
+    return JSON.stringify(message);
+  }
+  shipsMessage(){
+    console.log(JSON.stringify(this.getWsKey()))
+    const message = {
+      sessionKey:this.getWsKey(),
+      message:"set-ships",
+      ships:[
+        {
+          "shipSize":2,
+          "position":{x:0,y:0},
+          "vertically":true//here dybug later make it real!!!
+      }]
+
+
+    }
+    return JSON.stringify(message);
+  }
+  shotMessage(x:number,y:number){
+    const message = {
+      sessionKey:this.getWsKey(),
+      message:"move",
+      move:{
+        moveCoordinates:{
+          x:x,
+          y:y
+        }
+      }
     }
     return JSON.stringify(message);
   }
@@ -77,7 +137,10 @@ export class WebSocketService {
 
   sendMessage(message: any): void {
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-      this.socket.send(JSON.stringify(message));
+      this.socket.send(message);
+    }
+    else {
+      console.log("slot not ready")
     }
   }
 

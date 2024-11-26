@@ -1,0 +1,31 @@
+<div class="containerTwoPlayers">
+  <div class="containerOnePlayer">
+    <p>Your Board</p>
+    <app-grid
+      #gridObjY
+      [grid]="gridY"
+      [currentShipSize]="0"
+      (shipPlaced)="onClickedYourBoard($event)"
+      [horizontal]="true"
+      [mode]="'you'"
+    ></app-grid>
+
+  </div>
+  <div class="containerOnePlayer">
+    <p>{{this.getEnemy().name}}'s board</p>
+    <app-grid
+      #gridObjE
+      [grid]="gridE"
+      [currentShipSize]="0"
+      (onEnemyClicked)="onEnemyShot($event)"
+      [horizontal]="true"
+      [mode]="'enemy'"
+    ></app-grid>
+
+  </div>
+  <p *ngIf="this.getTurn()">twoja tura</p>
+  <p *ngIf="!this.getTurn()">tura przeciwnika</p>
+  <div class="containerOnePlayer">
+
+  </div>
+</div>

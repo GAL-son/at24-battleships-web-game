@@ -14,9 +14,17 @@
   border: rgba(72, 255, 10, 0.69) 2px solid;
 }
 
+.cell.ship-and-shot {
+  background-color: rgba(255, 0, 0, 0.73); /* Takes precedence */
+}
 .cell.ship {
   background-color: rgba(13, 225, 16, 0.73); /* Mark ship cells */
 }
+.cell.shot {
+  background-color: rgba(32, 191, 250, 0.73); /* Mark ship cells */
+}
+
+
 .containerOneGrid
 {
 

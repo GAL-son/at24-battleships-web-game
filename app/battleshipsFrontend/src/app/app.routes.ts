@@ -37,5 +37,9 @@ export const routes: Routes = [
   path:'lobby',
     loadComponent:()=>import('./components/game-lobby/game-lobby.component').then(m=>m.GameLobbyComponent)
   }
+  ,{
+  path:'playing',
+    loadComponent:()=>import('./components/game-playing/game-playing.component').then(m=>m.GamePlayingComponent)
+  }
 
 ];
