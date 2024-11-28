@@ -1,0 +1,11 @@
+.centerContainer {
+  margin-left: 30%;
+  width: 40%;
+
+  display: flex;
+  justify-content: center;
+  min-height: 40vh;
+}
+p{
+  font-size: 6vh;
+}

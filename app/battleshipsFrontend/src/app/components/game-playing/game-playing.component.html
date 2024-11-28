@@ -23,9 +23,11 @@
     ></app-grid>
 
   </div>
-  <p *ngIf="this.getTurn()">twoja tura</p>
-  <p *ngIf="!this.getTurn()">tura przeciwnika</p>
+
   <div class="containerOnePlayer">
 
   </div>
 </div>
+<div class="containerGameUi"><p *ngIf="this.getTurn()">twoja tura</p>
+  <p *ngIf="!this.getTurn()">tura przeciwnika</p></div>
+

@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AuthGuard} from "./guards/auth.guard";
+import {wsGuardGuard} from "./guards/ws-guard.guard";
 
 export const routes: Routes = [
   {
@@ -35,15 +36,18 @@ export const routes: Routes = [
   }
   ,{
   path:'lobby',
-    loadComponent:()=>import('./components/game-lobby/game-lobby.component').then(m=>m.GameLobbyComponent)
+    loadComponent:()=>import('./components/game-lobby/game-lobby.component').then(m=>m.GameLobbyComponent),
+    canActivate:[AuthGuard]
   }
   ,{
   path:'playing',
-    loadComponent:()=>import('./components/game-playing/game-playing.component').then(m=>m.GamePlayingComponent)
+    loadComponent:()=>import('./components/game-playing/game-playing.component').then(m=>m.GamePlayingComponent),
+    canActivate:[AuthGuard,wsGuardGuard]
   },
   {
     path:'result',
-    loadComponent:()=>import('./components/result/result.component').then(m=>m.ResultComponent)
+    loadComponent:()=>import('./components/result/result.component').then(m=>m.ResultComponent),
+    canActivate:[AuthGuard,wsGuardGuard]
   }
 
 ];

@@ -11,7 +11,8 @@ import {jwtDecode} from "jwt-decode";
 })
 export class AuthService {
   registerUrl = 'http://localhost:3001/api/users/create';
-  loginUrl = 'http://localhost:3001/api/session/create';//?
+  loginUrl = 'http://localhost:3001/api/session/create';
+  changeMailUrl = 'http://localhost:3001/api/session/create';
 
 
   private tokenKey = 'authToken';

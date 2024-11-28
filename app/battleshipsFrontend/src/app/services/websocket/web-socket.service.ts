@@ -1,5 +1,5 @@
 import {Inject, Injectable} from '@angular/core';
-import {Subject} from "rxjs";
+import {BehaviorSubject, Subject} from "rxjs";
 import {DOCUMENT} from "@angular/common";
 import {Router} from "@angular/router";
 import {GameService} from "../game.service";
@@ -19,6 +19,9 @@ export class WebSocketService {
   private tokenKey="WStoken";
   setup:number[]=[]
   enemy={name:'',score:''}
+  private isConectedToWs = new BehaviorSubject<boolean>(this.hasKey());
+
+  isConnected$ = this.isConectedToWs.asObservable();
 
   constructor( @Inject(DOCUMENT) private document: Document,private router:Router ,private gameService:GameService) {
 
@@ -83,6 +86,7 @@ export class WebSocketService {
 
 
     this.socket.onclose = () => {
+
       console.log('WebSocket connection closed');
     };
   }
@@ -156,6 +160,9 @@ export class WebSocketService {
     if (this.socket) {
       this.socket.close();
     }
+
+      return localStorage?.removeItem(this.tokenKey);
+
   }
 
   storeData(message: any) {
@@ -171,5 +178,18 @@ export class WebSocketService {
     console.log("enemy"+this.enemy.score)
     console.log("EOF==")
 
+  }
+
+  private hasKey() {
+    if (this.getWsKey()===undefined||this.getWsKey()===null)
+    {
+      console.log("has no ws key")
+      return false;
+    }
+    else {
+      console.log("has ws key")
+      console.log(this.getWsKey())
+      return true
+    }
   }
 }
