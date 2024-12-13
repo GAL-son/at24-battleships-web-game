@@ -10,7 +10,7 @@ import typia from "typia";
 import UserRepository from "Global/Database/Repositories/UserRepository";
 import IPlayer from "Interfaces/IPlayer";
 import { Connection } from "Ws/Types/Connection";
-import OnlinePlayer from "../OnlinePlayer";
+import OnlinePlayer from "../../Global/Logic/Players/OnlinePlayer";
 import { ServerMessage } from "Ws/Messages/Types/WsServerMessages";
 import { wsErrorHandler}  from "../WsErrorHandler";
 
