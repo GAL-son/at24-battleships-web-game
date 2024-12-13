@@ -5,7 +5,7 @@ import WsSessionService from "Ws/Services/WsSessionService";
 
 import WebSocket, {Data, WebSocketServer} from "ws";
 import { WebSocketWrapper } from "Interfaces/WebSocketWrapper";
-import { PlayerMessage, PlayerMessages, PlayerMoveMessage, SetShipsMessage} from "../Messages/Types/WsPlayerMessages";
+import { GameType, PlayerMessage, PlayerMessages, PlayerMoveMessage, PlayerSearchGameMessage, SetShipsMessage} from "../Messages/Types/WsPlayerMessages";
 import typia from "typia";
 import UserRepository from "Global/Database/Repositories/UserRepository";
 import IPlayer from "Interfaces/IPlayer";
@@ -79,7 +79,11 @@ class GameController implements IWsController {
             const pmessage = message as PlayerMessage;
             switch (pmessage.message) {
                 case PlayerMessages.START_SEARCH:
-                    this.handleGameSearch(pmessage, conn);
+                    let gameType = GameType.MULTIPLAYER;
+                    if(typia.is<PlayerSearchGameMessage>(pmessage)) {
+                        gameType = pmessage.gameType;
+                    }
+                    this.handleGameSearch(pmessage, conn, gameType);
                     break;
                 case PlayerMessages.SET_SHIPS:
                     if(!typia.is<SetShipsMessage>(pmessage)) {
@@ -89,7 +93,6 @@ class GameController implements IWsController {
                     this.handleSetShips(setShips, conn);
                     break;
                     case PlayerMessages.MOVE:
-                    case PlayerMessages.SET_SHIPS:
                         if(!typia.is<PlayerMoveMessage>(pmessage)) {
                             wsErrorHandler(wsw.ws, "Invalid PlayerMoveMessage!")
                         }
@@ -106,7 +109,7 @@ class GameController implements IWsController {
         }     
     }
 
-    private async handleGameSearch(message: PlayerMessage, connection: Connection) {
+    private async handleGameSearch(message: PlayerMessage, connection: Connection, gametype: GameType) {
 
         const session = this.wsSessionService.getSession(message.sessionKey);
         connection.sessionKey = session?.uuid;
@@ -118,7 +121,8 @@ class GameController implements IWsController {
         if(session !== undefined && userData !== undefined) {
             const player = new OnlinePlayer(userData, connection.wsw.id, this.handleMessageSend);
             this.players.set(session?.uuid, player);
-            this.gameService.addToQueue(player);
+            if(gametype == GameType.MULTIPLAYER) {}
+            this.gameService.addToQueue(player, gametype);
         }     
        } catch (error) {
         wsErrorHandler(connection.wsw.ws, error);
@@ -180,8 +184,6 @@ class GameController implements IWsController {
             wsErrorHandler(connection.wsw.ws, wsErrorHandler);
         }
     }
-
-    
 
     private getUserForConnection(connectionId: string) {
         const connection = this.connections.get(connectionId);

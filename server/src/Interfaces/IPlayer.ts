@@ -5,7 +5,7 @@ export default interface IPlayer {
     score: number;
 
     sendMessage(message: ServerMessage): void;    
-    isReady(): boolean;
+    readyVal(): boolean;
     setReady(ready: boolean): void;
 
     

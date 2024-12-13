@@ -25,6 +25,7 @@ export default class Game {
         isHit: boolean,
         isSunk: boolean 
         who: string;
+        sunkenShip: {x: number, y:number}[] | null;
     } | undefined;
 
     boards: {
@@ -105,7 +106,7 @@ export default class Game {
     } 
 
     public  canGameStart() {
-        return this.player1?.isReady() && this.player2?.isReady();
+        return this.player1?.readyVal() && this.player2?.readyVal();
     }
 
     public setShips(player: IPlayer, shipsPlacement: ShipPlacement[]) {
@@ -240,13 +241,13 @@ export default class Game {
         
         const isHit = this.boards.player2.hitField(move.moveCoordinates.x, move.moveCoordinates.y);
         let isDead = false;
-
-        console.log(JSON.stringify(isHit));
+        let sunkenShip: {x: number, y:number}[] | null= null;
         
         if(isHit) {
             this.stats.player1.hit++;
             isDead = isHit?.isDead() || false;
             if(isDead) {
+                sunkenShip = this.boards.player2.getShipFields(isHit);
                 this.ships.alive.player2--;
             }            
         } else {
@@ -270,12 +271,14 @@ export default class Game {
 
         const isHit = this.boards.player1.hitField(move.moveCoordinates.x, move.moveCoordinates.y);
         let isDead = false;
+        let sunkenShip: {x: number, y:number}[] | null= null;
         
         if(isHit) {
             this.stats.player2.hit++;
             isDead = isHit?.isDead() || false;
             if(isDead) {
                 this.ships.alive.player1--;
+                sunkenShip = this.boards.player1.getShipFields(isHit);
             }            
         }else {
             this.stats.player2.miss++;
@@ -392,18 +395,20 @@ export default class Game {
             this.lastMove?.isSunk,
             this.turn,
             this.lastMove.who,
-            isPlayerTurn
+            isPlayerTurn,
+            this.lastMove.sunkenShip
         );
 
         player.sendMessage(message);
     }
 
-    updateLastMove(move: MoveData, isHit: boolean, isSunk: boolean, who: string) {
+    updateLastMove(move: MoveData, isHit: boolean, isSunk: boolean, who: string, sunkenShip: {x: number, y:number}[] | null) {
         this.lastMove = {
             move: move,
             isHit: isHit,
             isSunk: isSunk,
             who: who,
+            sunkenShip: sunkenShip
         }
     }
 

@@ -1,4 +1,4 @@
-import { ShipSetup } from "Logic/IGameSetup";
+import { IGameSetup, ShipSetup } from "Logic/IGameSetup";
 import { GameEndReason, GameSetupMessage, GameStartMessage, ServerMessage, ServerMessages } from "./Types/WsServerMessages";
 import { MoveData } from "Global/Logic/Game/Types";
 
@@ -11,7 +11,7 @@ class WsServerMessageBuilder {
         } as ServerMessage
     }
 
-    public static createGameSetupMessage(gameSetup: ShipSetup, opponent: {name: string; score: number;}): GameSetupMessage {
+    public static createGameSetupMessage(gameSetup: IGameSetup, opponent: {name: string; score: number;}): GameSetupMessage {
         return {
             ... this.createGenericServerMessage(ServerMessages.GAME_FOUND),
             gameSetup: gameSetup,
@@ -32,7 +32,8 @@ class WsServerMessageBuilder {
         wasSunk: boolean, 
         turn: number, 
         who:string,
-        isYourTurn: boolean
+        isYourTurn: boolean,
+        sunkenShip: {x: number, y:number}[] | null
     ) {
         return {
             ... this.createGenericServerMessage(ServerMessages.GAME_UPDATE),
@@ -41,7 +42,8 @@ class WsServerMessageBuilder {
             wasSunk: wasSunk,
             turn: turn,
             who: who,
-            isYourTurn: isYourTurn
+            isYourTurn: isYourTurn,
+            sunkenShip: sunkenShip
         }
     }
 

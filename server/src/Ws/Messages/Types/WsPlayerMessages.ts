@@ -8,8 +8,17 @@ enum PlayerMessages {
     QUIT_GAME = "quit-game"
 }
 
+enum GameType {
+    SINGLEPLAYER = "singleplayer",
+    MULTIPLAYER = "multiplayer"
+}
+
 type PlayerMessage = WsSessionMessage & {
     message: string & PlayerMessages;
+}
+
+type PlayerSearchGameMessage = PlayerMessage & {
+    gameType: string & GameType,
 }
 
 type PlayerMoveMessage = PlayerMessage & {
@@ -22,9 +31,12 @@ type SetShipsMessage = PlayerMessage & {
 
 export {
     PlayerMessages,
+    GameType,
     PlayerMessage,
+    PlayerSearchGameMessage,
     PlayerMoveMessage,
     SetShipsMessage
+
 }
 
 

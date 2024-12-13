@@ -27,7 +27,7 @@ export default class OnlinePlayer implements IPlayer {
         this.messageHandler(this.connectionId, message);
     }
 
-    isReady(): boolean {
+    readyVal(): boolean {
         return this.didSetShips;
     }
 

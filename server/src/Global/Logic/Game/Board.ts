@@ -108,6 +108,20 @@ export default class Board {
         return field.hit();
     }
 
+    public getShipFields(ship: Ship) {
+        const coordinates: {x: number, y: number}[] = [];
+        for (let y = 0; y < this.boardSize.y; y++) {
+            this.fields[y] = [];
+            for (let x = 0; x < this.boardSize.x; x++) {
+                if(this.fields[y][x].getShip() == ship) {
+                    coordinates.push({x:x, y:y});
+                } 
+            }
+        }
+
+        return coordinates;
+    }
+
     printBoard() {
         this.fields.forEach(row => {
             let rowString = "";
