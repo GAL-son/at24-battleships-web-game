@@ -22,4 +22,13 @@ botShipSetups.set(
     ]
 );
 
+botShipSetups.set(
+    {'2': 1},
+    [
+        [
+            { shipSize: 2, vertically: false, position: { x: 2, y: 7 }}
+        ]
+    ]
+)
+
 export {botShipSetups}

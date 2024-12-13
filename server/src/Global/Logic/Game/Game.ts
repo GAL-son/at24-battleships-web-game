@@ -106,7 +106,7 @@ export default class Game {
     } 
 
     public  canGameStart() {
-        return this.player1?.readyVal() && this.player2?.readyVal();
+        return this.player1?.isReady() && this.player2?.isReady();
     }
 
     public setShips(player: IPlayer, shipsPlacement: ShipPlacement[]) {
@@ -178,22 +178,22 @@ export default class Game {
 
         return ships;
     }
-
+    
     public start() {
         this.isPlayer1Move = Math.random() > .5;
         this.gameStarted = true;
-
+        
         this.player1?.sendMessage(WsServerMessageBuilder.createGameStartMessage(this.isPlayer1Move));
         this.player2?.sendMessage(WsServerMessageBuilder.createGameStartMessage(!this.isPlayer1Move));
     }
-
+    
     public move(player: IPlayer, move: MoveData) {
         if(!this.gameStarted || this.gameEnded) {
             throw new Error("Cant make move on inactive game");
         }
-
-        console.log("MOVE" + JSON.stringify(move.moveCoordinates));
-
+        
+        // console.log("MOVE" + JSON.stringify(move.moveCoordinates));
+        
         if(player.name == this.player1?.name) {
             this.movePlayerOne(move);
         } else if(player.name == this.player2?.name) {
@@ -201,44 +201,30 @@ export default class Game {
         } else {
             throw new Error("Invalid player");
         }        
-
+        
         if(this.checkIfGameEnded()) {
             this.endGame();
             return;
         } else {
             this.nextTurn()
         }
-
+        
         if(this.player1 !== undefined && this.player2 !== undefined) {
+            console.log("UPDATE");
+            
             this.sendGameUpdate(this.player2);
             this.sendGameUpdate(this.player1);
         }
     }
-
+    
     public movePlayerOne(move: MoveData) {
         console.log("PLAYER 1");
-
-        console.log("PLAYER 2 BOARD")
-        this.boards.player2.printBoard();
-        
+        console.log(move);        
         if(!this.isPlayer1Move) {
             throw new Error("Not your turn!");
         }       
-
-        const field = this.boards.player2.getField(move.moveCoordinates.x, move.moveCoordinates.y);
-
-        if(field === undefined) {
-            console.log(" FIELD UNDEFINED");
-
-        }
-
-        if(field.hasShip()) {
-            console.log(" FIELD " + JSON.stringify (move.moveCoordinates) + " HAS SHIP");
-        } else {
-            console.log(" FIELD " + JSON.stringify (move.moveCoordinates) + " DOES NOT HAS SHIP");
-
-        }
         
+        const field = this.boards.player2.getField(move.moveCoordinates.x, move.moveCoordinates.y);        
         const isHit = this.boards.player2.hitField(move.moveCoordinates.x, move.moveCoordinates.y);
         let isDead = false;
         let sunkenShip: {x: number, y:number}[] | null= null;
@@ -257,14 +243,13 @@ export default class Game {
         if(this.player1 == undefined) {
             throw new Error("Missing player 1");
         }
-        this.updateLastMove(move , isHit != false, isDead, this.player1.name);
+        this.updateLastMove(move , isHit != false, isDead, this.player1.name, sunkenShip);
     }
     
     public movePlayerTwo(move: MoveData) {
         console.log("PLAYER 2");
-        
-        console.log("PLAYER 1 BOARD")
-        this.boards.player1.printBoard();
+        console.log(move);
+
         if(this.isPlayer1Move) {
             throw new Error("Not your turn!");
         }
@@ -287,7 +272,7 @@ export default class Game {
         if(this.player2 == undefined) {
             throw new Error("Missing player 2");
         }
-        this.updateLastMove(move, isHit != false, isDead, this.player2.name);
+        this.updateLastMove(move, isHit != false, isDead, this.player2.name, sunkenShip);
     }
 
     checkIfGameEnded() {

@@ -43,22 +43,27 @@ class GameService {
         }
 
         if (gameType == GameType.SINGLEPLAYER) {
-
+            this.gameWithBot(player);
+            return;
         }
 
         this.queue.set(player.name, player);
         this.queueMaxSkillGap.set(player.name, this.START_SKILLGAP);
         player.sendMessage(WsServerMessageBuilder.createGenericServerMessage(ServerMessages.SEARCH_STARTED));
-
+        
         this.processQueue(player.name);
     }
-
+    
     gameWithBot(player: IPlayer) {
+        player.sendMessage(WsServerMessageBuilder.createGenericServerMessage(ServerMessages.SEARCH_STARTED));
         const bot: AIPlayer = new AIPlayer(this.botHandler)
         this.createGame(player, bot);
     }
 
     botHandler = (bot: AIPlayer, message: PlayerMessage): void => {
+        console.log("MESSAGE FROM BOT");
+        console.log(message);
+
         const botName = this.players.get(bot.name);
         if(botName === undefined) {
             console.warn("Bot " + bot.name + " tries to play game when not registered")
@@ -73,6 +78,7 @@ class GameService {
         const botMessage = message as PlayerMessage;
         switch (botMessage.message) {
             case PlayerMessages.SET_SHIPS:
+                console.log("BOT SET SHIPS");
                 if (!typia.is<SetShipsMessage>(botMessage)) {
                     console.warn("Invalid Bot Message");
                     return;
@@ -101,11 +107,7 @@ class GameService {
     }
 
     setShips(player: IPlayer, ships: ShipPlacement[]) {
-        console.log("SetShips");
         const game = this.getPlayerGame(player);
-        console.log(game);
-
-
         game.setShips(player, ships);
 
         if (game.canGameStart()) {

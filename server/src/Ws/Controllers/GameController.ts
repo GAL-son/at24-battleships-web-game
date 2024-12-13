@@ -121,7 +121,7 @@ class GameController implements IWsController {
         if(session !== undefined && userData !== undefined) {
             const player = new OnlinePlayer(userData, connection.wsw.id, this.handleMessageSend);
             this.players.set(session?.uuid, player);
-            if(gametype == GameType.MULTIPLAYER) {}
+            console.log(message);
             this.gameService.addToQueue(player, gametype);
         }     
        } catch (error) {
