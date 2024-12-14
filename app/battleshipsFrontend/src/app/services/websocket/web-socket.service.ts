@@ -40,6 +40,9 @@ export class WebSocketService {
     this.socket.onopen = () =>{
       this.socket?.send(this.initMessage())
     }
+//{"serverMessage":"game-update","serverTimestamp":1734191383129,"enemyMove":
+// {"moveCoordinates":{"x":2,"y":8}},"wasHit":true,"wasSunk":true,"turn":7,"who":"cw","isYourTurn":false,
+// "sunkenShip":[{"x":0,"y":8},{"x":1,"y":8},{"x":2,"y":8}]}
 
     this.socket.onmessage = (event: MessageEvent) => {
       console.log("ws speaking!")
@@ -65,12 +68,15 @@ export class WebSocketService {
           this.gameService.yourTurn=true;
           const {x,y}=message.enemyMove.moveCoordinates;
           this.gameService.emitEnemyMove(x,y)
+          //tobie zniszczono
+         // if (message.enemyMove.)
 
         }
         else{
             if(message.wasHit==true){
               const {x,y}=message.enemyMove.moveCoordinates;
               this.gameService.emitWasHit(x,y)
+              //ty zniszczyłeś
             }
         }
       }if(message.serverMessage=="game-ended")
