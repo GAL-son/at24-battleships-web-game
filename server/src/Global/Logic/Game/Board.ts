@@ -111,7 +111,6 @@ export default class Board {
     public getShipFields(ship: Ship) {
         const coordinates: {x: number, y: number}[] = [];
         for (let y = 0; y < this.boardSize.y; y++) {
-            this.fields[y] = [];
             for (let x = 0; x < this.boardSize.x; x++) {
                 if(this.fields[y][x].getShip() == ship) {
                     coordinates.push({x:x, y:y});
