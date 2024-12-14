@@ -22,6 +22,7 @@ export class WebSocketService {
   private isConectedToWs = new BehaviorSubject<boolean>(this.hasKey());
 
   isConnected$ = this.isConectedToWs.asObservable();
+  private gameMode: string | null='';
 
   constructor( @Inject(DOCUMENT) private document: Document,private router:Router ,private gameService:GameService) {
 
@@ -42,6 +43,7 @@ export class WebSocketService {
 
     this.socket.onmessage = (event: MessageEvent) => {
       console.log("ws speaking!")
+      console.log(event)
       console.log(event.data)
       const message = JSON.parse(event.data);
 
@@ -97,11 +99,21 @@ export class WebSocketService {
 
   initMessage(){
     console.log(JSON.stringify(this.getWsKey()))
-    const message = {
-      sessionKey:this.getWsKey(),
-      message:"start-search"
+    if (this.gameMode=="singleplayer"){
+      const message = {
+        sessionKey:this.getWsKey(),
+        message:"start-search",
+        gameType: "singleplayer"
+      }
+      return JSON.stringify(message);
+    }else {
+      const message = {
+        sessionKey: this.getWsKey(),
+        message: "start-search"
+      }
+      return JSON.stringify(message);
     }
-    return JSON.stringify(message);
+
   }
   shipsMessage(shipsData:any[]){
     console.log(JSON.stringify(this.getWsKey()))
@@ -167,17 +179,27 @@ export class WebSocketService {
 
   storeData(message: any) {
 
-      this.enemy.name=message.opponent.name;
-      this.enemy.score=message.opponent.score;
-      this.setup = Object.entries(message.gameSetup as GameSetup).flatMap(([shipType, count]) =>
-      Array(count).fill(Number(shipType))
-    );
-      console.log("setup got setted")
-    console.log("setting"+this.setup)
-    console.log("enemy"+this.enemy.name)
-    console.log("enemy"+this.enemy.score)
-    console.log("EOF==")
+    this.enemy.name = message.opponent.name;
+    this.enemy.score = message.opponent.score;
 
+    this.setup = Object.entries(message.gameSetup.shipSizes).flatMap(([shipType, count]) => {
+
+      const size = Number(shipType);
+      const shipCount = Number(count);
+
+      if (isNaN(size) || isNaN(shipCount)) {
+        console.error(`Invalid data: shipType=${shipType}, count=${count}`);
+        return [];
+      }
+
+      return Array(shipCount).fill(size);
+    });
+
+    // Debugging logs
+    console.log("Setup got set successfully:", this.setup);
+    console.log("Enemy name:", this.enemy.name);
+    console.log("Enemy score:", this.enemy.score);
+    console.log("EOF==");
   }
 
   private hasKey() {
@@ -191,5 +213,10 @@ export class WebSocketService {
       console.log(this.getWsKey())
       return true
     }
+  }
+
+  setMode(gameMode: string | null) {
+    this.gameMode=gameMode
+
   }
 }

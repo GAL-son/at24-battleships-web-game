@@ -35,7 +35,7 @@ export const routes: Routes = [
     loadComponent:()=>import('./components/register/register.component').then(m=>m.RegisterComponent)
   }
   ,{
-  path:'lobby',
+  path:'lobby/:mode',
     loadComponent:()=>import('./components/game-lobby/game-lobby.component').then(m=>m.GameLobbyComponent),
     canActivate:[AuthGuard]
   }
