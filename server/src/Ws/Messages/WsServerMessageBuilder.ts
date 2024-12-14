@@ -1,5 +1,5 @@
 import { IGameSetup, ShipSetup } from "Logic/IGameSetup";
-import { GameEndReason, GameSetupMessage, GameStartMessage, ServerMessage, ServerMessages } from "./Types/WsServerMessages";
+import { GameEndReason, GameSetupMessage, GameStartMessage, GameUpdateMessage, ServerMessage, ServerMessages } from "./Types/WsServerMessages";
 import { MoveData } from "Global/Logic/Game/Types";
 
 
@@ -34,7 +34,7 @@ class WsServerMessageBuilder {
         who:string,
         isYourTurn: boolean,
         sunkenShip: {x: number, y:number}[] | null
-    ) {
+    ): GameUpdateMessage {
         return {
             ... this.createGenericServerMessage(ServerMessages.GAME_UPDATE),
             enemyMove: enemyMove,

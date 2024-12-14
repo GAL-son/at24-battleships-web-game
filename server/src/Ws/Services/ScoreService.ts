@@ -19,7 +19,6 @@ export default class ScoreService {
         const currentScore = user.score;
         const scoreChange = this.calculateScoreChange(userName, result);
 
-
         let newScore = currentScore + scoreChange;
 
         if(newScore < 0) {
