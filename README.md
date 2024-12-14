@@ -11,6 +11,6 @@ Gra w statki online
 
 ### Frontend
 ``` 
-> cd ./app
+> cd ./app/battleshipsFrontend
 > ng serve
 ```

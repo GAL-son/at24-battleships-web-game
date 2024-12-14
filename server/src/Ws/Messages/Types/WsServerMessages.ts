@@ -1,5 +1,5 @@
 import { MoveData } from "Global/Logic/Game/Types";
-import { ShipSetup } from "Logic/IGameSetup";
+import { IGameSetup, ShipSetup } from "Logic/IGameSetup";
 
 enum ServerMessages {
     SEARCH_STARTED = "search-started",
@@ -21,7 +21,7 @@ type ServerMessage = {
 }
 
 type GameSetupMessage = ServerMessage & {
-    gameSetup: ShipSetup;
+    gameSetup: IGameSetup;
     opponent: {
         name: string;
         score: number;
@@ -39,6 +39,7 @@ type GameUpdateMessage = ServerMessage & {
     turn: number;
     who: string,
     isYourTurn: boolean;
+    sunkenShip?: {x: number, y:number}[];
 }
 
 type GameEndedMessage = {
