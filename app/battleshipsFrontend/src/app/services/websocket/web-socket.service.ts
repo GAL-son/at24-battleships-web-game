@@ -65,18 +65,23 @@ export class WebSocketService {
       if(message.serverMessage==="game-update"){
         if (message.isYourTurn===true)
         {
+          //ennemy moved
           this.gameService.yourTurn=true;
           const {x,y}=message.enemyMove.moveCoordinates;
           this.gameService.emitEnemyMove(x,y)
-          //tobie zniszczono
-         // if (message.enemyMove.)
+          if (message.wasSunk) {
+            this.handleSunkenShip(message.sunkenShip, "your"); // Update opponent's board
+          }
 
         }
         else{
+          //you just moved and you hear ab result
             if(message.wasHit==true){
               const {x,y}=message.enemyMove.moveCoordinates;
               this.gameService.emitWasHit(x,y)
-              //ty zniszczyłeś
+              if (message.wasSunk) {
+                this.handleSunkenShip(message.sunkenShip, "opponent"); // Update opponent's board
+              }
             }
         }
       }if(message.serverMessage=="game-ended")
@@ -223,6 +228,53 @@ export class WebSocketService {
 
   setMode(gameMode: string | null) {
     this.gameMode=gameMode
+
+  }
+  private handleSunkenShip(
+    sunkenShip: { x: number; y: number }[],
+    boardType: "your" | "opponent"
+  ): void {
+
+    console.log(sunkenShip)
+    console.log(boardType)
+    const boardSize = { x: 10, y: 10 }; // Example board size
+    const markedCells = new Set<string>();
+
+    const isValidCell = (x: number, y: number): boolean =>
+      x >= 0 && x < boardSize.x && y >= 0 && y < boardSize.y;
+
+    // Mark adjacent cells
+    for (const { x, y } of sunkenShip) {
+      for (let dx = -1; dx <= 1; dx++) {
+        for (let dy = -1; dy <= 1; dy++) {
+          const adjX = x + dx;
+          const adjY = y + dy;
+
+          if (isValidCell(adjX, adjY)) {
+            const key = `${adjX},${adjY}`;
+            markedCells.add(key);
+          }
+        }
+      }
+    }
+
+    // Remove actual ship cells from markedCells
+    for (const { x, y } of sunkenShip) {
+      const key = `${x},${y}`;
+      markedCells.delete(key);
+    }
+
+    // Emit events to update the board
+    markedCells.forEach((cell) => {
+      const [x, y] = cell.split(',').map(Number);
+
+      if (boardType === "your") {
+        this.gameService.emitHitYou(x, y); // Mark adjacent cells on your board
+      } else {
+        this.gameService.emitEnemyHit(x, y); // Mark adjacent cells on the opponent's board
+      }
+    });
+
 
   }
 }

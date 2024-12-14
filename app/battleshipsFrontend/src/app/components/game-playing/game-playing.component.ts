@@ -73,6 +73,13 @@ export class GamePlayingComponent {
     this.gameService.wasHit$.subscribe(({x,y})=>{
       this.gridE[y][x].hasShip=true;
     })
+    this.gameService.enemyHit$.subscribe(({x,y})=>{
+      this.gridE[y][x].shot=true;
+    })
+    this.gameService.hitYou$.subscribe(({x,y})=>{
+      this.gridY[y][x].shot=true;
+    })
+
 
     console.log(this.gameService.getShips());
 
