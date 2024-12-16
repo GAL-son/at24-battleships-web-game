@@ -5,22 +5,21 @@ dotenv.config();
 import { config } from './config';
 
 import AppServer from "./AppServer";
-import DatabaseService from "./Global/Services/DatabaseService";
-import SessionService from './Rest/Services/SessionService';
-import WsSessionService from './Ws/Services/WsSessionService';
-import GameService from './Ws/Services/GameService';
+import DatabaseService from './Services/DatabaseService';
+import SessionService from './Services/SessionService';
+import WsSessionService from './Services/WsSessionService';
+import GameService from './Services/GameService';
 
-import SessionController from './Rest/Controllers/SessionController';
-import EchoController from "./Ws/Controllers/EchoController";
-import UserController from './Rest/Controllers/UserController';
-import GamesController from './Rest/Controllers/GamesController';
-import GameController from './Ws/Controllers/GameController';
+import SessionController from './Controllers/SessionController';
+import UserController from './Controllers/UserController';
+import GamesController from './Controllers/GamesController';
+import GameController from './Controllers/GameController';
 
-import UserRepository from "./Global/Database/Repositories/UserRepository";
-import GameRepository from './Global/Database/Repositories/GameRepository';
+import UserRepository from './Database/Repositories/UserRepository';
+import GameRepository from './Database/Repositories/GameRepository';
 
-import { getMiddlewareWithSession } from './Rest/Middleware/AuthMiddleware';
-import ScoreService from './Ws/Services/ScoreService';
+import { getMiddlewareWithSession } from './Middleware/AuthMiddleware';
+import ScoreService from './Services/ScoreService';
 
 const server: AppServer = new AppServer();
 

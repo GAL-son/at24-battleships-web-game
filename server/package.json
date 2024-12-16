@@ -6,7 +6,7 @@
     "dev": "ts-node ./src/index.ts",
     "build": "tsc",
     "watch": "nodemon",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "prepare": "ts-patch install && typia patch"
   },
   "keywords": [],
@@ -26,12 +26,14 @@
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.14",
+    "@types/jest": "^29.5.14",
     "@types/morgan": "1.9.3",
     "@types/node": "^14.18.33",
     "@types/pg-promise": "^5.4.3",
     "@types/ws": "^8.5.13",
     "node-gyp": "^6.1.0",
     "nodemon": "^3.1.0",
+    "ts-jest": "^29.2.5",
     "ts-node": "10.9.1",
     "ts-patch": "^3.2.1",
     "typescript": "^5.6.2",

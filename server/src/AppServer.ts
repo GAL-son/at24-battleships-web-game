@@ -4,8 +4,8 @@ import * as http from "http";
 import cors from 'cors';
 
 import { config } from './config';
-import {IRestController} from 'Rest/Interface/IRestController';
-import {IWsController} from 'Ws/Interfaces/IWsController';
+import {IRestController} from 'Interfaces/IRestController';
+import {IWsController} from 'Interfaces/IWsController';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import { randomUUID } from 'crypto';

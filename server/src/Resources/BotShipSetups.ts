@@ -1,6 +1,6 @@
 import { ShipSetup } from "Logic/IGameSetup"
 import { defaultShipSetup } from "./DefaultShipSetup";
-import { ShipPlacement } from "Global/Logic/Game/Types";
+import { ShipPlacement } from "Logic/Game/Types";
 
 const botShipSetups = new Map<ShipSetup, ShipPlacement[][]>();
 
