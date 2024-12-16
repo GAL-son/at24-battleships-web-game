@@ -78,13 +78,12 @@ class GameService {
         const botMessage = message as PlayerMessage;
         switch (botMessage.message) {
             case PlayerMessages.SET_SHIPS:
-                console.log("BOT SET SHIPS");
                 if (!typia.is<SetShipsMessage>(botMessage)) {
                     console.warn("Invalid Bot Message");
                     return;
                 }
-                const setShips = botMessage as SetShipsMessage;
-                this.setShips(bot, bot.setupShips(botGame.gamesetup));
+                console.log("BOT SET SHIPS");
+                this.setShips(bot, botMessage.ships);
                 break;
             case PlayerMessages.MOVE:
                 if (!typia.is<PlayerMoveMessage>(botMessage)) {
@@ -108,11 +107,19 @@ class GameService {
 
     setShips(player: IPlayer, ships: ShipPlacement[]) {
         const game = this.getPlayerGame(player);
+        console.log(game);
+        
         game.setShips(player, ships);
 
-        if (game.canGameStart()) {
-            this.startGame(game);
-        }
+        console.log("CAN START");
+        // console.log(game.canGameStart());
+        
+
+        setTimeout(() => {
+            if (game.canGameStart()) {
+                this.startGame(game);
+            }
+        }, 100);
     }
 
     processQueue = (name: string): void => {
@@ -175,7 +182,7 @@ class GameService {
     }
 
     createGame(player1: IPlayer, player2: IPlayer) {
-        const gameSetup = testGameSetup;
+        const gameSetup = defaultGameSetup;
         const game = new Game(gameSetup, this.clearEndedGames, this.updateScore);
 
         game.linkPlayer(player1);

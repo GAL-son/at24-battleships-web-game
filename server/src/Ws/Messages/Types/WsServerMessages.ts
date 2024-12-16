@@ -33,13 +33,13 @@ type GameStartMessage = ServerMessage & {
 }
 
 type GameUpdateMessage = ServerMessage & {
-    move: MoveData;
+    enemyMove: MoveData;
     wasHit: boolean;
     wasSunk: boolean;
     turn: number;
     who: string,
     isYourTurn: boolean;
-    sunkenShip?: {x: number, y:number}[];
+    sunkenShip: {x: number, y:number}[] | null;
 }
 
 type GameEndedMessage = {
