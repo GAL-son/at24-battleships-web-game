@@ -6,7 +6,7 @@ export default class Ship {
     }
 
     public hit(part: number) {
-        if(part > this.parts.length) {
+        if(part >= this.parts.length) {
             throw new Error("Cant hit outside of the ship");
         }
 
