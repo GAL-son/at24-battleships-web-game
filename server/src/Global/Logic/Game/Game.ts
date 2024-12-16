@@ -106,19 +106,26 @@ export default class Game {
     } 
 
     public  canGameStart() {
+        console.log(this.player1);
+        console.log(this.player2);
+        console.log(this.player1?.isReady());
+        console.log(this.player2?.isReady());
+        
         return this.player1?.isReady() && this.player2?.isReady();
     }
 
     public setShips(player: IPlayer, shipsPlacement: ShipPlacement[]) {
+        
         this.validateShipPlacement(shipsPlacement);
+        console.log("SET SHIPS FOR " + player.name);
         if(this.gameStarted || this.gameEnded) {
             throw Error("Cant set ships, game already started");
         }
-
+        
         if(player !== this.player1 && player !== this.player2) {
             throw new Error("Invalid player");
         }
-
+        
         try {
             if(player === this.player1) {
                 this.boards.player1.setShips(this.ships.player1, shipsPlacement);
@@ -127,6 +134,10 @@ export default class Game {
                 this.boards.player2.setShips(this.ships.player2, shipsPlacement);
                 this.player2.setReady(true);
             }
+            console.log("UPDATE SHIPS");
+            
+            console.log(this.canGameStart);
+            
         } catch (error) {
             let message = "Invalid Ship Placement: ";
 
@@ -138,28 +149,34 @@ export default class Game {
             throw new Error(message);
         }
     }
-
+    
     private validateShipPlacement(shipsPlacement: ShipPlacement[]) {
         let countShips = 0;
         const check = {...this.shipSetup};
-
+        
         shipsPlacement.forEach(placement => {
             const size = placement.shipSize as keyof typeof this.shipSetup;
             countShips++;
             check[size]--;
         });
-
+        console.log("VALIDATE1");
+        
         if(countShips !== this.ships.alive.player1) {
+            console.log("VALIDATE2");
+            console.log("SHIPS COUNT" + countShips);
             throw new Error("Invalid ship placement");
         }
-
+        
+        console.log("VALIDATE3");
         Object.keys(check).forEach((size) => {
             const key = parseInt(size) as keyof typeof check;
-
+            
             if(check[key] !== 0) {
+                console.log("VALIDATE4");
                 throw new Error ("Invalid ship placement");
             }
         });
+        console.log("VALIDATE4");
     }
 
     private prepareShips(shipSetup: ShipSetup) {

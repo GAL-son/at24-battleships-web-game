@@ -3,6 +3,14 @@ import { GameResult, PlayerResult } from "Ws/Types/GameResult";
 
 
 export default class ScoreService {
+    readonly MAX_SCORE_SCALE = 3.0;
+    readonly MIN_SCORE_SCALE = 0.1;
+    readonly HIT_BONUS = 1;
+    readonly KILL_BONUS = 5;
+    readonly GAME_LENGTH_BASE_BONUS = 100;
+    readonly WIN_BONUS = 50;
+
+
     userRepository: UserRepository;
 
     constructor(userRepository: UserRepository) {
@@ -19,8 +27,10 @@ export default class ScoreService {
         const currentScore = user.score;
         const scoreChange = this.calculateScoreChange(userName, result);
 
-
         let newScore = currentScore + scoreChange;
+
+        console.log("SCORE CHANGE FOR: " + userName + " - " + currentScore + " + " + scoreChange);
+        
 
         if(newScore < 0) {
             newScore = 0;
@@ -44,34 +54,39 @@ export default class ScoreService {
             }
         }
         const isWinner = gameResult.winner == playerResult.name;
-        const isBetterScore = playerResult.score > opponentResult.score;
-        const scoreDiff = Math.abs(playerResult.score - opponentResult.score);
+        const scoreScale = this.calculateScoreScale(playerResult.score, opponentResult.score);
         
         const maxGameLength = 2* (gameResult.boardSize.x * gameResult.boardSize.y) -1;
-        const totalShipFields = playerResult.ships.map((v, i, a) => {
-            return a[i].size;
+        const totalShipFields = playerResult.ships.map((v) => {
+            return v.size;
         }).reduce((total, hp) => {
             return total + hp;
         })
 
-        const gameLenghtBonus = this.calculateLengthBonus(maxGameLength, totalShipFields, gameResult.turns);
+        const gameLenghtBonus = this.calculateGameLengthMultiplier(maxGameLength, totalShipFields, gameResult.turns);
         const hitBonus = this.calcuateHitBonus(playerResult.hits, playerResult.misses);
         const killBonus = this.calculateKillBonus(opponentResult.ships);
         const killPenalty = this.calculateKillBonus(playerResult.ships);
 
-        const scoreChange = ((hitBonus + killBonus - killPenalty) + (gameLenghtBonus * (isWinner ? 1 : -1))) * (10 + scoreDiff/(isBetterScore ? 4 : 2)) + (isWinner ? 200 : -100);
-        return scoreChange;
+        const gameActionBonus = (hitBonus + killBonus + killPenalty);
+        const gameResultBonus = ((isWinner) ? (this.WIN_BONUS * gameLenghtBonus) : (this.WIN_BONUS * -1 * gameLenghtBonus));
+
+        return (gameActionBonus + gameResultBonus) * scoreScale;
     }
 
-    calculateLengthBonus(maxGameLengt: number, minGameLength: number, gameLength: number) {
-        const gameLengthNormalized = (gameLength - minGameLength) / (maxGameLengt - minGameLength);
+    calculateScoreScale(playerScore: number, oppoentScore: number) {
+        const scoreScale = Math.min(Math.max(oppoentScore / playerScore, this.MIN_SCORE_SCALE), this.MAX_SCORE_SCALE);
+        return scoreScale;
+    }
 
-        return (-200 * gameLengthNormalized ) + 200; 
+    calculateGameLengthMultiplier(maxGameLengt: number, minGameLength: number, gameLength: number) {
+        const gameLengthNormalized = (gameLength - minGameLength) / (maxGameLengt - minGameLength);
+        return -gameLengthNormalized + 1;
     }
 
     calcuateHitBonus(hitNumber: number, missNumber: number) {
         const hitPercentage = hitNumber / (hitNumber + missNumber);
-        return hitNumber * 5 * hitPercentage;        
+        return hitNumber * this.HIT_BONUS * hitPercentage;        
     }
 
     calculateKillBonus(opponentsShips: {size: number, hp: number}[]) {
@@ -79,11 +94,10 @@ export default class ScoreService {
 
         opponentsShips.forEach(s => {
             if(s.hp == 0) {
-                killBonus += 10* s.size;
+                killBonus += this.KILL_BONUS * s.size * (1/s.size);
             }
         });
 
         return killBonus;
     }
-
 }
