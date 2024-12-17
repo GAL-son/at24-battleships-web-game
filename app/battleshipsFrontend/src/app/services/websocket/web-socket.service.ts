@@ -6,7 +6,7 @@ import {GameService} from "../game.service";
 import {GamePlayingComponent} from "../../components/game-playing/game-playing.component";
 
 interface GameSetup {
-[key:number]:number
+  [key: number]: number
 }
 
 @Injectable({
@@ -16,28 +16,26 @@ export class WebSocketService {
 
   private socket: WebSocket | null = null;
   private messagesSubject: Subject<any> = new Subject<any>();
-  private tokenKey="WStoken";
-  setup:number[]=[]
-  enemy={name:'',score:''}
+  private tokenKey = "WStoken";
+  setup: number[] = []
+  enemy = {name: '', score: ''}
   private isConectedToWs = new BehaviorSubject<boolean>(this.hasKey());
 
   isConnected$ = this.isConectedToWs.asObservable();
-  private gameMode: string | null='';
+  private gameMode: string | null = '';
 
-  constructor( @Inject(DOCUMENT) private document: Document,private router:Router ,private gameService:GameService) {
+  constructor(@Inject(DOCUMENT) private document: Document, private router: Router, private gameService: GameService) {
 
 
   }
 
 
-
   connect(url: string): void {
-
 
 
     this.socket = new WebSocket(url);
 
-    this.socket.onopen = () =>{
+    this.socket.onopen = () => {
       this.socket?.send(this.initMessage())
     }
 //{"serverMessage":"game-update","serverTimestamp":1734191383129,"enemyMove":
@@ -52,41 +50,38 @@ export class WebSocketService {
 
       this.messagesSubject.next(message);
       console.log(this.messagesSubject)
-      if (message.serverMessage==='game-started'){
+      if (message.serverMessage === 'game-started') {
         console.log("caught event game started")
         console.log(message.isYourTurn)
-        if (message.isYourTurn==true)
-        {
+        if (message.isYourTurn == true) {
           console.log("this one has priority")
-          this.gameService.yourTurn=true;
+          this.gameService.yourTurn = true;
         }
         this.goToGame(message)
       }
-      if(message.serverMessage==="game-update"){
-        if (message.isYourTurn===true)
-        {
+      if (message.serverMessage === "game-update") {
+        if (message.isYourTurn === true) {
           //ennemy moved
-          this.gameService.yourTurn=true;
-          const {x,y}=message.enemyMove.moveCoordinates;
-          this.gameService.emitEnemyMove(x,y)
+          this.gameService.yourTurn = true;
+          const {x, y} = message.enemyMove.moveCoordinates;
+          this.gameService.emitEnemyMove(x, y)
           if (message.wasSunk) {
             this.handleSunkenShip(message.sunkenShip, "your"); // Update opponent's board
           }
 
-        }
-        else{
+        } else {
           //you just moved and you hear ab result
-            if(message.wasHit==true){
-              const {x,y}=message.enemyMove.moveCoordinates;
-              this.gameService.emitWasHit(x,y)
-              if (message.wasSunk) {
-                this.handleSunkenShip(message.sunkenShip, "opponent"); // Update opponent's board
-              }
+          if (message.wasHit == true) {
+            const {x, y} = message.enemyMove.moveCoordinates;
+            this.gameService.emitWasHit(x, y)
+            if (message.wasSunk) {
+              this.handleSunkenShip(message.sunkenShip, "opponent"); // Update opponent's board
             }
+          }
         }
-      }if(message.serverMessage=="game-ended")
-      {
-        this.gameService.won=message.didYouWon;
+      }
+      if (message.serverMessage == "game-ended") {
+        this.gameService.won = message.didYouWon;
         this.router.navigate(['./result'])
       }
 
@@ -104,20 +99,20 @@ export class WebSocketService {
     };
   }
 
-  private goToGame(message:any) {
+  private goToGame(message: any) {
     this.router.navigate(['./playing'])
   }
 
-  initMessage(){
+  initMessage() {
     console.log(JSON.stringify(this.getWsKey()))
-    if (this.gameMode=="singleplayer"){
+    if (this.gameMode == "singleplayer") {
       const message = {
-        sessionKey:this.getWsKey(),
-        message:"start-search",
+        sessionKey: this.getWsKey(),
+        message: "start-search",
         gameType: "singleplayer"
       }
       return JSON.stringify(message);
-    }else {
+    } else {
       const message = {
         sessionKey: this.getWsKey(),
         message: "start-search"
@@ -126,42 +121,45 @@ export class WebSocketService {
     }
 
   }
-  shipsMessage(shipsData:any[]){
+
+  shipsMessage(shipsData: any[]) {
     console.log(JSON.stringify(this.getWsKey()))
     const ships = shipsData.map(ship => ({
       shipSize: ship.size,
-      position: { x: ship.x, y: ship.y },
+      position: {x: ship.x, y: ship.y},
       vertically: !ship.horizontal,
     }));
     const message = {
-      sessionKey:this.getWsKey(),
-      message:"set-ships",
-      ships:ships
+      sessionKey: this.getWsKey(),
+      message: "set-ships",
+      ships: ships
 
 
     }
     return JSON.stringify(message);
   }
-  shotMessage(x:number,y:number){
+
+  shotMessage(x: number, y: number) {
     const message = {
-      sessionKey:this.getWsKey(),
-      message:"move",
-      move:{
-        moveCoordinates:{
-          x:x,
-          y:y
+      sessionKey: this.getWsKey(),
+      message: "move",
+      move: {
+        moveCoordinates: {
+          x: x,
+          y: y
         }
       }
     }
     return JSON.stringify(message);
   }
-  setWsKey(token:string)
-  {
-    console.log("seting key"+token)
+
+  setWsKey(token: string) {
+    console.log("seting key" + token)
     localStorage?.setItem(this.tokenKey, token);
   }
-  getWsKey(){
-    return localStorage?.getItem(this.tokenKey);
+
+  getWsKey() {
+    return this.document.defaultView?.localStorage.getItem(this.tokenKey);
   }
 
   get messages$() {
@@ -172,8 +170,7 @@ export class WebSocketService {
   sendMessage(message: any): void {
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
       this.socket.send(message);
-    }
-    else {
+    } else {
       console.log("slot not ready")
     }
   }
@@ -184,7 +181,7 @@ export class WebSocketService {
       this.socket.close();
     }
 
-      return localStorage?.removeItem(this.tokenKey);
+    return localStorage?.removeItem(this.tokenKey);
 
   }
 
@@ -206,7 +203,6 @@ export class WebSocketService {
       return Array(shipCount).fill(size);
     });
 
-    // Debugging logs
     console.log("Setup got set successfully:", this.setup);
     console.log("Enemy name:", this.enemy.name);
     console.log("Enemy score:", this.enemy.score);
@@ -214,12 +210,10 @@ export class WebSocketService {
   }
 
   private hasKey() {
-    if (this.getWsKey()===undefined||this.getWsKey()===null)
-    {
+    if (this.getWsKey() === undefined || this.getWsKey() === null) {
       console.log("has no ws key")
       return false;
-    }
-    else {
+    } else {
       console.log("has ws key")
       console.log(this.getWsKey())
       return true
@@ -227,9 +221,10 @@ export class WebSocketService {
   }
 
   setMode(gameMode: string | null) {
-    this.gameMode=gameMode
+    this.gameMode = gameMode
 
   }
+
   private handleSunkenShip(
     sunkenShip: { x: number; y: number }[],
     boardType: "your" | "opponent"
@@ -237,14 +232,14 @@ export class WebSocketService {
 
     console.log(sunkenShip)
     console.log(boardType)
-    const boardSize = { x: 10, y: 10 }; // Example board size
+    const boardSize = {x: 10, y: 10}; // Example board size
     const markedCells = new Set<string>();
 
     const isValidCell = (x: number, y: number): boolean =>
       x >= 0 && x < boardSize.x && y >= 0 && y < boardSize.y;
 
     // Mark adjacent cells
-    for (const { x, y } of sunkenShip) {
+    for (const {x, y} of sunkenShip) {
       for (let dx = -1; dx <= 1; dx++) {
         for (let dy = -1; dy <= 1; dy++) {
           const adjX = x + dx;
@@ -258,13 +253,10 @@ export class WebSocketService {
       }
     }
 
-    // Remove actual ship cells from markedCells
-    for (const { x, y } of sunkenShip) {
+    for (const {x, y} of sunkenShip) {
       const key = `${x},${y}`;
       markedCells.delete(key);
     }
-
-    // Emit events to update the board
     markedCells.forEach((cell) => {
       const [x, y] = cell.split(',').map(Number);
 

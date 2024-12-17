@@ -13,7 +13,6 @@ export class LobbyServiceService {
 
   constructor(private http: HttpClient, @Inject(DOCUMENT) private document: Document) {}
   startGame() {
-    console.log("aaa")
     return this.http.post(this.url,{});
   }
 

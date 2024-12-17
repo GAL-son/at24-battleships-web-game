@@ -102,7 +102,7 @@ body { background-color: #eeeeee; padding: 0; margin: 5px; overflow-y: scroll; }
 
   
   <span class="passingAlert bar"><span class="fold-buttons"><a href="#" onclick="fold();">Fold</a> | 
-  <a href="#" onclick="unfold();">Unfold</a></span>3 specs, 0 failed, 0 pending</span>
+  <a href="#" onclick="unfold();">Unfold</a></span>13 specs, 0 failed, 0 pending</span>
   
 
 
@@ -118,15 +118,75 @@ body { background-color: #eeeeee; padding: 0; margin: 5px; overflow-y: scroll; }
       <span class="description">AuthService Unit Tests</span>
     
       <div class="specSummary passed">
-      <span class="description">should login and store token in localStorage</span>
-      </div>
-    
-      <div class="specSummary passed">
       <span class="description">should logout and clear token and navigate to home</span>
       </div>
     
       <div class="specSummary passed">
       <span class="description">should decode a valid token</span>
+      </div>
+    
+      <div class="specSummary passed">
+      <span class="description">should login and store token in localStorage</span>
+      </div>
+    
+    </div>
+  
+    <div class="suite passed">
+      <span class="description">GridComponent - isValidPlacement</span>
+    
+      <div class="specSummary passed">
+      <span class="description">should return false if the ship placement overlaps with an existing ship</span>
+      </div>
+    
+      <div class="specSummary passed">
+      <span class="description">should return false if the ship placement is adjacent diagonally</span>
+      </div>
+    
+      <div class="specSummary passed">
+      <span class="description">should return false if the ship placement is out of bounds horizontally</span>
+      </div>
+    
+      <div class="specSummary passed">
+      <span class="description">should return false if the ship placement is out of bounds vertically</span>
+      </div>
+    
+      <div class="specSummary passed">
+      <span class="description">should return true for a valid ship placement vertically</span>
+      </div>
+    
+      <div class="specSummary passed">
+      <span class="description">should return true for a valid ship placement horizontally</span>
+      </div>
+    
+    </div>
+  
+    <div class="suite passed">
+      <span class="description">WebSocketService unit test hasKey()</span>
+    
+      <div class="specSummary passed">
+      <span class="description">should return true when WebSocket key exists</span>
+      </div>
+    
+      <div class="specSummary passed">
+      <span class="description">should return false when WebSocket key does not exist</span>
+      </div>
+    
+    </div>
+  
+    <div class="suite passed">
+      <span class="description">WebSocketService unit test</span>
+    
+      <div class="specSummary passed">
+      <span class="description">should return a formatted shot message</span>
+      </div>
+    
+    </div>
+  
+    <div class="suite passed">
+      <span class="description">WebSocketService unit test storeData()</span>
+    
+      <div class="specSummary passed">
+      <span class="description">should correctly parse and store game setup and enemy data</span>
       </div>
     
     </div>

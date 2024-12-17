@@ -12,7 +12,6 @@ export class GetRankingService {
 
 
   getRanking() {
-    console.log("aaa")
     return this.http.get(this.url);
   }
 }
