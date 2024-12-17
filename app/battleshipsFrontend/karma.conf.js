@@ -1,32 +1,37 @@
+const { exec } = require('child_process');
+
 module.exports = function (config) {
   config.set({
     basePath: '',
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
     plugins: [
-      require('karma-jasmine'),
-      require('karma-chrome-launcher'),
-      require('karma-jasmine-html-reporter'),
-      require('karma-coverage'),
-      require('@angular-devkit/build-angular/plugins/karma')
+      'karma-jasmine',
+      'karma-chrome-launcher',
+      '@angular-devkit/build-angular/plugins/karma',
+      'karma-html-reporter',
     ],
     client: {
-      clearContext: false // leave Jasmine Spec Runner output visible in browser
+      clearContext: false,
     },
-    coverageReporter: {
-      dir: require('path').join(__dirname, './coverage'),
-      subdir: '.',
-      reporters: [
-        { type: 'html' },
-        { type: 'text-summary' }
-      ]
+    files: [
+      'src/app/tests/**/*.spec.ts',
+    ],
+    preprocessors: {},
+    reporters: ['progress', 'html'],
+    htmlReporter: {
+      outputFile: 'karma-results.html',
+      pageTitle: 'Unit Test Results',
     },
-    reporters: ['progress', 'kjhtml'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
     browsers: ['Chrome'],
-    singleRun: false,
-    restartOnFileChange: true
+    singleRun: true, // Change to true so it exits after running
+    restartOnFileChange: true,
+    // Open results dynamically
+    afterRun: function() {
+      exec('start karma-results.html'); // Windows: Replace this with "open karma-results.html" for macOS/Linux
+    },
   });
 };

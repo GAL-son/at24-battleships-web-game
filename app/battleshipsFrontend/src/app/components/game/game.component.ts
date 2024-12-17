@@ -30,12 +30,6 @@ export class GameComponent implements OnInit{
   currentShipSize = this.shipSizes[0];
   horizontal:boolean=true;
 
-
-
-
-
-
-
   onShipPlaced(success: JSON): void {
     if (success) {
       console.log(success)
@@ -73,9 +67,9 @@ export class GameComponent implements OnInit{
     this.horizontal=!this.horizontal;
   }
 
-  private addShipToList() {
-
-  }
+  // private addShipToList() {
+  //
+  // }
 
   ngOnInit(): void {
 
