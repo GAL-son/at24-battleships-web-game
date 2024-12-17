@@ -1,19 +1,23 @@
 
-<form autocomplete="off">
-  <div class="input-group">
-    <input type="text" name="username" placeholder="Nazwa" title="Login" [(ngModel)]="username">
-  </div>
-  <div class="input-group">
-    <input type="password" name="password" placeholder="Hasło" title="Password" [(ngModel)]="password">
-  </div>
-  <div class="input-group">
-    <input type="email" name="mail" placeholder="adres eMail" title="Mail"[(ngModel)]="email">
-  </div>
+<div class="loginContainer" autocomplete="off">
+  <form class="form" autocomplete="off">
+  <span class="input-span">
+    <label for="login" class="label">login</label>
+    <input type="text" name="login" id="login" placeholder="Nazwa" title="Login" [(ngModel)]="username"
+    />
+  </span>
+    <span class="input-span">
+      <label for="password" class="label">Password</label>
+      <input type="password" name="password" id="password" placeholder="Hasło" title="Password" [(ngModel)]="password"
+    />
+    </span>
+    <span class="input-span">
+      <label for="mail" class="label">Email</label>
+      <input type="email" name="mail" id="mail" placeholder="mail" title="Email" [(ngModel)]="email"
+      />
+    </span>
+    <input class="submit" type="submit" value="Log in" (click)="Register($event)"/>
+    <span class="span">Don't have an account? <a href="#" (click)="goToLogin($event)">Sign up</a></span>
+  </form>
+</div>
 
-  <button type="button" (click)="Register($event)" class="btn btn-primary" title="Przycisk zarejestruj">
-    rejestracja
-  </button>
-  <button type="button" (click)="goToLogin($event)" class="btn btn-secondary" title="Przycisk rejestracja">
-    już mam konto
-  </button>
-</form>

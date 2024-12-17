@@ -20,7 +20,7 @@ import {GameService} from "../../services/game.service";
 
 export class GridComponent implements OnInit {
   @Input() grid: { hasShip: boolean,shot:boolean }[][] = [];
-  @Input() currentShipSize!: number; // Size of the ship to place
+  @Input() currentShipSize!: number;
   @Input() mode!:string;
   @Input() horizontal!: boolean;
   @Output() shipPlaced = new EventEmitter<JSON>();
@@ -48,7 +48,7 @@ constructor(private gameService:GameService) {
   placeShip(x: number, y: number) {
     if (!this.isValidPlacement(x, y)||this.currentShipSize==0) {
       console.log('Invalid placement, try again!');
-      return false; // Ship cannot be placed
+      return false;
     }
 
 
@@ -76,52 +76,49 @@ constructor(private gameService:GameService) {
     const boardSize = 10;
 
     if (this.horizontal) {
-      // Check if the ship fits within the grid
       if (x + this.currentShipSize > boardSize) return false;
-
-      // Check for ships directly in the placement area
       for (let i = 0; i < this.currentShipSize; i++) {
-        if (this.grid[y][x + i].hasShip) return false; // Ship is already placed here
+        if (this.grid[y][x + i].hasShip) return false;
 
         // Check diagonals
-        if (y > 0 && this.grid[y - 1][x + i].hasShip) return false; // Top diagonal
-        if (y < boardSize - 1 && this.grid[y + 1][x + i].hasShip) return false; // Bottom diagonal
+        if (y > 0 && this.grid[y - 1][x + i].hasShip) return false;
+        if (y < boardSize - 1 && this.grid[y + 1][x + i].hasShip) return false;
       }
 
-      // Check horizontal neighbors outside the ship's placement
+
       if (x > 0) {
-        if (this.grid[y][x - 1].hasShip) return false; // Left
-        if (y > 0 && this.grid[y - 1][x - 1].hasShip) return false; // Top-left diagonal
-        if (y < boardSize - 1 && this.grid[y + 1][x - 1].hasShip) return false; // Bottom-left diagonal
+        if (this.grid[y][x - 1].hasShip) return false;
+        if (y > 0 && this.grid[y - 1][x - 1].hasShip) return false;
+        if (y < boardSize - 1 && this.grid[y + 1][x - 1].hasShip) return false;
       }
       if (x + this.currentShipSize < boardSize) {
-        if (this.grid[y][x + this.currentShipSize].hasShip) return false; // Right
-        if (y > 0 && this.grid[y - 1][x + this.currentShipSize].hasShip) return false; // Top-right diagonal
-        if (y < boardSize - 1 && this.grid[y + 1][x + this.currentShipSize].hasShip) return false; // Bottom-right diagonal
+        if (this.grid[y][x + this.currentShipSize].hasShip) return false;
+        if (y > 0 && this.grid[y - 1][x + this.currentShipSize].hasShip) return false;
+        if (y < boardSize - 1 && this.grid[y + 1][x + this.currentShipSize].hasShip) return false;
       }
     } else {
-      // Check if the ship fits within the grid
+
       if (y + this.currentShipSize > boardSize) return false;
 
-      // Check for ships directly in the placement area
-      for (let i = 0; i < this.currentShipSize; i++) {
-        if (this.grid[y + i][x].hasShip) return false; // Ship is already placed here
 
-        // Check diagonals
-        if (x > 0 && this.grid[y + i][x - 1].hasShip) return false; // Left diagonal
-        if (x < boardSize - 1 && this.grid[y + i][x + 1].hasShip) return false; // Right diagonal
+      for (let i = 0; i < this.currentShipSize; i++) {
+        if (this.grid[y + i][x].hasShip) return false;
+
+
+        if (x > 0 && this.grid[y + i][x - 1].hasShip) return false;
+        if (x < boardSize - 1 && this.grid[y + i][x + 1].hasShip) return false;
       }
 
-      // Check vertical neighbors outside the ship's placement
+
       if (y > 0) {
-        if (this.grid[y - 1][x].hasShip) return false; // Above
-        if (x > 0 && this.grid[y - 1][x - 1].hasShip) return false; // Top-left diagonal
-        if (x < boardSize - 1 && this.grid[y - 1][x + 1].hasShip) return false; // Top-right diagonal
+        if (this.grid[y - 1][x].hasShip) return false;
+        if (x > 0 && this.grid[y - 1][x - 1].hasShip) return false;
+        if (x < boardSize - 1 && this.grid[y - 1][x + 1].hasShip) return false;
       }
       if (y + this.currentShipSize < boardSize) {
-        if (this.grid[y + this.currentShipSize][x].hasShip) return false; // Below
-        if (x > 0 && this.grid[y + this.currentShipSize][x - 1].hasShip) return false; // Bottom-left diagonal
-        if (x < boardSize - 1 && this.grid[y + this.currentShipSize][x + 1].hasShip) return false; // Bottom-right diagonal
+        if (this.grid[y + this.currentShipSize][x].hasShip) return false;
+        if (x > 0 && this.grid[y + this.currentShipSize][x - 1].hasShip) return false;
+        if (x < boardSize - 1 && this.grid[y + this.currentShipSize][x + 1].hasShip) return false;
       }
     }
 
@@ -137,19 +134,7 @@ constructor(private gameService:GameService) {
   }
 
   ngOnInit(): void {
-    // console.log(this.gameService.getShips());
-    //
-    // const ships = this.gameService.getShips();
-    // for (const ship of ships) {
-    //   const { x, y, size, horizontal } = ship;
-    //   for (let i = 0; i < size; i++) {
-    //     if (horizontal) {
-    //       this.grid[y][x + i].hasShip = true;
-    //     } else {
-    //       this.grid[y + i][x].hasShip = true;
-    //     }
-    //   }
-    // }
+
   }
 
   private clickedOwn(x: number, y: number) {
