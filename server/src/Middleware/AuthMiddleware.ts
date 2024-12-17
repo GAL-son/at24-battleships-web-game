@@ -1,29 +1,25 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
 import SessionService from "../Services/SessionService";
-import jwt from 'jsonwebtoken';
-import { config } from "../config";
+import JWTService from "../Services/JWTService";
 
 export const getMiddlewareWithSession = (sessionService: SessionService) => {
     return (request: Request, response: Response, next: NextFunction)=> {
-        const key = config.jwtKey;
-        if(!key) {
-            throw new Error("Missing JWT Key")
-        }
         const token =  request.header('Authorization')?.replace('Bearer ', '');      
-
+        
         if(!token) {
             response.status(401).send("Missing token");
         } else {
-            const session = sessionService.getSession(token);
+            const session = sessionService.getSession(token);    
 
             if(session) {
                 try {
-                    jwt.verify(token, key);
+                    const jwt = new JWTService();
+                    jwt.verifyToken(token);
                 } catch (error) {
                     sessionService.deleteSession(token);
                     return response.status(401).send("Session has expired");
                 }
-                request.body['session'] = session;
+                request.body['session'] = session;               
                 next();
             } else {
                 response.status(401).send("Authorization failed");
