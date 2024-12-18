@@ -7,19 +7,20 @@ class UserRepository implements IRepository {
     name: string;
     db?: IDatabase<any>;
 
-    table: string = 'BattleshipsDB.users';
-
-    constructor(name: string) {
+    table: string;
+    constructor(name: string, scemaName: string = "BattleshipsDB", tableName: string = "users") {
         this.name = name;
+        this.table = scemaName + "." + tableName;
+        console.log(this.table);       
     }
 
     linkDb(db: IDatabase<any>): void {
-        this.db = db;    
+        this.db = db;
     }
 
     async getUsers() {
         this.validateDb();
-        
+
         const sql = `SELECT * FROM ${this.table}`;
         return await this.db?.any<IUserModel>(sql);
     }
@@ -30,18 +31,18 @@ class UserRepository implements IRepository {
         const query = `SELECT * FROM ${this.table} where email = $1`;
         return this.db?.one<IUserModel>(query, [email]);
     }
-    
+
     async getUser(name: string) {
-        this.validateDb();        
+        this.validateDb();
         const query = `SELECT * FROM ${this.table} WHERE name = $1 `;
         try {
             return await this.db?.one<IUserModel>(query, [name])
         } catch (error) {
-            if(error instanceof errors.QueryResultError) {
-                if(error.code === errors.queryResultErrorCode.noData) {
+            if (error instanceof errors.QueryResultError) {
+                if (error.code === errors.queryResultErrorCode.noData) {
                     return undefined;
                 }
-                
+
                 throw error;
             }
         }
@@ -76,7 +77,7 @@ class UserRepository implements IRepository {
         const query = `UPDATE ${this.table} SET score = $1 WHERE name = $2`;
         return this.db?.query(query, [score, name]);
     }
-    
+
     public parseSafe(userUnsafe: IUserModel) {
         return {
             score: userUnsafe.score,
@@ -84,11 +85,11 @@ class UserRepository implements IRepository {
         };
     }
 
-    validateDb() : void {
-        if(this.db == null) {
+    validateDb(): void {
+        if (this.db == null) {
             throw Error("NO DATABASE CONNECTED");
         }
-    }    
+    }
 }
 
 export default UserRepository;

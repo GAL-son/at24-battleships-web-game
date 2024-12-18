@@ -6,10 +6,11 @@ export default class GameRepository implements IRepository {
     name: string;
     db?: IDatabase<any>;
 
-    table: string = 'BattleshipsDB.GameHistory';
+    table: string;;
 
-    constructor(name: string) {
+    constructor(name: string, scemaName: string = "BattleshipDB", tableName: string = "GameHistory") {
         this.name = name;
+        this.table = scemaName + "." +tableName;
     }
 
     linkDb(db: IDatabase<any>): void {

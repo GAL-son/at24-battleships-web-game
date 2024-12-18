@@ -18,8 +18,8 @@ describe('Test User endpoints with correct user', () => {
 
     beforeAll(async () => {
         testdb = new DatabaseService(config.db).withRepositories([
-            new UserRepository("users"),
-            new GameRepository("games")
+            new UserRepository("users", config.db.schema, config.db.usersTable),
+            new GameRepository("games", config.db.schema, config.db.gamesTable)
         ]);
         testapp = createApp(testdb);
 
@@ -126,8 +126,8 @@ describe('Test User endpoints with correct user', () => {
         await request(testapp.getRestServer())
             .delete('/api/users/user/' + "someoneElse" + "/delete")
             .set("Authorization", "Bearer " + token);
-            testapp.end();
-            testdb.close();
+        testapp.end();
+        testdb.close();
 
     })
 })
@@ -144,8 +144,8 @@ describe("Test User endpoints with incorrect user", () => {
 
     beforeAll(async () => {
         testdb = new DatabaseService(config.db).withRepositories([
-            new UserRepository("users"),
-            new GameRepository("games")
+            new UserRepository("users", config.db.schema, config.db.usersTable),
+            new GameRepository("games", config.db.schema, config.db.gamesTable)
         ]);
         testapp = createApp(testdb);
 
@@ -220,8 +220,8 @@ describe('Test User endpoints with expired token', () => {
 
     beforeAll(async () => {
         testdb = new DatabaseService(config.db).withRepositories([
-            new UserRepository("users"),
-            new GameRepository("games")
+            new UserRepository("users", config.db.schema, config.db.usersTable),
+            new GameRepository("games", config.db.schema, config.db.gamesTable)
         ]);
         testapp = createApp(testdb);
 

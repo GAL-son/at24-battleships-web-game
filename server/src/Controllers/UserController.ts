@@ -204,6 +204,8 @@ class UserController implements IRestController {
             await this.userRepository.saveUser(newUser);
             response.status(201).send();
         } catch (error) {  
+            console.log((error as AggregateError).errors);
+            
             console.error("Failed to save user! " + error);
             response.status(500).send("Failed to create user");
         }

@@ -17,8 +17,8 @@ describe("test Rest session", () => {
 
     beforeAll(async () => {
         const testdb: DatabaseService = new DatabaseService(config.db).withRepositories([
-            new UserRepository("users"),
-            new GameRepository("games")
+            new UserRepository("users", config.db.schema, config.db.usersTable),
+            new GameRepository("games", config.db.schema, config.db.gamesTable)
         ]);
         testapp = createApp(testdb);
 
