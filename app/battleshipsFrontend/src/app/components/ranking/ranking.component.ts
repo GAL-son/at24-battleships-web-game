@@ -15,7 +15,7 @@ import {NgForOf} from "@angular/common";
 })
 export class RankingComponent implements OnInit {
 
-  ranking: any[] = [ { name: 'Alice', score: 1200 }, { name: 'Bob', score: 1100 }, { name: 'Charlie', score: 900 }, ]; // To store the ranking data
+  ranking: any[] = [  ];
 
   constructor(private getRankingService: GetRankingService) {}
 

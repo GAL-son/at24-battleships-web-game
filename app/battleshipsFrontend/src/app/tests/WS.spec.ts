@@ -14,6 +14,7 @@ class MockRouter {
   navigate = jasmine.createSpy('navigate');
 }
 
+// Mockowanie localStorage
 // @ts-ignore
 const mockLocalStorage = {
   store: {} as Record<string, string>,
@@ -35,6 +36,7 @@ describe('WebSocketService unit test', () => {
   let service: WebSocketService;
 
   beforeEach(() => {
+    // Konfiguracja środowiska testowego z potrzebnymi providerami i mockami
     TestBed.configureTestingModule({
       teardown: { destroyAfterEach: false },
       providers: [
@@ -51,11 +53,12 @@ describe('WebSocketService unit test', () => {
     });
 
     service = TestBed.inject(WebSocketService);
-    mockLocalStorage.store = {}; // Reset mock localStorage before each test
+    mockLocalStorage.store = {}; // Resetowanie mock localStorage przed każdym testem
   });
 
-  // Test for shotMessage()
+  // Test 1: Sprawdzanie, czy metoda shotMessage() zwraca poprawną wiadomość
   it('should return a formatted shot message', () => {
+    // Arrange: Przygotowanie danych testowych
     const testKey = 'test-session-key';
     mockLocalStorage.setItem('WStoken', testKey);
 
@@ -70,54 +73,58 @@ describe('WebSocketService unit test', () => {
       },
     });
 
+    // Act: Wywołanie funkcji
     const result = service.shotMessage(x, y);
 
+    // Assert: Sprawdzenie, czy wynik jest zgodny z oczekiwaniami
     expect(result).toEqual(expectedMessage);
     expect(mockLocalStorage.getItem).toHaveBeenCalledWith('WStoken');
   });
 
-  // Test for hasKey()
+  // Test 2: Sprawdzanie funkcji hasKey(), która weryfikuje istnienie klucza w localStorage
   describe('hasKey()', () => {
     it('should return true when WebSocket key exists', () => {
-      // Arrange
+      // Arrange: Przygotowanie danych testowych
       const testKey = 'existing-key';
       mockLocalStorage.setItem('WStoken', testKey);
 
-      // Act
+      // Act: Wywołanie funkcji
       const result = (service as any).hasKey();
 
-      // Assert
+      // Assert: Sprawdzenie, czy funkcja poprawnie zwraca true
       expect(result).toBeTrue();
       expect(mockLocalStorage.getItem).toHaveBeenCalledWith('WStoken');
     });
 
     it('should return false when WebSocket key does not exist', () => {
-      // Arrange
+      // Arrange: Klucz nie istnieje
       mockLocalStorage.removeItem('WStoken');
 
-      // Act
+      // Act: Wywołanie funkcji
       const result = (service as any).hasKey();
 
-      // Assert
+      // Assert: Sprawdzenie, czy funkcja poprawnie zwraca false
       expect(result).toBeFalse();
       expect(mockLocalStorage.getItem).toHaveBeenCalledWith('WStoken');
     });
   });
+
+  // Test 3: Sprawdzanie funkcji storeData(), która parsuje dane i przechowuje informacje o grze i przeciwniku
   describe('storeData()', () => {
     it('should correctly parse and store game setup and enemy data', () => {
-      // Arrange
+      // Arrange: Przygotowanie przykładowych danych
       const message = {
         opponent: { name: 'EnemyPlayer', score: '1000' },
         gameSetup: { shipSizes: { '2': 3, '3': 2 } },
       };
 
-      // Act
+      // Act: Wywołanie funkcji
       service.storeData(message);
 
-      // Assert
+      // Assert: Sprawdzenie, czy dane zostały poprawnie sparsowane i zapisane
       expect(service.enemy.name).toBe('EnemyPlayer');
       expect(service.enemy.score).toBe('1000');
-      expect(service.setup).toEqual([2, 2, 2, 3, 3]); // Flattened array of ship sizes
+      expect(service.setup).toEqual([2, 2, 2, 3, 3]);
     });
   });
 });
