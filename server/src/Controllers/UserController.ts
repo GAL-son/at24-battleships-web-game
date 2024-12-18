@@ -181,7 +181,7 @@ class UserController implements IRestController {
 
         let createUserData: CreateUserData;
         try {
-            createUserData = typia.assert(request.body);
+            createUserData = typia.assert<CreateUserData>(request.body);
         } catch (error) {
             console.error("Invalid data format" + error);
             response.status(400).json(error);
