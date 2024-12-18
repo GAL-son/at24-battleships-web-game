@@ -1,13 +1,3 @@
-<style>
-    table {
-        width: 100%;
-    }
-
-    img {
-        margin-top: 10px;
-    }
-</style>
-
 # Battleships Webapp
 Gra w statki online
 
