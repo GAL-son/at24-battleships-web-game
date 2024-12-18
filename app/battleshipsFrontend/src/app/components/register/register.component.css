@@ -32,7 +32,7 @@
   outline: 2px solid var(--bg-dark);
 }
 
-.form input[type="text"],
+.form input[type="text"]:focus,
 .form input[type="email"]:focus,
 .form input[type="password"]:focus {
   outline: 2px solid var(--clr);

@@ -3,3 +3,16 @@
   margin-left: 25%;
   width: 50%;
 }
+button{
+  border: chartreuse 1px solid;
+  background-color: transparent;
+  color: chartreuse;
+  margin-right: 5px;
+  margin-top: 5px;
+  transition: all 200ms;
+}
+button:hover{
+  background-color: chartreuse;
+  color: #505050;
+  border-color: #505050;
+}
