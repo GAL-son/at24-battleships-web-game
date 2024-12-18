@@ -4,16 +4,16 @@ import * as http from "http";
 import cors from 'cors';
 
 import { config } from './config';
-import {IRestController} from 'Rest/Interface/IRestController';
-import {IWsController} from 'Ws/Interfaces/IWsController';
+import {IRestController} from 'Interfaces/IRestController';
+import {IWsController} from 'Interfaces/IWsController';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import { randomUUID } from 'crypto';
 
 class AppServer {
-    private restServer: express.Application;
+    restServer: express.Application;
     private webSocketServer: WebSocketServer;
-    private server: http.Server;
+    server: http.Server;
 
     constructor() {
         this.restServer = express();
@@ -22,7 +22,7 @@ class AppServer {
             
         this.restServer.use(            
             cors(config.corsOptions),
-            morgan('dev'),
+            // morgan('dev'),
             bodyParser.json()
         );
         this.restServer.use(
@@ -32,6 +32,8 @@ class AppServer {
           });
     }
 
+    
+
     public start() {
         this.server.listen(config.port, () => {
             console.log("Server is now running at http://localhost:" + config.port);
@@ -40,7 +42,7 @@ class AppServer {
 
     public withRestControllers(restControllers: IRestController[]) {
         restControllers.forEach(controller => {
-            controller.router.stack.forEach((l: any) => console.log("/api" + l.route?.path, l.route?.methods))
+            // controller.router.stack.forEach((l: any) => console.log("/api" + l.route?.path, l.route?.methods))
             
             this.restServer.use('/api', controller.router);
         });       
@@ -82,6 +84,14 @@ class AppServer {
                 });
             })
         })
+    }
+
+    public getRestServer() {
+        return this.restServer;
+    }
+
+    public end() {
+        this.server.close();
     }
 
 

@@ -5,8 +5,13 @@ export const config = {
         "port": process.env.DB_PORT,
         "database": process.env.DB_NAME,
         "user": process.env.DB_USER,
-        "password": process.env.DB_PASSWORD
+        "password": process.env.DB_PASSWORD,
+        "schema": process.env.DB_SCHEMA,
+        "gamesTable": process.env.DB_GAME_TABLE,
+        "usersTable": process.env.DB_USERS_TABLE
     },
+
+
     corsWhitelist: ['https://localhost:3001','http://localhost:4200'],
     corsOptions: {
         origin: function (origin: any, callback: any) {
