@@ -5,14 +5,15 @@ import { IRepository } from '../Interfaces/IRepository';
 
 class DatabaseService {
     db: IDatabase<any>;
+    private pgp: IMain;
 
     repositories: Map<String, IRepository>;
 
     constructor(dbConfig: any) {        
-        let pgp: IMain = pgPromise.default();
-        pgp.pg.types.setTypeParser(20, Number);
+        this.pgp = pgPromise.default();
+        this.pgp.pg.types.setTypeParser(20, Number);
 
-        this.db = pgp(dbConfig);
+        this.db = this.pgp(dbConfig);
         this.repositories = new Map<String, IRepository>();        
     }    
 
@@ -32,6 +33,10 @@ class DatabaseService {
         }
 
         return repo as T;
+    }
+
+    close() {
+        this.pgp.end();
     }
 }
 

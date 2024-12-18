@@ -42,7 +42,7 @@ class UserController implements IRestController {
         this.router.get(this.path + "/user/:name", this.authMiddleware, this.getUser);
         this.router.post(this.path + "/create", this.createUser);
         this.router.delete(this.path + "/user/:name/delete", this.authMiddleware, this.deleteUser);
-        this.router.patch(this.path + "/user/:name/updateMail", this.authMiddleware, this.updateUser);
+        this.router.patch(this.path + "/user/:name/update", this.authMiddleware, this.updateUser);
     }
 
     updateUser = async(request: Request, response: Response) => {
@@ -63,7 +63,7 @@ class UserController implements IRestController {
         
         if(newEmail) {
             try {
-                newEmail = typia.assert(newEmail);
+                newEmail = typia.assert<string & tags.Format<'email'>>(newEmail);
             } catch (e) {
                 return response.status(400).send("Invalid Email");
             }
@@ -95,7 +95,7 @@ class UserController implements IRestController {
             return;
         }
 
-        console.log(session.data);
+        // console.log(session.data);
 
         const userDb = await this.userRepository.getUser(userToDelete);
         if(!userDb) {
@@ -177,17 +177,16 @@ class UserController implements IRestController {
     }
 
     createUser = async (request: Request, response: Response) => {
-        console.log("CREATE");
-
         let createUserData: CreateUserData;
         try {
             createUserData = typia.assert<CreateUserData>(request.body);
         } catch (error) {
-            console.error("Invalid data format" + error);
+            console.error("Invalid data format: " + error);
+            console.error(request.body);
+
             response.status(400).json(error);
             return;
         }
-
         
         const newUser: IUserModel = {
             name: createUserData.name,
@@ -195,18 +194,16 @@ class UserController implements IRestController {
             score: 0,
             password: await this.passwordService.encryptPassword(createUserData.password)
         };
-
+        
         if (await this.userRepository.getUser(newUser.name)) {
+            console.error("USERNAME TAKEN");
             return response.status(400).send("Name already in use");
         }
-
-        console.log("NEW USER");
-        console.log(newUser);
 
         try {
             await this.userRepository.saveUser(newUser);
             response.status(201).send();
-        } catch (error) {            
+        } catch (error) {  
             console.error("Failed to save user! " + error);
             response.status(500).send("Failed to create user");
         }

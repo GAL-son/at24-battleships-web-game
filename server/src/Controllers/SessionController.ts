@@ -78,8 +78,8 @@ export default class SessionController implements RestController {
         }            
     }
     
-    deleteSession = async(request: Request, response: Response) => {
-        const token = request.body["token"];
+    deleteSession = async(request: Request, response: Response) => {        
+        const token = request.body.session.token;
 
         if(!token) {
             response.status(400).send("Token Missing");

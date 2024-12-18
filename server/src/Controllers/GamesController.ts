@@ -36,12 +36,12 @@ export default class GamesController implements IRestController {
         }
     }    
 
-    getAllGames = async (request: Request, response: Response) => {
+    getAllGames = async (request: Request, response: Response) => {       
         try {
             const games = await this.gameRepository.getAllGames();
-
             return response.status(200).json(games);
         } catch (error) {
+            console.error(error);
             return response.status(404).send("No games found");
         }
     }
