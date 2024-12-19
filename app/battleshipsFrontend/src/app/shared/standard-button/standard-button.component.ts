@@ -11,4 +11,5 @@ import {RouterLink} from "@angular/router";
 export class StandardButtonComponent {
   @Input() label: string = '';
   @Input() link: string = '';
+
 }

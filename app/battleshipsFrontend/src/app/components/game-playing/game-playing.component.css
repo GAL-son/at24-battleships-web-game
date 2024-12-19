@@ -1,0 +1,19 @@
+.containerTwoPlayers {
+  width: 100%;
+  justify-content: space-between;
+  display: flex;
+}
+.containerOnePlayer{
+  margin: 3vh 10vh;
+}
+
+.containerGameUi {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  font-size: 4vh;
+
+}
+p{
+  font-size: 3vh;
+}

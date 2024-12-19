@@ -8,9 +8,11 @@ import {DOCUMENT} from "@angular/common";
 export class LobbyServiceService {
 
   url='http://localhost:3001/api/session/game/create'
+  private yourShips=[];
+
+
   constructor(private http: HttpClient, @Inject(DOCUMENT) private document: Document) {}
   startGame() {
-    console.log("aaa")
     return this.http.post(this.url,{});
   }
 

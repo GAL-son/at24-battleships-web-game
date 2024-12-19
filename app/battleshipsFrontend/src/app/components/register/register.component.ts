@@ -3,12 +3,14 @@ import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {HttpResponse} from "@angular/common/http";
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-register',
   standalone: true,
   imports: [
-    FormsModule
+    FormsModule,
+    NgIf
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
@@ -17,6 +19,7 @@ export class RegisterComponent {
   username = '';
   password = '';
   email = '';
+  errorMessage = '';
 
   constructor(private authService: AuthService, private router: Router) {
   }
@@ -24,17 +27,21 @@ export class RegisterComponent {
   Register(event: Event) {
     event.preventDefault();
     console.log(`registration: mail=${this.email}, username=${this.username}, password=${this.password}`);
-    this.authService.register(this.username, this.email, this.password).subscribe((response: HttpResponse<any>) => {
-      console.log('Response received:', response);
-      if (response && response.status === 201) {
-        console.log('Registration successful');
+
+    this.authService.register(this.username, this.email, this.password).subscribe(
+      (response) => {
+        console.log('Registration successful', response);
         this.router.navigate(['../login']);
-      } else {
-        console.log('Unexpected response status:', response.status);
+      },
+      (error) => {
+        console.error('Error occurred during registration:', error);
+        if (error.status === 400) {
+          this.errorMessage = 'Username already taken. Please choose a different one.';
+        } else {
+          this.errorMessage = 'An unexpected error occurred. Please try again later.';
+        }
       }
-    }, (error) => {
-      console.error('Registration failed:', error);
-    });
+    );
   }
 
   goToLogin(event: Event

@@ -2,6 +2,8 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {NgForOf, NgIf} from "@angular/common";
 import {GridComponent} from "../../shared/grid/grid.component";
 import {WebSocketService} from "../../services/websocket/web-socket.service";
+import {Router} from "@angular/router";
+import {GameService} from "../../services/game.service";
 
 @Component({
   selector: 'app-game',
@@ -15,20 +17,18 @@ import {WebSocketService} from "../../services/websocket/web-socket.service";
   styleUrl: './game.component.css'
 })
 export class GameComponent implements OnInit{
-  constructor(private wsService: WebSocketService) {
+  constructor(private wsService: WebSocketService,private router: Router,private gameService:GameService) {
   }
 
   @ViewChild('gridObj') gridComponent!: GridComponent;
+
   grid = Array.from({ length: 10 }, () =>
-    Array.from({ length: 10 }, () => ({ hasShip: false }))
+    Array.from({ length: 10 }, () => ({ hasShip: false,shot:false }))
   );
   shipSizes:number[] = [];
   shipsPlaced: any[] = [];
   currentShipSize = this.shipSizes[0];
   horizontal:boolean=true;
-
-
-
 
   onShipPlaced(success: JSON): void {
     if (success) {
@@ -46,12 +46,17 @@ export class GameComponent implements OnInit{
   }
   startGame() {
 
+    this.gameService.setData(this.shipsPlaced,this.wsService.enemy.name)
+    console.log("navigating to Game")
+    this.wsService.sendMessage(this.wsService.shipsMessage(this.shipsPlaced))
+    //this.router.navigate(['/playing']);
+
   }
 
   reset() {
    // console.log(this.gridComponent)
     this.gridComponent.clear()
-    this.shipSizes=this.wsService.setup;
+    this.shipSizes=[...this.wsService.setup];
     this.currentShipSize = this.shipSizes[0]
     console.log(this.shipSizes)
     console.log("in service:"+this.wsService.setup)
@@ -62,9 +67,9 @@ export class GameComponent implements OnInit{
     this.horizontal=!this.horizontal;
   }
 
-  private addShipToList() {
-
-  }
+  // private addShipToList() {
+  //
+  // }
 
   ngOnInit(): void {
 
