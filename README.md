@@ -318,7 +318,7 @@ API dla serwera dzieli się na dwie części:
 > |-|-|--|-|
 > | `name` |  tak  | string | Nazwa użytkownika |
 > | `password` |  tak  | string | hasło użytkownika |
-Example JSON:
+##### Przykładowe body:
 ```json
 {
     "name": "string",
@@ -388,6 +388,60 @@ Example JSON:
 
 </details>
 
+#### Wyświetlanie danych o użytkownikach
+<details>
+ <summary><code>GET</code> <code><b>/api/users</b></code> - Pobieranie listy wszystkich użytkowników</summary>
+
+##### Parametry zapytania
+
+> Brak
+
+##### Parametry body
+> Brak
+
+##### Nagłówki zapytania
+
+> | Nazwa nagłówka    | zawartość | Opis |
+> |-|-|-|
+> |`Authorization` | `Bearer: `| Nagłówek zawierający token JWT |
+
+##### Odpowiedzi
+
+> | kod HTTP    | content-type | odpowiedź |
+> |-|-|-|
+> | `200` | `application/json` | `[{"name": "user1", "score", 1234},...]` |
+> | `500` | `text/html;charset=utf-8` | Brak |
+
+</details>
+
+<details>
+ <summary><code>GET</code> <code><b>/api/users/{name}</b></code> - Pobieranie informacji o danym użytkowniku</summary>
+
+##### Parametry zapytania
+
+> Brak
+
+##### Parametry body
+> | Nazwa |  wymagany | typ  | opis  |
+> |-|-|--|-|
+> | `name` |  tak  | string | Nazwa użytkownika |
+
+##### Nagłówki zapytania
+
+> | Nazwa nagłówka    | zawartość | Opis |
+> |-|-|-|
+> |`Authorization` | `Bearer: `| Nagłówek zawierający token JWT |
+
+##### Odpowiedzi
+
+> | kod HTTP    | content-type | odpowiedź |
+> |-|-|-|
+> | `200` | `application/json` | `{"name": "test1", "email": "test@mail.com", "score": 1234}` |
+> | `404` | `text/html;charset=utf-8` | `User not found` |
+> | `500` | `text/html;charset=utf-8` | Brak |
+
+</details>
+
 #### Zarządzanie kontem
 
 <details>
@@ -403,7 +457,7 @@ Example JSON:
 > | `name` |  tak  | string | Nazwa użytkownika |
 > | `email` |  tak  | string | Adres Email użytkownika |
 > | `password` |  tak  | string | Hasło użytkownika |
-Example JSON:
+##### Przykładowe body:
 ```json
 {
     "name": "string",
@@ -437,7 +491,13 @@ Example JSON:
 > | `email` |  nie  | string | Nowy adres email |
 > | `password` |  nie  | string | Nowe hasło |
 
-Example JSON:
+##### Nagłówki zapytania
+
+> | Nazwa nagłówka    | zawartość | Opis |
+> |-|-|-|
+> |`Authorization` | `Bearer: `| Nagłówek zawierający token JWT |
+
+##### Przykładowe body:
 ```json
 {
     "password": "string",
@@ -449,165 +509,94 @@ Example JSON:
 
 > | kod HTTP    | content-type | odpowiedź |
 > |-|-|-|
-> | `201` | `application/json` | `{"sessionKey": "sessionKey"}`|
-> | `404` | `text/html;charset=utf-8` | `No such user` |
+> | `204` | `text/html;charset=utf-8` | `Email updated` |
+> | `204` | `text/html;charset=utf-8` | `Password updated` |
+> | `400` | `text/html;charset=utf-8` | `Invalid Email` |
 > | `403` | `text/html;charset=utf-8` | `Action is forbidden` |
-> | `400` | `text/html;charset=utf-8` | `Invalud Email` |
+> | `404` | `text/html;charset=utf-8` | `No such user` |
+> | `500` | `text/html;charset=utf-8` | `Failed when updating email` |
+> | `500` | `text/html;charset=utf-8` | `Failed when updating password` |
 
 </details>
 <details>
- <summary><code>POST</code> <code><b>/api/session/game/create</b></code> - Autoryzacja sesji WebSocket</summary>
+ <summary><code>DELETE</code> <code><b>/api/users/user/{name}/update</b></code> - Usuwanie konta użytkownika</summary>
+
+##### Parametry zapytania
+
+> | Nazwa |  wymagany | typ  | opis  |
+> |-|-|--|-|
+> | `name` |  tak  | string | Nazwa użytkownika |
+
+##### Parametry body
+> Brak
+
+##### Nagłówki zapytania
+
+> | Nazwa nagłówka    | zawartość | Opis |
+> |-|-|-|
+> |`Authorization` | `Bearer: `| Nagłówek zawierający token JWT |
+
+##### Odpowiedzi
+
+> | kod HTTP    | content-type | odpowiedź |
+> |-|-|-|
+> | `204` | `text/html;charset=utf-8` | Brak |
+> | `403` | `text/html;charset=utf-8` | `Action is forbidden` |
+> | `404` | `text/html;charset=utf-8` | `No such user` |
+> | `500` | `text/html;charset=utf-8` | `Failed when deleting email` |
+
+</details>
+
+#### Pobieranie informacji na temat history rozgryweg 
+
+<details>
+ <summary><code>GET</code> <code><b>/api/games/all</b></code> - Pobieranie wszystkich rozgrywek</summary>
 
 ##### Parametry zapytania
 
 > Brak
 
 ##### Parametry body
-> | Nazwa |  wymagany | typ  | opis  |
-> |-|-|--|-|
-> | `session` |  tak  | string | token JWT |
-Example JSON:
-```json
-{
-    "session": "string",
-}
-```
+> Brak
+
+##### Nagłówki zapytania
+
+> | Nazwa nagłówka    | zawartość | Opis |
+> |-|-|-|
+> |`Authorization` | `Bearer: `| Nagłówek zawierający token JWT |
 
 ##### Odpowiedzi
 
 > | kod HTTP    | content-type | odpowiedź |
 > |-|-|-|
-> | `401` | `text/html;charset=utf-8` | `Token Missing` |
-> | `201` | `application/json` | `{"sessionKey": "sessionKey"}`|
+> | `200` | `application/json` | `[{"gameId": 1, "player1Name": "test1", "player2Name": "test2", "player1Winner", true, "length": 53}]`|
+> | `404` | `text/html;charset=utf-8` | `No games found` |
 
 </details>
+
 <details>
- <summary><code>POST</code> <code><b>/api/session/game/create</b></code> - Autoryzacja sesji WebSocket</summary>
+ <summary><code>GET</code> <code><b>/api/games/user/{user}</b></code> - Pobieranie wszystkich rozgrywek przeprowadzonych przez danego gracza</summary>
 
 ##### Parametry zapytania
 
-> Brak
-
-##### Parametry body
 > | Nazwa |  wymagany | typ  | opis  |
 > |-|-|--|-|
-> | `session` |  tak  | string | token JWT |
-Example JSON:
-```json
-{
-    "session": "string",
-}
-```
+> | `name` |  tak  | string | Nazwa użytkownika |
+
+##### Parametry body
+> Brak
+
+##### Nagłówki zapytania
+
+> | Nazwa nagłówka    | zawartość | Opis |
+> |-|-|-|
+> |`Authorization` | `Bearer: `| Nagłówek zawierający token JWT |
 
 ##### Odpowiedzi
 
 > | kod HTTP    | content-type | odpowiedź |
 > |-|-|-|
-> | `401` | `text/html;charset=utf-8` | `Token Missing` |
-> | `201` | `application/json` | `{"sessionKey": "sessionKey"}`|
-
-</details>
-<details>
- <summary><code>POST</code> <code><b>/api/session/game/create</b></code> - Autoryzacja sesji WebSocket</summary>
-
-##### Parametry zapytania
-
-> Brak
-
-##### Parametry body
-> | Nazwa |  wymagany | typ  | opis  |
-> |-|-|--|-|
-> | `session` |  tak  | string | token JWT |
-Example JSON:
-```json
-{
-    "session": "string",
-}
-```
-
-##### Odpowiedzi
-
-> | kod HTTP    | content-type | odpowiedź |
-> |-|-|-|
-> | `401` | `text/html;charset=utf-8` | `Token Missing` |
-> | `201` | `application/json` | `{"sessionKey": "sessionKey"}`|
-
-</details>
-<details>
- <summary><code>POST</code> <code><b>/api/session/game/create</b></code> - Autoryzacja sesji WebSocket</summary>
-
-##### Parametry zapytania
-
-> Brak
-
-##### Parametry body
-> | Nazwa |  wymagany | typ  | opis  |
-> |-|-|--|-|
-> | `session` |  tak  | string | token JWT |
-Example JSON:
-```json
-{
-    "session": "string",
-}
-```
-
-##### Odpowiedzi
-
-> | kod HTTP    | content-type | odpowiedź |
-> |-|-|-|
-> | `401` | `text/html;charset=utf-8` | `Token Missing` |
-> | `201` | `application/json` | `{"sessionKey": "sessionKey"}`|
-
-</details>
-<details>
- <summary><code>POST</code> <code><b>/api/session/game/create</b></code> - Autoryzacja sesji WebSocket</summary>
-
-##### Parametry zapytania
-
-> Brak
-
-##### Parametry body
-> | Nazwa |  wymagany | typ  | opis  |
-> |-|-|--|-|
-> | `session` |  tak  | string | token JWT |
-Example JSON:
-```json
-{
-    "session": "string",
-}
-```
-
-##### Odpowiedzi
-
-> | kod HTTP    | content-type | odpowiedź |
-> |-|-|-|
-> | `401` | `text/html;charset=utf-8` | `Token Missing` |
-> | `201` | `application/json` | `{"sessionKey": "sessionKey"}`|
-
-</details>
-<details>
- <summary><code>POST</code> <code><b>/api/session/game/create</b></code> - Autoryzacja sesji WebSocket</summary>
-
-##### Parametry zapytania
-
-> Brak
-
-##### Parametry body
-> | Nazwa |  wymagany | typ  | opis  |
-> |-|-|--|-|
-> | `session` |  tak  | string | token JWT |
-Example JSON:
-```json
-{
-    "session": "string",
-}
-```
-
-##### Odpowiedzi
-
-> | kod HTTP    | content-type | odpowiedź |
-> |-|-|-|
-> | `401` | `text/html;charset=utf-8` | `Token Missing` |
-> | `201` | `application/json` | `{"sessionKey": "sessionKey"}`|
+> | `200` | `application/json` | `[{"gameId": 1, "player1Name": "test1", "player2Name": "test2", "player1Winner", true, "length": 53}]`|
+> | `404` | `text/html;charset=utf-8` | `No games found` |
 
 </details>
