@@ -61,6 +61,7 @@ describe("test /api/games Endpoints", () => {
         )
     });
 
+    // TI_11
     it("Should be able to see all games", async () => {
         const response = await request(testapp.getRestServer())
             .get('/api/games/all')
@@ -69,6 +70,7 @@ describe("test /api/games Endpoints", () => {
         expect(response.body).toBeInstanceOf(Array);
     })
 
+    // TI_12
     it("Should be able to see all games for user", async () => {
         const response = await request(testapp.getRestServer())
             .get('/api/games/user/' + testUser.name)

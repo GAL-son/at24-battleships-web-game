@@ -45,6 +45,7 @@ describe('GridComponent (Integration Tests)', () => {
     expect(component).toBeTruthy();
   });
 
+  //TI_03
   // Test 2: Sprawdzanie, czy statek można umieścić poprawnie poziomo
   it('should place a ship horizontally when placement is valid', () => {
     // Arrange: Tworzymy szpieg dla zdarzenia `shipPlaced`
@@ -68,7 +69,7 @@ describe('GridComponent (Integration Tests)', () => {
       })
     );
   });
-
+  //TI_04
   // Test 3: Sprawdzanie, że statek **nie jest umieszczany**, jeśli dane wejściowe są błędne
   it('should not place a ship if placement is invalid', () => {
     // Arrange: Tworzymy szpieg dla zdarzenia `shipPlaced` oraz symulujemy istniejący statek w polu
@@ -84,7 +85,7 @@ describe('GridComponent (Integration Tests)', () => {
     expect(component.grid[0][2].hasShip).toBeFalse();
     expect(shipPlacedSpy).not.toHaveBeenCalled();
   });
-
+  //TI_05
   // Test 4: Sprawdzanie, czy kliknięcie na komórkę w trybie "enemy" powoduje wyemitowanie zdarzenia
   it('should emit onEnemyClicked when clicking on an enemy cell', () => {
     // Arrange: Tworzymy szpieg dla zdarzenia `onEnemyClicked`
@@ -98,6 +99,7 @@ describe('GridComponent (Integration Tests)', () => {
     expect(enemyClickedSpy).toHaveBeenCalledWith(jasmine.objectContaining({ x: 5, y: 5 }));
   });
 
+  //TI_06
   // Test 5: Sprawdzanie, że kliknięcie na komórkę w trybie "enemy" nie powoduje zdarzenia, jeśli nie jest to tura gracza
   it('should not emit onEnemyClicked if it is not the player\'s turn', () => {
     // Arrange: Symulujemy, że tura gracza jest zakończona
@@ -111,7 +113,7 @@ describe('GridComponent (Integration Tests)', () => {
     // Assert: Sprawdzanie, czy zdarzenie nie zostało wyemitowane
     expect(enemyClickedSpy).not.toHaveBeenCalled();
   });
-
+  //TI_07
   // Test 6: Sprawdzanie funkcji `getCellClass`, aby zwracała poprawne klasy CSS
   it('should return the correct class for a grid cell', () => {
     let cell = { hasShip: true, shot: true };
@@ -127,6 +129,7 @@ describe('GridComponent (Integration Tests)', () => {
     expect(component.getCellClass(cell)).toBe('');
   });
 
+  //TI_08
   // Test 7: Sprawdzanie funkcji `clear`, aby upewnić się, że plansza zostaje wyczyszczona
   it('should clear the grid', () => {
     component.grid[0][0].hasShip = true;

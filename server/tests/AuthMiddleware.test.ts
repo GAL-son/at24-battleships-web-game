@@ -34,6 +34,7 @@ describe("Test AuthMiddleware", () => {
         process.env = oldEnv;
     })
 
+    // TJ_20
     it("When token is missing return response with 401 status code", () => {
         const mockRequest = createRequest();
         const mockResponse = createResponse();
@@ -41,6 +42,7 @@ describe("Test AuthMiddleware", () => {
         expect(mockResponse.statusCode).toBe(401);
     });
     
+    // TJ_20
     it("When request has correct token it should call next function", () => {
         const mockRequest = createRequest({
             headers: {
@@ -49,10 +51,11 @@ describe("Test AuthMiddleware", () => {
         });
         const mockResponse = createResponse();
         authMiddleware(mockRequest, mockResponse, spyNext);
-
+        
         expect(spyNext.mock.calls.length).toBe(1);
     })
-
+    
+    // TJ_20
     it("With invalid token middleware should return response with 401 status code", () => {
         const mockRequest = createRequest({
             headers: {

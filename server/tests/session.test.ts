@@ -37,6 +37,7 @@ describe("test Rest session", () => {
         token = response.body.token;
     });
 
+    // TI_20
     it("Should get access to ws sesion key", async () => {
         const result = await request(testapp.getRestServer())
             .post('/api/session/game/create')

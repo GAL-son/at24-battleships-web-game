@@ -25,6 +25,7 @@ describe("Test WsAuthMiddleware", () => {
         mockSend.mockClear();
     })
 
+    // TJ_19
     it("Should send error on websocket when not valid JSON message was send", () => {
         const invalidJson = "{invalid: json"
         WsAuthMiddleware(mockSessionService(), mockSocket(), invalidJson);
@@ -44,16 +45,18 @@ describe("Test WsAuthMiddleware", () => {
         expect(result.value).toEqual(correctResult);
     })
 
+    // TJ_19
     it("Should return correct message when session key is missing", () => {
         const message = JSON.stringify({data: 123});
         WsAuthMiddleware(mockSessionService(), mockSocket(), message);
-
+        
         const result = mockSend.mock.results[0];
         const correctResult = JSON.stringify({error: "'sessionKey' missing!"});
-
+        
         expect(result.value).toEqual(correctResult);
     })
-
+    
+    // TJ_19
     it("Should return correct message when invalid session key is provided", () => {
         const message = JSON.stringify({sessionKey: "invalidSessionKey"});
         WsAuthMiddleware(mockSessionService(), mockSocket(), message);

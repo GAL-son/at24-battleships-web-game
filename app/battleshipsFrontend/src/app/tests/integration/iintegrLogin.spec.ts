@@ -45,7 +45,7 @@ describe('LoginComponent Integration Tests', () => {
     // Cleanup: Sprawdzanie, czy wszystkie oczekiwane HTTP requesty zostały zakończone
     httpMock.verify();
   });
-
+//TI_02
   // Test 1: Sprawdzenie poprawnego logowania i nawigacji po zalogowaniu
   it('should login successfully and navigate to home after clicking Login', () => {
     // Arrange: Konfiguracja mock authService.login do zwracania sukcesu
@@ -64,6 +64,7 @@ describe('LoginComponent Integration Tests', () => {
     expect(router.navigate).toHaveBeenCalledWith(['../home']);
   });
 
+  //TI_01
   // Test 2: Sprawdzenie, czy logowanie poprawnie obsługuje błąd
   it('should log an error if login fails', () => {
     // Arrange: Konfiguracja mock authService.login do zwracania błędu
