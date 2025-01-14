@@ -37,11 +37,12 @@ Przed uruchomieniem testów ważne jest uruchomienie aplikacji
 > npm t
 ```
 
-### Testy jednostkowe
+#### Frontend
 ```
 > cd ./app/battleshipsFrontend
-> npm t
+> ng test
 ```
+### Testy jednostkowe
 
 
 
