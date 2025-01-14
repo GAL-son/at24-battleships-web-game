@@ -31,73 +31,75 @@ Przed uruchomieniem testów ważne jest uruchomienie aplikacji
 
 ### Testy jednostkowe
 
+
+
 | **ID**    | TJ_01                                                           |
 |-----------|-----------------------------------------------------------------|
 | **Opis**  | Sprawdzenia zapis tokenu do LocalStorage przy logowaniu         |
-| **Plik**  | [odnośnik](/app/battleshipsFrontend/src/app/tests/Auth.spec.ts) |
+| **Plik**  | [/app/battleshipsFrontend/src/app/tests/Auth.spec.ts](/app/battleshipsFrontend/src/app/tests/Auth.spec.ts) |
 | **Autor** | Piotr Dawid                                                     |
 
 
 | **ID**    | TJ_02                                                                                                     |
 |-----------|-----------------------------------------------------------------------------------------------------------|
 | **Opis**  | sprawdzenie wylogowania i usuwania tokenu z localStorage oraz przekierowania użytkownika na stronę domową |
-| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/Auth.spec.ts)                                          |
+| **Plik**  | [/app/battleshipsFrontend/src/app/tests/Auth.spec.ts](/app/battleshipsFrontend/src/app/tests/Auth.spec.ts)                                          |
 | **Autor** | Piotr Dawid                                                                                               |
 
 
 | **ID**    | TJ_03                                                            |
 |-----------|------------------------------------------------------------------|
 | **Opis**  | Sprawdzenie dekodowania prawidłowego tokenu                      |
-| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/Auth.spec.ts) |
+| **Plik**  | [/app/battleshipsFrontend/src/app/tests/Auth.spec.ts](/app/battleshipsFrontend/src/app/tests/Auth.spec.ts) |
 | **Autor** | Piotr Dawid                                                      |
 
 
 | **ID**    | TJ_04                                                                                  |
 |-----------|----------------------------------------------------------------------------------------|
 | **Opis**  | Sprawdzanie, czy funkcja zwraca false, gdy statek wychodzi poza granice siatki poziomo |
-| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/grid.spec.ts)                       |
+| **Plik**  | [/app/battleshipsFrontend/src/app/tests/grid.spec.ts](/app/battleshipsFrontend/src/app/tests/grid.spec.ts)                       |
 | **Autor** | Piotr Dawid                                                                            |
 
 
 | **ID**    | TJ_05                                                                                  |
 |-----------|----------------------------------------------------------------------------------------|
 | **Opis**  | Sprawdzanie, czy funkcja zwraca false, gdy statek wychodzi poza granice siatki pionowo |
-| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/grid.spec.ts)                       |
+| **Plik**  | [/app/battleshipsFrontend/src/app/tests/grid.spec.ts](/app/battleshipsFrontend/src/app/tests/grid.spec.ts)                       |
 | **Autor** | Piotr Dawid                                                                            |
 
 
 | **ID**    | TJ_06                                                                           |
 |-----------|---------------------------------------------------------------------------------|
 | **Opis**  | Sprawdzanie, czy funkcja zwraca false, gdy statek nachodzi na istniejący statek |
-| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/grid.spec.ts)                |
+| **Plik**  | [/app/battleshipsFrontend/src/app/tests/grid.spec.ts](/app/battleshipsFrontend/src/app/tests/grid.spec.ts)                |
 | **Autor** | Piotr Dawid                                                                     |
 
 
 | **ID**    | TJ_07                                                                               |
 |-----------|-------------------------------------------------------------------------------------|
 | **Opis**  | Sprawdzanie, czy funkcja zwraca false, gdy statek jest obok innego statku po skosie |
-| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/grid.spec.ts)                    |
+| **Plik**  | [/app/battleshipsFrontend/src/app/tests/grid.spec.ts](/app/battleshipsFrontend/src/app/tests/grid.spec.ts)                    |
 | **Autor** | Piotr Dawid                                                                         |
 
 
 | **ID**    | TJ_08                                                                                 |
 |-----------|---------------------------------------------------------------------------------------|
 | **Opis**  | Sprawdzanie, czy funkcja zwraca true, gdy umiejscowienie statku poziomo jest poprawne |
-| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/grid.spec.ts)                      |
+| **Plik**  | [/app/battleshipsFrontend/src/app/tests/grid.spec.ts](/app/battleshipsFrontend/src/app/tests/grid.spec.ts)                      |
 | **Autor** | Piotr Dawid                                                                           |
 
 
 | **ID**    | TJ_09                                                                                 |
 |-----------|---------------------------------------------------------------------------------------|
 | **Opis**  | Sprawdzanie, czy funkcja zwraca true, gdy umiejscowienie statku pionowo jest poprawne |
-| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/grid.spec.ts)                      |
+| **Plik**  | [odnośnik/app/battleshipsFrontend/src/app/tests/grid.spec.ts](/app/battleshipsFrontend/src/app/tests/grid.spec.ts)                      |
 | **Autor** | Piotr Dawid                                                                           |
 
 
 | **ID**    | TJ_10                                                                         |
 |-----------|-------------------------------------------------------------------------------|
 | **Opis**  | SPrawdzenie  załadowania danych rankingowych podczas inicjalizacji komponentu |
-| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/ranking.spec.ts)           |
+| **Plik**  | [/app/battleshipsFrontend/src/app/tests/ranking.spec.ts](/app/battleshipsFrontend/src/app/tests/ranking.spec.ts)           |
 | **Autor** | Piotr Dawid                                                                   |
 
 
@@ -106,77 +108,77 @@ Przed uruchomieniem testów ważne jest uruchomienie aplikacji
 | **ID**    | TI_01                                                            |
 |-----------|------------------------------------------------------------------|
 | **Opis**  | sprawdzenie, czy logowanie poprawnie obsługuje błąd              |
-| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/integration/iintegrLogin.spec.ts) |
+| **Plik**  | [/app/battleshipsFrontend/src/app/tests/integration/iintegrLogin.spec.ts](/app/battleshipsFrontend/src/app/tests/integration/iintegrLogin.spec.ts) |
 | **Autor** | Piotr Dawid                                                      |
 
 
 | **ID**    | TI_02                                                                                |
 |-----------|--------------------------------------------------------------------------------------|
 | **Opis**  | sprawdzenie poprawnego logowania i nawigacji po zalogowaniu                               |
-| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/integration/iintegrLogin.spec.ts) |
+| **Plik**  | [/app/battleshipsFrontend/src/app/tests/integration/iintegrLogin.spec.ts](/app/battleshipsFrontend/src/app/tests/integration/iintegrLogin.spec.ts) |
 | **Autor** | Piotr Dawid                                                                          |
 
 
 | **ID**    | TI_02                                                                                |
 |-----------|--------------------------------------------------------------------------------------|
 | **Opis**  | sprawdzenie poprawnego logowania i nawigacji po zalogowaniu                               |
-| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/integration/iintegrLogin.spec.ts) |
+| **Plik**  | [/app/battleshipsFrontend/src/app/tests/integration/iintegrLogin.spec.ts](/app/battleshipsFrontend/src/app/tests/integration/iintegrLogin.spec.ts) |
 | **Autor** | Piotr Dawid                                                                          |
 
 
 | **ID**    | TI_03                                                                              |
 |-----------|------------------------------------------------------------------------------------|
 | **Opis**  | Sprawdzanie, czy statek można umieścić poprawnie poziomo                      |
-| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/integration/gridIntegr.spec.ts) |
+| **Plik**  | [/app/battleshipsFrontend/src/app/tests/integration/gridIntegr.spec.ts](/app/battleshipsFrontend/src/app/tests/integration/gridIntegr.spec.ts) |
 | **Autor** | Piotr Dawid                                                                        |
 
 
 | **ID**    | TI_04                                                                              |
 |-----------|------------------------------------------------------------------------------------|
 | **Opis**  | Sprawdzanie, że statek **nie jest umieszczany**, jeśli dane wejściowe są błędne                       |
-| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/integration/gridIntegr.spec.ts) |
+| **Plik**  | [/app/battleshipsFrontend/src/app/tests/integration/gridIntegr.spec.ts](/app/battleshipsFrontend/src/app/tests/integration/gridIntegr.spec.ts) |
 | **Autor** | Piotr Dawid                                                                        |
 
 
 | **ID**    | TI_05                                                                              |
 |-----------|------------------------------------------------------------------------------------|
 | **Opis**  | Sprawdzanie, czy kliknięcie na komórkę w trybie "enemy" powoduje wyemitowanie zdarzenia    |
-| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/integration/gridIntegr.spec.ts) |
+| **Plik**  | [/app/battleshipsFrontend/src/app/tests/integration/gridIntegr.spec.ts](/app/battleshipsFrontend/src/app/tests/integration/gridIntegr.spec.ts) |
 | **Autor** | Piotr Dawid                                                                        |
 
 
 | **ID**    | TI_06                                                                                   |
 |-----------|-----------------------------------------------------------------------------------------|
 | **Opis**  |  Sprawdzanie, że kliknięcie na komórkę w trybie "enemy" nie powoduje zdarzenia, jeśli nie jest to tura gracza |
-| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/integration/gridIntegr.spec.ts)      |
+| **Plik**  | [/app/battleshipsFrontend/src/app/tests/integration/gridIntegr.spec.ts](/app/battleshipsFrontend/src/app/tests/integration/gridIntegr.spec.ts)      |
 | **Autor** | Piotr Dawid                                                                             |
 
 
 | **ID**    | TI_07                                                                                                        |
 |-----------|--------------------------------------------------------------------------------------------------------------|
 | **Opis**  | Sprawdzanie funkcji `getCellClass`, aby zwracała poprawne klasy CSS |
-| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/integration/gridIntegr.spec.ts)                           |
+| **Plik**  | [/app/battleshipsFrontend/src/app/tests/integration/gridIntegr.spec.ts](/app/battleshipsFrontend/src/app/tests/integration/gridIntegr.spec.ts)                           |
 | **Autor** | Piotr Dawid                                                                                                  |
 
 
 | **ID**    | TI_08                                                                                                        |
 |-----------|--------------------------------------------------------------------------------------------------------------|
 | **Opis**  | Sprawdzanie funkcji `clear`, aby upewnić się, że plansza zostaje wyczyszczona |
-| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/integration/gridIntegr.spec.ts)                           |
+| **Plik**  | [/app/battleshipsFrontend/src/app/tests/integration/gridIntegr.spec.ts](/app/battleshipsFrontend/src/app/tests/integration/gridIntegr.spec.ts)                           |
 | **Autor** | Piotr Dawid                                                                                                  |
 
 
 | **ID**    | TI_09                                                            |
 |-----------|------------------------------------------------------------------|
 | **Opis**  | Sprawdzanie, czy komponent poprawnie subskrybuje obiekty typu observable w inicjalizacji komponentu |
-| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/integration/integrGame.spec.ts) |
+| **Plik**  | [/app/battleshipsFrontend/src/app/tests/integration/integrGame.spec.ts](/app/battleshipsFrontend/src/app/tests/integration/integrGame.spec.ts) |
 | **Autor** | Piotr Dawid                                                      |
 
 
 | **ID**    | TI_10                                                                                               |
 |-----------|-----------------------------------------------------------------------------------------------------|
 | **Opis**  | Sprawdzenie wysłania odpowiedzi i oznaczenia kratki na polu po strzale wroga |
-| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/integration/integrGame.spec.ts)                  |
+| **Plik**  | [/app/battleshipsFrontend/src/app/tests/integration/integrGame.spec.ts](/app/battleshipsFrontend/src/app/tests/integration/integrGame.spec.ts)                  |
 | **Autor** | Piotr Dawid                                                                                         |
 
 
@@ -478,7 +480,7 @@ API dla serwera dzieli się na dwie części:
 
 > | kod HTTP    | content-type | odpowiedź |
 > |-|-|-|
-> | `201` | `application/json` | `{"token": ""}` |
+> | `201` | `application/json` | `{"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7I…0MjF9.cZjxglLmfpatltdNOqBZ9qgcMM_lEr-FUIM5nRutN4Y"}` |
 > | `401` | `text/html;charset=utf-8` | `Invalid Password` |
 > | `500` | `text/html;charset=utf-8` | ` Unknown Error ` |
 
@@ -747,4 +749,146 @@ API dla serwera dzieli się na dwie części:
 > | `200` | `application/json` | `[{"gameId": 1, "player1Name": "test1", "player2Name": "test2", "player1Winner", true, "length": 53}]`|
 > | `404` | `text/html;charset=utf-8` | `No games found` |
 
+</details>
+
+### WebSocket
+
+Wiadomości wymieniane w trakcie komunikacji stosują format JSON
+
+#### Wiadomości wysyłane przez aplikację
+<details>
+ <summary><code><b>start-search</b></code> - Wiadomość rozpoczynająca wyszukiwanie rozgrywki</summary>
+
+##### JSON
+```json
+{
+    "sessionKey": "7aed1893-964f-485d-b1d6-30ff08256058",
+    "gameType": "singleplayer"
+}
+```
+
+Wartość `gameType` może przyjąć wartości: 
+* `singleplayer` - dla rozgrywki jednoosobowej
+* `multiplayer` - dla rozgrywki wieloobowej
+</details>
+<details>
+ <summary><code><b>set-ships</b></code> - Wiadomość przesyłająca ustawienie statków gracza na server</summary>
+
+##### JSON
+```json
+{
+    "sessionKey": "7aed1893-964f-485d-b1d6-30ff08256058",
+    "ships": [
+
+    ]
+}
+```
+<details>
+<details>
+ <summary><code><b>move</b></code> - Wiadomość przesyłająca ustawienie statków gracza na server</summary>
+
+##### JSON
+```json
+{
+    "sessionKey": "7aed1893-964f-485d-b1d6-30ff08256058",
+    "ships": [
+        {"shipSize": 1, "position": {"x": 1, "y": 0}, "vertically": false},
+        {"shipSize": 1, "position": {"x": 1, "y": 3}, "vertically": false},
+        {"shipSize": 1, "position": {"x": 1, "y": 6}, "vertically": false},
+        {"shipSize": 1, "position": {"x": 1, "y": 8}, "vertically": false},
+        {"shipSize": 2, "position": {"x": 3, "y": 8}, "vertically": false},
+        {"shipSize": 2, "position": {"x": 3, "y": 6}, "vertically": false},
+        {"shipSize": 2, "position": {"x": 3, "y": 3}, "vertically": false},
+        {"shipSize": 3, "position": {"x": 3, "y": 0}, "vertically": false},
+        {"shipSize": 3, "position": {"x": 7, "y": 0}, "vertically": false}, 
+        {"shipSize": 4, "position": {"x": 6, "y": 3}, "vertically": false} 
+    ]
+}
+```
+<details>
+
+
+#### Wiadomości wysyłane przez serwer
+<details>
+ <summary><code><b>search-started</b></code> - Wiadomość informująca o rozpoczęciu wysyłania rozgrywki</summary>
+
+##### JSON
+```json
+{
+    "serverTimestamp": "",
+    "serverMessage": "search-started"
+}
+```
+</details>
+<details>
+ <summary><code><b>game-found</b></code> - Wiadomość informująca o znalezieniu rozgrywki oraz przekazująca informacje na temat znalezioner rozgrywki (takie jak nazwa przeciwnika czy układ statków)</summary>
+
+##### JSON
+```json
+{
+    "serverTimestamp": "1736873646272",
+    "serverMessage": "game-found",
+    "gameSetup": {
+        "boardSize": {"x": 10, "y": 10},
+        "shipSizes": {
+            "1": 4,
+            "2": 3,
+            "3": 2,
+            "4": 1
+        }
+    },
+    "opponent": {
+        "name": "test1",
+        "score": 123
+    }
+}
+```
+</details>
+<details>
+ <summary><code><b>game-started</b></code> - Wiadomość informująca o rozpoczęciu rozgrywki oraz informująca czyja tura jest pierwsza</summary>
+
+##### JSON
+```json
+{
+    "serverTimestamp": "1736873646272",
+    "serverMessage": "game-start",
+    "isYourTurn":true
+}
+```
+</details>
+<details>
+ <summary><code><b>game-update</b></code> - Wiadomość aktualizująca stan rozgrywki</summary>
+
+##### JSON
+```json
+{
+    "serverTimestamp": "1736873646272",
+    "serverMessage": "game-update",
+    "isYourTurn":true,
+    "enemyMove": {"x": 1, "y": 1},
+    "wasHit":true,
+    "wasSunk":true,
+    "turn":10,
+    "who":"test1",
+    "enemyMove":true,
+    "sunkenShip":[
+        {"x": 1, "y": 1}
+    ]
+}
+```
+</details>
+<details>
+ <summary><code><b>game-ended</b></code> - Wiadomość informująca o rozpoczęciu rozgrywki oraz informująca czyja tura jest pierwsza</summary>
+
+##### JSON
+```json
+{
+    "serverTimestamp": "1736873646272",
+    "serverMessage": "game-start",
+    "didYouWin": true,
+    "totalTurns": 76,
+    "scoreChange" : 123,
+    "reason": "ships-destroyed:"
+}
+```
 </details>
