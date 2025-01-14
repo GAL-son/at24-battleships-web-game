@@ -45,6 +45,7 @@ W konsoli pojawi się adres na którym dostępna jest aplikacja (zazwyczaj http:
 > npm i
 > ng test
 ```
+Testy stworzone z użyciem Karma twoorzą wynikowy plik html opisujący wsyztskie testy w katalogu `karma_html`
 ### Testy jednostkowe
 
 
@@ -301,7 +302,7 @@ W konsoli pojawi się adres na którym dostępna jest aplikacja (zazwyczaj http:
 | **Plik** | [/server/tests/users.test.ts](/server/tests/users.test.ts) |
 | **Autor** | Bartłomiej Gala |
 
-| **ID** | TI_12 |
+| **ID** | TI_20 |
 |-|-|
 | **Opis** | Uzyskanie dostępu do sesji WebSocket |
 | **Plik** | [/server/tests/session.test.ts](/server/tests/session.test.ts) |
