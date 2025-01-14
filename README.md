@@ -1,7 +1,16 @@
 # Battleships Webapp
-Gra w statki online
+
+## Informacje o projekcie
+> **Kurs**: Testowanie i Jakość Oprogramowania<br>
+> **Autorzy**: 
+> * Bartłomiej Gala - 35201
+> * Piotr Dawid - 35195
+> 
+> **Temat projektu**: Gra w statki online<br>
+> **Opis projektu**: Projekt zakłada implementację oraz testowanie serwera oraz aplikacji służącej do prowadzenia wieloosobowych rozgrywek w statki<br>
 
 ## Uruchamianie
+Sekwencja komend służąca do uruchamiania poszczególnych animacji zaczyna się w katalogó głównym projektu.
 
 ### Serwer: 
 ```
@@ -15,7 +24,10 @@ Gra w statki online
 > ng serve
 ```
 
+W konsoli pojawi się adres na którym dostępna jest aplikacja (zazwyczaj http://localhost:4200)
+
 ## Testy
+Przed uruchomieniem testów ważne jest uruchomienie aplikacji
 
 ### Testy jednostkowe
 ### Testy integracyjne
@@ -279,3 +291,323 @@ Gra w statki online
 | **Oczekiwany rezultat** | Gracz przenosi się na ekran końca gry z informacją o jego zwycięstwie |
 
 <br>
+
+## Technologia
+Technologie użyte w projekcie to:
+* Anguar + TypeScript (frontend)
+* ExpressJS + TypeScipt (backend)
+* PostgreSQL (baza danych)
+
+## Opis API
+API dla serwera dzieli się na dwie części:
+* API REST - do podstawowej komunikacji z serwerem (logowanie, pobieranie rankingów etc.)
+* WebSocket - w celu komunikacji w czasie rzeczywistym (rozgrywka)
+
+### REST
+
+#### Logowanie i autoryzacja
+<details>
+ <summary><code>POST</code> <code><b>/api/session/create</b></code> - Logowanie do aplikacji</summary>
+
+##### Parametry zapytania
+
+> Brak
+
+##### Parametry body
+> | Nazwa   |  wymagany      | typ      | opis                                          |
+> |-|-|--|-|
+> | `name` |  tak  | string | Nazwa użytkownika |
+> | `password` |  tak  | string | hasło użytkownika |
+Example JSON:
+```json
+{
+    "name": "string",
+    "password": "string"
+}
+```
+
+##### Odpowiedzi
+
+> | kod HTTP    | content-type | odpowiedź |
+> |-|-|-|
+> | `201` | `application/json` | `{"token": ""}` |
+> | `401` | `text/html;charset=utf-8` | `Invalid Password` |
+> | `500` | `text/html;charset=utf-8` | ` Unknown Error ` |
+
+</details>
+<details>
+ <summary><code>POST</code> <code><b>/api/session/delete</b></code> - Wylogowywanie z aplikacji</summary>
+
+##### Parametry zapytania
+
+> Brak
+
+##### Parametry body
+
+> Brak
+
+##### Nagłówki zapytania
+
+> | Nazwa nagłówka | zawartość | Opis |
+> |-|-|-|
+> |`Authorization` | `Bearer: `| Nagłówek zawierający token JWT |
+
+##### Odpowiedzi
+
+> | kod HTTP    | content-type | odpowiedź |
+> |-|-|-|
+> | `400` | `text/html;charset=utf-8` | `Token Missing` |
+> | `200` | `text/html;charset=utf-8` | Brak |
+
+</details>
+
+<details>
+ <summary><code>POST</code> <code><b>/api/session/game/create</b></code> - Autoryzacja sesji WebSocket</summary>
+
+##### Parametry zapytania
+
+> Brak
+
+##### Parametry body
+
+> Brak
+
+##### Nagłówki zapytania
+
+> | Nazwa nagłówka    | zawartość | Opis |
+> |-|-|-|
+> |`Authorization` | `Bearer: `| Nagłówek zawierający token JWT |
+
+
+##### Odpowiedzi
+
+> | kod HTTP    | content-type | odpowiedź |
+> |-|-|-|
+> | `401` | `text/html;charset=utf-8` | `Token Missing` |
+> | `201` | `application/json` | `{"sessionKey": "sessionKey"}`|
+
+</details>
+
+#### Zarządzanie kontem
+
+<details>
+ <summary><code>POST</code> <code><b>/api/users/create</b></code> - Utworzenie konta użytkownika</summary>
+
+##### Parametry zapytania
+
+> Brak
+
+##### Parametry body
+> | Nazwa |  wymagany | typ  | opis  |
+> |-|-|--|-|
+> | `name` |  tak  | string | Nazwa użytkownika |
+> | `email` |  tak  | string | Adres Email użytkownika |
+> | `password` |  tak  | string | Hasło użytkownika |
+Example JSON:
+```json
+{
+    "name": "string",
+    "email": "test@mail.com",
+    "password": "string"
+}
+```
+
+##### Odpowiedzi
+
+> | kod HTTP    | content-type | odpowiedź |
+> |-|-|-|
+> | `201` | `application/json` | Brak|
+> | `400` | `text/html;charset=utf-8` | `Invalid data format` |
+> | `400` | `text/html;charset=utf-8` | `Name already in use` |
+> | `500` | `text/html;charset=utf-8` | `Failed to create user` |
+
+</details>
+<details>
+ <summary><code>PATCH</code> <code><b>/api/users/user/{name}/update</b></code> - Aktualizacja danych konta użytkownika</summary>
+
+##### Parametry zapytania
+
+> | Nazwa |  wymagany | typ  | opis  |
+> |-|-|--|-|
+> | `name` |  tak  | string | Nazwa użytkownika |
+
+##### Parametry body
+> | Nazwa |  wymagany | typ  | opis  |
+> |-|-|--|-|
+> | `email` |  nie  | string | Nowy adres email |
+> | `password` |  nie  | string | Nowe hasło |
+
+Example JSON:
+```json
+{
+    "password": "string",
+    "email": "string@mail.com",
+}
+```
+
+##### Odpowiedzi
+
+> | kod HTTP    | content-type | odpowiedź |
+> |-|-|-|
+> | `201` | `application/json` | `{"sessionKey": "sessionKey"}`|
+> | `404` | `text/html;charset=utf-8` | `No such user` |
+> | `403` | `text/html;charset=utf-8` | `Action is forbidden` |
+> | `400` | `text/html;charset=utf-8` | `Invalud Email` |
+
+</details>
+<details>
+ <summary><code>POST</code> <code><b>/api/session/game/create</b></code> - Autoryzacja sesji WebSocket</summary>
+
+##### Parametry zapytania
+
+> Brak
+
+##### Parametry body
+> | Nazwa |  wymagany | typ  | opis  |
+> |-|-|--|-|
+> | `session` |  tak  | string | token JWT |
+Example JSON:
+```json
+{
+    "session": "string",
+}
+```
+
+##### Odpowiedzi
+
+> | kod HTTP    | content-type | odpowiedź |
+> |-|-|-|
+> | `401` | `text/html;charset=utf-8` | `Token Missing` |
+> | `201` | `application/json` | `{"sessionKey": "sessionKey"}`|
+
+</details>
+<details>
+ <summary><code>POST</code> <code><b>/api/session/game/create</b></code> - Autoryzacja sesji WebSocket</summary>
+
+##### Parametry zapytania
+
+> Brak
+
+##### Parametry body
+> | Nazwa |  wymagany | typ  | opis  |
+> |-|-|--|-|
+> | `session` |  tak  | string | token JWT |
+Example JSON:
+```json
+{
+    "session": "string",
+}
+```
+
+##### Odpowiedzi
+
+> | kod HTTP    | content-type | odpowiedź |
+> |-|-|-|
+> | `401` | `text/html;charset=utf-8` | `Token Missing` |
+> | `201` | `application/json` | `{"sessionKey": "sessionKey"}`|
+
+</details>
+<details>
+ <summary><code>POST</code> <code><b>/api/session/game/create</b></code> - Autoryzacja sesji WebSocket</summary>
+
+##### Parametry zapytania
+
+> Brak
+
+##### Parametry body
+> | Nazwa |  wymagany | typ  | opis  |
+> |-|-|--|-|
+> | `session` |  tak  | string | token JWT |
+Example JSON:
+```json
+{
+    "session": "string",
+}
+```
+
+##### Odpowiedzi
+
+> | kod HTTP    | content-type | odpowiedź |
+> |-|-|-|
+> | `401` | `text/html;charset=utf-8` | `Token Missing` |
+> | `201` | `application/json` | `{"sessionKey": "sessionKey"}`|
+
+</details>
+<details>
+ <summary><code>POST</code> <code><b>/api/session/game/create</b></code> - Autoryzacja sesji WebSocket</summary>
+
+##### Parametry zapytania
+
+> Brak
+
+##### Parametry body
+> | Nazwa |  wymagany | typ  | opis  |
+> |-|-|--|-|
+> | `session` |  tak  | string | token JWT |
+Example JSON:
+```json
+{
+    "session": "string",
+}
+```
+
+##### Odpowiedzi
+
+> | kod HTTP    | content-type | odpowiedź |
+> |-|-|-|
+> | `401` | `text/html;charset=utf-8` | `Token Missing` |
+> | `201` | `application/json` | `{"sessionKey": "sessionKey"}`|
+
+</details>
+<details>
+ <summary><code>POST</code> <code><b>/api/session/game/create</b></code> - Autoryzacja sesji WebSocket</summary>
+
+##### Parametry zapytania
+
+> Brak
+
+##### Parametry body
+> | Nazwa |  wymagany | typ  | opis  |
+> |-|-|--|-|
+> | `session` |  tak  | string | token JWT |
+Example JSON:
+```json
+{
+    "session": "string",
+}
+```
+
+##### Odpowiedzi
+
+> | kod HTTP    | content-type | odpowiedź |
+> |-|-|-|
+> | `401` | `text/html;charset=utf-8` | `Token Missing` |
+> | `201` | `application/json` | `{"sessionKey": "sessionKey"}`|
+
+</details>
+<details>
+ <summary><code>POST</code> <code><b>/api/session/game/create</b></code> - Autoryzacja sesji WebSocket</summary>
+
+##### Parametry zapytania
+
+> Brak
+
+##### Parametry body
+> | Nazwa |  wymagany | typ  | opis  |
+> |-|-|--|-|
+> | `session` |  tak  | string | token JWT |
+Example JSON:
+```json
+{
+    "session": "string",
+}
+```
+
+##### Odpowiedzi
+
+> | kod HTTP    | content-type | odpowiedź |
+> |-|-|-|
+> | `401` | `text/html;charset=utf-8` | `Token Missing` |
+> | `201` | `application/json` | `{"sessionKey": "sessionKey"}`|
+
+</details>
