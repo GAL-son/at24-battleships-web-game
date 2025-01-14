@@ -27,7 +27,6 @@ Sekwencja komend służąca do uruchamiania poszczególnych animacji zaczyna si�
 W konsoli pojawi się adres na którym dostępna jest aplikacja (zazwyczaj http://localhost:4200)
 
 ## Testy
-Przed uruchomieniem testów ważne jest uruchomienie aplikacji
 
 ### Uruchomienie testów
 
