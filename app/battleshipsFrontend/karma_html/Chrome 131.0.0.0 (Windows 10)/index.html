@@ -94,7 +94,7 @@ body { background-color: #eeeeee; padding: 0; margin: 5px; overflow-y: scroll; }
 </head>
 
 <body id="HTMLReporter" class="html-reporter">
-<h1>Tested in Chrome 131.0.0.0 (Windows 10) on Wed Dec 18 2024</h1>
+<h1>Tested in Chrome 131.0.0.0 (Windows 10) on Tue Jan 14 2025</h1>
 
 <div class="alert">
 
@@ -115,18 +115,14 @@ body { background-color: #eeeeee; padding: 0; margin: 5px; overflow-y: scroll; }
   
   
     <div class="suite passed">
-      <span class="description">AuthService Unit Tests</span>
+      <span class="description">GamePlayingComponent Integration Tests</span>
     
       <div class="specSummary passed">
-      <span class="description">should login and store token in localStorage</span>
+      <span class="description">should send a WebSocket message and mark grid shot on enemy shot</span>
       </div>
     
       <div class="specSummary passed">
-      <span class="description">should decode a valid token</span>
-      </div>
-    
-      <div class="specSummary passed">
-      <span class="description">should logout and clear token and navigate to home</span>
+      <span class="description">should subscribe to observables without throwing an error</span>
       </div>
     
     </div>
@@ -149,30 +145,78 @@ body { background-color: #eeeeee; padding: 0; margin: 5px; overflow-y: scroll; }
     </div>
   
     <div class="suite passed">
-      <span class="description">GridComponent - isValidPlacement</span>
+      <span class="description">GridComponent (Integration Tests)</span>
     
       <div class="specSummary passed">
-      <span class="description">should return false if the ship placement is out of bounds horizontally</span>
+      <span class="description">should not place a ship if placement is invalid</span>
       </div>
     
       <div class="specSummary passed">
-      <span class="description">should return false if the ship placement overlaps with an existing ship</span>
+      <span class="description">should emit onEnemyClicked when clicking on an enemy cell</span>
       </div>
     
       <div class="specSummary passed">
-      <span class="description">should return false if the ship placement is out of bounds vertically</span>
+      <span class="description">should create the component</span>
       </div>
     
       <div class="specSummary passed">
-      <span class="description">should return true for a valid ship placement horizontally</span>
+      <span class="description">should place a ship horizontally when placement is valid</span>
       </div>
     
       <div class="specSummary passed">
-      <span class="description">should return false if the ship placement is adjacent diagonally</span>
+      <span class="description">should not emit onEnemyClicked if it is not the player's turn</span>
       </div>
     
       <div class="specSummary passed">
-      <span class="description">should return true for a valid ship placement vertically</span>
+      <span class="description">should return the correct class for a grid cell</span>
+      </div>
+    
+      <div class="specSummary passed">
+      <span class="description">should clear the grid</span>
+      </div>
+    
+    </div>
+  
+    <div class="suite passed">
+      <span class="description">LoginComponent Integration Tests</span>
+    
+      <div class="specSummary passed">
+      <span class="description">should login successfully and navigate to home after clicking Login</span>
+      </div>
+    
+      <div class="specSummary passed">
+      <span class="description">should log an error if login fails</span>
+      </div>
+    
+    </div>
+  
+    <div class="suite passed">
+      <span class="description">WebSocketService unit test</span>
+    
+      <div class="specSummary passed">
+      <span class="description">should return a formatted shot message</span>
+      </div>
+    
+    </div>
+  
+    <div class="suite passed">
+      <span class="description">WebSocketService unit test hasKey()</span>
+    
+      <div class="specSummary passed">
+      <span class="description">should return false when WebSocket key does not exist</span>
+      </div>
+    
+      <div class="specSummary passed">
+      <span class="description">should return true when WebSocket key exists</span>
+      </div>
+    
+    </div>
+  
+    <div class="suite passed">
+      <span class="description">WebSocketService unit test storeData()</span>
+    
+      <div class="specSummary passed">
+      <span class="description">should correctly parse and store game setup and enemy data</span>
       </div>
     
     </div>
@@ -191,91 +235,47 @@ body { background-color: #eeeeee; padding: 0; margin: 5px; overflow-y: scroll; }
     </div>
   
     <div class="suite passed">
-      <span class="description">WebSocketService unit test</span>
+      <span class="description">GridComponent - isValidPlacement</span>
     
       <div class="specSummary passed">
-      <span class="description">should return a formatted shot message</span>
+      <span class="description">should return false if the ship placement is out of bounds vertically</span>
+      </div>
+    
+      <div class="specSummary passed">
+      <span class="description">should return false if the ship placement is out of bounds horizontally</span>
+      </div>
+    
+      <div class="specSummary passed">
+      <span class="description">should return false if the ship placement is adjacent diagonally</span>
+      </div>
+    
+      <div class="specSummary passed">
+      <span class="description">should return false if the ship placement overlaps with an existing ship</span>
+      </div>
+    
+      <div class="specSummary passed">
+      <span class="description">should return true for a valid ship placement vertically</span>
+      </div>
+    
+      <div class="specSummary passed">
+      <span class="description">should return true for a valid ship placement horizontally</span>
       </div>
     
     </div>
   
     <div class="suite passed">
-      <span class="description">WebSocketService unit test hasKey()</span>
+      <span class="description">AuthService Unit Tests</span>
     
       <div class="specSummary passed">
-      <span class="description">should return true when WebSocket key exists</span>
+      <span class="description">should logout and clear token and navigate to home</span>
       </div>
     
       <div class="specSummary passed">
-      <span class="description">should return false when WebSocket key does not exist</span>
-      </div>
-    
-    </div>
-  
-    <div class="suite passed">
-      <span class="description">WebSocketService unit test storeData()</span>
-    
-      <div class="specSummary passed">
-      <span class="description">should correctly parse and store game setup and enemy data</span>
-      </div>
-    
-    </div>
-  
-    <div class="suite passed">
-      <span class="description">GridComponent (Integration Tests)</span>
-    
-      <div class="specSummary passed">
-      <span class="description">should place a ship horizontally when placement is valid</span>
+      <span class="description">should decode a valid token</span>
       </div>
     
       <div class="specSummary passed">
-      <span class="description">should emit onEnemyClicked when clicking on an enemy cell</span>
-      </div>
-    
-      <div class="specSummary passed">
-      <span class="description">should create the component</span>
-      </div>
-    
-      <div class="specSummary passed">
-      <span class="description">should not place a ship if placement is invalid</span>
-      </div>
-    
-      <div class="specSummary passed">
-      <span class="description">should clear the grid</span>
-      </div>
-    
-      <div class="specSummary passed">
-      <span class="description">should return the correct class for a grid cell</span>
-      </div>
-    
-      <div class="specSummary passed">
-      <span class="description">should not emit onEnemyClicked if it is not the player's turn</span>
-      </div>
-    
-    </div>
-  
-    <div class="suite passed">
-      <span class="description">GamePlayingComponent Integration Tests</span>
-    
-      <div class="specSummary passed">
-      <span class="description">should send a WebSocket message and mark grid shot on enemy shot</span>
-      </div>
-    
-      <div class="specSummary passed">
-      <span class="description">should subscribe to observables without throwing an error</span>
-      </div>
-    
-    </div>
-  
-    <div class="suite passed">
-      <span class="description">LoginComponent Integration Tests</span>
-    
-      <div class="specSummary passed">
-      <span class="description">should login successfully and navigate to home after clicking Login</span>
-      </div>
-    
-      <div class="specSummary passed">
-      <span class="description">should log an error if login fails</span>
+      <span class="description">should login and store token in localStorage</span>
       </div>
     
     </div>
