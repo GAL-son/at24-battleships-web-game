@@ -30,7 +30,155 @@ W konsoli pojawi się adres na którym dostępna jest aplikacja (zazwyczaj http:
 Przed uruchomieniem testów ważne jest uruchomienie aplikacji
 
 ### Testy jednostkowe
+
+| **ID**    | TJ_01                                                           |
+|-----------|-----------------------------------------------------------------|
+| **Opis**  | Sprawdzenia zapis tokenu do LocalStorage przy logowaniu         |
+| **Plik**  | [odnośnik](/app/battleshipsFrontend/src/app/tests/Auth.spec.ts) |
+| **Autor** | Piotr Dawid                                                     |
+
+
+| **ID**    | TJ_02                                                                                                     |
+|-----------|-----------------------------------------------------------------------------------------------------------|
+| **Opis**  | sprawdzenie wylogowania i usuwania tokenu z localStorage oraz przekierowania użytkownika na stronę domową |
+| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/Auth.spec.ts)                                          |
+| **Autor** | Piotr Dawid                                                                                               |
+
+
+| **ID**    | TJ_03                                                            |
+|-----------|------------------------------------------------------------------|
+| **Opis**  | Sprawdzenie dekodowania prawidłowego tokenu                      |
+| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/Auth.spec.ts) |
+| **Autor** | Piotr Dawid                                                      |
+
+
+| **ID**    | TJ_04                                                                                  |
+|-----------|----------------------------------------------------------------------------------------|
+| **Opis**  | Sprawdzanie, czy funkcja zwraca false, gdy statek wychodzi poza granice siatki poziomo |
+| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/grid.spec.ts)                       |
+| **Autor** | Piotr Dawid                                                                            |
+
+
+| **ID**    | TJ_05                                                                                  |
+|-----------|----------------------------------------------------------------------------------------|
+| **Opis**  | Sprawdzanie, czy funkcja zwraca false, gdy statek wychodzi poza granice siatki pionowo |
+| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/grid.spec.ts)                       |
+| **Autor** | Piotr Dawid                                                                            |
+
+
+| **ID**    | TJ_06                                                                           |
+|-----------|---------------------------------------------------------------------------------|
+| **Opis**  | Sprawdzanie, czy funkcja zwraca false, gdy statek nachodzi na istniejący statek |
+| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/grid.spec.ts)                |
+| **Autor** | Piotr Dawid                                                                     |
+
+
+| **ID**    | TJ_07                                                                               |
+|-----------|-------------------------------------------------------------------------------------|
+| **Opis**  | Sprawdzanie, czy funkcja zwraca false, gdy statek jest obok innego statku po skosie |
+| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/grid.spec.ts)                    |
+| **Autor** | Piotr Dawid                                                                         |
+
+
+| **ID**    | TJ_08                                                                                 |
+|-----------|---------------------------------------------------------------------------------------|
+| **Opis**  | Sprawdzanie, czy funkcja zwraca true, gdy umiejscowienie statku poziomo jest poprawne |
+| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/grid.spec.ts)                      |
+| **Autor** | Piotr Dawid                                                                           |
+
+
+| **ID**    | TJ_09                                                                                 |
+|-----------|---------------------------------------------------------------------------------------|
+| **Opis**  | Sprawdzanie, czy funkcja zwraca true, gdy umiejscowienie statku pionowo jest poprawne |
+| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/grid.spec.ts)                      |
+| **Autor** | Piotr Dawid                                                                           |
+
+
+| **ID**    | TJ_10                                                                         |
+|-----------|-------------------------------------------------------------------------------|
+| **Opis**  | SPrawdzenie  załadowania danych rankingowych podczas inicjalizacji komponentu |
+| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/ranking.spec.ts)           |
+| **Autor** | Piotr Dawid                                                                   |
+
+
 ### Testy integracyjne
+
+| **ID**    | TI_01                                                            |
+|-----------|------------------------------------------------------------------|
+| **Opis**  | sprawdzenie, czy logowanie poprawnie obsługuje błąd              |
+| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/integration/iintegrLogin.spec.ts) |
+| **Autor** | Piotr Dawid                                                      |
+
+
+| **ID**    | TI_02                                                                                |
+|-----------|--------------------------------------------------------------------------------------|
+| **Opis**  | sprawdzenie poprawnego logowania i nawigacji po zalogowaniu                               |
+| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/integration/iintegrLogin.spec.ts) |
+| **Autor** | Piotr Dawid                                                                          |
+
+
+| **ID**    | TI_02                                                                                |
+|-----------|--------------------------------------------------------------------------------------|
+| **Opis**  | sprawdzenie poprawnego logowania i nawigacji po zalogowaniu                               |
+| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/integration/iintegrLogin.spec.ts) |
+| **Autor** | Piotr Dawid                                                                          |
+
+
+| **ID**    | TI_03                                                                              |
+|-----------|------------------------------------------------------------------------------------|
+| **Opis**  | Sprawdzanie, czy statek można umieścić poprawnie poziomo                      |
+| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/integration/gridIntegr.spec.ts) |
+| **Autor** | Piotr Dawid                                                                        |
+
+
+| **ID**    | TI_04                                                                              |
+|-----------|------------------------------------------------------------------------------------|
+| **Opis**  | Sprawdzanie, że statek **nie jest umieszczany**, jeśli dane wejściowe są błędne                       |
+| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/integration/gridIntegr.spec.ts) |
+| **Autor** | Piotr Dawid                                                                        |
+
+
+| **ID**    | TI_05                                                                              |
+|-----------|------------------------------------------------------------------------------------|
+| **Opis**  | Sprawdzanie, czy kliknięcie na komórkę w trybie "enemy" powoduje wyemitowanie zdarzenia    |
+| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/integration/gridIntegr.spec.ts) |
+| **Autor** | Piotr Dawid                                                                        |
+
+
+| **ID**    | TI_06                                                                                   |
+|-----------|-----------------------------------------------------------------------------------------|
+| **Opis**  |  Sprawdzanie, że kliknięcie na komórkę w trybie "enemy" nie powoduje zdarzenia, jeśli nie jest to tura gracza |
+| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/integration/gridIntegr.spec.ts)      |
+| **Autor** | Piotr Dawid                                                                             |
+
+
+| **ID**    | TI_07                                                                                                        |
+|-----------|--------------------------------------------------------------------------------------------------------------|
+| **Opis**  | Sprawdzanie funkcji `getCellClass`, aby zwracała poprawne klasy CSS |
+| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/integration/gridIntegr.spec.ts)                           |
+| **Autor** | Piotr Dawid                                                                                                  |
+
+
+| **ID**    | TI_08                                                                                                        |
+|-----------|--------------------------------------------------------------------------------------------------------------|
+| **Opis**  | Sprawdzanie funkcji `clear`, aby upewnić się, że plansza zostaje wyczyszczona |
+| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/integration/gridIntegr.spec.ts)                           |
+| **Autor** | Piotr Dawid                                                                                                  |
+
+
+| **ID**    | TI_09                                                            |
+|-----------|------------------------------------------------------------------|
+| **Opis**  | Sprawdzanie, czy komponent poprawnie subskrybuje obiekty typu observable w inicjalizacji komponentu |
+| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/integration/integrGame.spec.ts) |
+| **Autor** | Piotr Dawid                                                      |
+
+
+| **ID**    | TI_10                                                                                               |
+|-----------|-----------------------------------------------------------------------------------------------------|
+| **Opis**  | Sprawdzenie wysłania odpowiedzi i oznaczenia kratki na polu po strzale wroga |
+| **Plik**  | [odnośnik](./app/battleshipsFrontend/src/app/tests/integration/integrGame.spec.ts)                  |
+| **Autor** | Piotr Dawid                                                                                         |
+
 
 ### Testy manualne
 | **ID** | TM_01 |

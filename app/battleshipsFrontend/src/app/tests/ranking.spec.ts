@@ -27,7 +27,8 @@ describe('RankingComponent tests', () => {
     httpMock.verify();
   });
 
-  // Test 1: Powinno załadować dane rankingowe podczas inicjalizacji komponentu
+  //TJ_10
+  // Test 1: SPrawdzenie  załadowania danych rankingowych podczas inicjalizacji komponentu
   it('should fetch and populate ranking on init', () => {
     // Arrange: Przygotowanie danych testowych
     const mockData = [

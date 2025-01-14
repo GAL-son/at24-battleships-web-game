@@ -61,6 +61,8 @@ describe('GamePlayingComponent Integration Tests', () => {
     // Cleanup po każdym teście
   });
 
+  //TI_09
+  //test 1: Sprawdzanie, czy komponent poprawnie subskrybuje obiekty typu observable w inicjalizacji komponentu
   it('should subscribe to observables without throwing an error', () => {
     // Arrange: Przygotowanie do testu
     expect(() => {
@@ -69,6 +71,9 @@ describe('GamePlayingComponent Integration Tests', () => {
     }).not.toThrow(); // Assert: Sprawdzanie, czy nie wyrzucony jest błąd
   });
 
+
+  //TI_10
+  //Sprawdzenie wysłania odpowiedzi i oznaczenia kratki na polu po strzale wroga
   it('should send a WebSocket message and mark grid shot on enemy shot', () => {
     // Arrange: Przygotowanie mockowanej planszy i danych testowych
     // @ts-ignore
