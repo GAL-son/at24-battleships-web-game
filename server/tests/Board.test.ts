@@ -5,6 +5,7 @@ describe("Test Board", () => {
     const boardSize = {x: 10, y: 10};
     const board: Board = new Board(boardSize);
 
+    // TJ_11
     it("Should access field in bounds", () => {
         const coordinates = {x: 2, y: 0};
         const field: Field = board.getField(coordinates.x, coordinates.y);
@@ -12,6 +13,7 @@ describe("Test Board", () => {
         expect(field).toBeInstanceOf(Field);
     })
     
+    // TJ_12
     it("Should throw when accessing out of bounds field", () => {
         const coordinates = {x: 3, y: -1};
         try {

@@ -14,6 +14,7 @@ describe("Test JWT service", () => {
         process.env = oldEnv;
     })
 
+    // TJ_15
     it("Should throw an error when JWT_KEY variable is not set" ,() => {
         process.env.JWT_KEY = undefined;
         try {
