@@ -15,12 +15,14 @@ Sekwencja komend służąca do uruchamiania poszczególnych animacji zaczyna si�
 ### Serwer: 
 ```
 > cd ./server
+> npm i
 > npm run dev
 ```
 
 ### Frontend
 ``` 
 > cd ./app/battleshipsFrontend
+> npm i
 > ng serve
 ```
 
@@ -33,12 +35,14 @@ W konsoli pojawi się adres na którym dostępna jest aplikacja (zazwyczaj http:
 #### Server
 ```
 > cd ./server
+> npm i
 > npm t
 ```
 
 #### Frontend
 ```
 > cd ./app/battleshipsFrontend
+> npm i
 > ng test
 ```
 ### Testy jednostkowe
