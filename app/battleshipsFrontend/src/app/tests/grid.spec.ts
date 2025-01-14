@@ -28,6 +28,7 @@ describe('GridComponent - isValidPlacement', () => {
     component.grid = createEmptyGrid();
   });
 
+  //TJ_04
   // Test 1: Sprawdzanie, czy funkcja zwraca false, gdy statek wychodzi poza granice siatki poziomo
   it('should return false if the ship placement is out of bounds horizontally', () => {
     // Arrange: Przygotowanie danych testowych do sprawdzenia sytuacji, gdy statek wychodzi poza granice siatki poziomo
@@ -43,6 +44,7 @@ describe('GridComponent - isValidPlacement', () => {
 
   });
 
+  //TJ_05
   // Test 2: Sprawdzanie, czy funkcja zwraca false, gdy statek wychodzi poza granice siatki pionowo
   it('should return false if the ship placement is out of bounds vertically', () => {
     // Arrange: Przygotowanie danych testowych do sprawdzenia sytuacji, gdy statek wychodzi poza granice siatki pionowo
@@ -57,6 +59,7 @@ describe('GridComponent - isValidPlacement', () => {
 
   });
 
+  //TJ_06
   // Test 3: Sprawdzanie, czy funkcja zwraca false, gdy statek nachodzi na istniejący statek
   it('should return false if the ship placement overlaps with an existing ship', () => {
     // Arrange: Przygotowanie danych testowych, aby statek miał konflikt z istniejącym statkiem
@@ -74,6 +77,7 @@ describe('GridComponent - isValidPlacement', () => {
 
   });
 
+  //TJ_07
   // Test 4: Sprawdzanie, czy funkcja zwraca false, gdy statek jest obok innego statku po skosie
   it('should return false if the ship placement is adjacent diagonally', () => {
     // Arrange: Przygotowanie danych testowych dla przypadku, gdy statek umiejscawia się obok innego statku po skosie
@@ -90,6 +94,7 @@ describe('GridComponent - isValidPlacement', () => {
 
   });
 
+  //TJ_08
   // Test 5: Sprawdzanie, czy funkcja zwraca true, gdy umiejscowienie statku poziomo jest poprawne
   it('should return true for a valid ship placement horizontally', () => {
     // Arrange: Przygotowanie danych testowych dla poprawnego umiejscowienia statku poziomo
@@ -104,7 +109,7 @@ describe('GridComponent - isValidPlacement', () => {
 
 
   });
-
+  //TJ_09
   // Test 6: Sprawdzanie, czy funkcja zwraca true, gdy umiejscowienie statku pionowo jest poprawne
   it('should return true for a valid ship placement vertically', () => {
     // Arrange: Przygotowanie danych testowych dla poprawnego umiejscowienia statku pionowo

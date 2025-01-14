@@ -33,6 +33,7 @@ describe('Test User endpoints with correct user', () => {
             });
     });
 
+    // TI_13
     it("Should create user and return 201", async () => {
         const result = await request(testapp.getRestServer())
             .post('/api/users/create')
@@ -55,6 +56,7 @@ describe('Test User endpoints with correct user', () => {
         token = result.body.token;
     })
 
+    // TI_14
     it("should be able to see ranking", async () => {
         const result = await request(testapp.getRestServer())
             .get('/api/users')
@@ -63,6 +65,7 @@ describe('Test User endpoints with correct user', () => {
         expect(result.statusCode).toBe(200);
     })
 
+    // TI_15
     it("should be able to read own account data", async () => {
         const result = await request(testapp.getRestServer())
             .get('/api/users/user/' + userdata.name)
@@ -72,6 +75,7 @@ describe('Test User endpoints with correct user', () => {
         expect(result.body.name).toEqual(userdata.name);
     })
 
+    // TI_16
     it("should be able to update his email and password", async () => {
         const newEmail = 'newEmail@email.com';
         const result = await request(testapp.getRestServer())
@@ -87,6 +91,7 @@ describe('Test User endpoints with correct user', () => {
         expect(resultCheck.body.email).toEqual(newEmail);
     })
 
+    // TI_17
     it("should not be able to update someone elses email and password", async () => {
         const newEmail = 'newEmail@email.com';
         const result = await request(testapp.getRestServer())
@@ -96,6 +101,7 @@ describe('Test User endpoints with correct user', () => {
         expect(result.statusCode).toBe(403);
     })
 
+    // TI_18
     it("Should not be able to delete other users", async () => {
         const result = await request(testapp.getRestServer())
             .delete('/api/users/user/' + "someoneElse" + "/delete")
@@ -104,6 +110,7 @@ describe('Test User endpoints with correct user', () => {
         expect(result.statusCode).toBe(403);
     })
 
+    // TI_19
     it("Should be able to delete own accound", async () => {
         const result = await request(testapp.getRestServer())
             .delete('/api/users/user/' + userdata.name + "/delete")
@@ -112,6 +119,7 @@ describe('Test User endpoints with correct user', () => {
         expect(result.statusCode).toBe(204);
     })
 
+    
     afterAll(async () => {
         // Log in and delete other user
         const response = await request(testapp.getRestServer())
@@ -159,6 +167,7 @@ describe("Test User endpoints with incorrect user", () => {
             });
     });
 
+    // TI_13
     it("Should not be able to create account with incorrect data", async () => {
         const result = await request(testapp.getRestServer())
             .post('/api/users/create')
@@ -167,6 +176,7 @@ describe("Test User endpoints with incorrect user", () => {
         expect(result.statusCode).toBe(400);
     });
 
+    // TI_13
     it("Should not be able to use name thats taken", async () => {
         const result = await request(testapp.getRestServer())
             .post('/api/users/create')
@@ -178,6 +188,7 @@ describe("Test User endpoints with incorrect user", () => {
         expect(result.statusCode).toBe(400);
     })
 
+    // TI_15
     it("Should not access user information with invalid token", async () => {
         const result = await request(testapp.getRestServer())
             .get('/api/users/user/' + userdata.name)

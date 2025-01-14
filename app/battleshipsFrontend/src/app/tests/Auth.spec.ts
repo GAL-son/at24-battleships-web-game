@@ -53,8 +53,8 @@ describe('AuthService Unit Tests', () => {
     // Cleanup: Sprawdzanie, czy wszystkie HTTP żądania zostały zakończone
     httpMock.verify();
   });
-
-  // Test 1: Powinno się zalogować i zapisać token w localStorage */
+  //TJ_01
+  //  Test 1: Powinno się zalogować i zapisać token w localStorage */
   it('should login and store token in localStorage', () => {
     // Arrange: Przygotowanie danych testowych
     const name = 'John Doe';
@@ -76,6 +76,7 @@ describe('AuthService Unit Tests', () => {
     console.log('should login and store token in localStorage');
   });
 
+  //TJ_02
   // Test 2: Powinno się wylogować i usunąć token z localStorage oraz przekierować użytkownika na stronę domową */
   it('should logout and clear token and navigate to home', () => {
     // Act: Wywołanie funkcji logout
@@ -87,6 +88,7 @@ describe('AuthService Unit Tests', () => {
     console.log('should logout and clear token and navigate to home');
   });
 
+  //TJ_03
   // Test 3: Dekodowanie prawidłowego tokenu
   it('should decode a valid token', () => {
     // Arrange: Przygotowanie przykładowego tokenu

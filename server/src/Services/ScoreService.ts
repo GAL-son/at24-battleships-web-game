@@ -40,7 +40,7 @@ export default class ScoreService {
         return scoreChange;
     }
 
-    calculateScoreChange(name: string, gameResult: GameResult) {
+    calculateScoreChange(name: string, gameResult: GameResult):number{
         let playerResult = gameResult.player1;
         let opponentResult = gameResult.player2;
 
@@ -74,6 +74,10 @@ export default class ScoreService {
     }
 
     calculateScoreScale(playerScore: number, oppoentScore: number) {
+        if (playerScore===0)
+        {
+            return this.MIN_SCORE_SCALE;
+        }
         const scoreScale = Math.min(Math.max(oppoentScore / playerScore, this.MIN_SCORE_SCALE), this.MAX_SCORE_SCALE);
         return scoreScale;
     }
